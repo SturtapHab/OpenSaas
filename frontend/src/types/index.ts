@@ -120,3 +120,41 @@ export interface ReferralUser {
   status: "registered" | "trial" | "converted";
   created_at: string;
 }
+
+// ===== LANDINGS =====
+
+export type LandingSphere =
+  | "saas"
+  | "course"
+  | "services"
+  | "product"
+  | "event"
+  | "other";
+
+export type LandingTone = "professional" | "friendly" | "aggressive";
+export type LandingColorScheme = "blue" | "dark" | "light" | "green";
+export type LandingStatus = "draft" | "published";
+
+export interface LandingFormData {
+  sphere: LandingSphere;
+  product_name: string;
+  description: string;
+  target_audience: string;
+  price?: string;
+  cta_text: string;
+  advantages: string[];
+  tone: LandingTone;
+  color_scheme: LandingColorScheme;
+}
+
+export interface Landing {
+  id: string;
+  slug: string;
+  title: string;
+  status: LandingStatus;
+  form_data: LandingFormData;
+  sections_json: Record<string, unknown> | null;
+  html_content?: string;
+  created_at: string;
+  updated_at: string;
+}

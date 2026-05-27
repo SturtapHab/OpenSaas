@@ -71,6 +71,10 @@ class Settings(BaseSettings):
     environment: str = Field(default="development")
     cors_origins: str = Field(default="http://localhost:3000")
 
+    # === OpenAI ===
+    openai_api_key: str = Field(default="")
+    openai_model: str = Field(default="gpt-4.1-mini")
+
     # === Бизнес-логика ===
     trial_days: int = Field(default=3)
     referral_commission_percent: int = Field(default=20)

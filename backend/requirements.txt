@@ -29,3 +29,7 @@ python-dotenv==1.2.2
 
 # Redis (опционально, импортируется только если REDIS_URL задан)
 redis==5.0.4
+
+# AI Landing Generator
+openai==1.35.0
+python-slugify==8.0.1

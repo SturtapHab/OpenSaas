@@ -8,6 +8,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.v1.router import api_router
+from api.v1.public.pages import router as pages_router
 from config import settings
 
 logging.basicConfig(
@@ -49,6 +50,7 @@ app.add_middleware(
 )
 
 app.include_router(api_router)
+app.include_router(pages_router)
 
 
 @app.get("/health", tags=["health"])
