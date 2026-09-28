@@ -7,9 +7,10 @@ const columns = [
   {
     title: 'Продукт',
     links: [
-      { label: 'Что внутри', href: '/#what-you-get' },
-      { label: 'AI', href: '/#ai-agents' },
       { label: 'Как начать', href: '/#how-to-start' },
+      { label: 'Наставник', href: '/#mentor' },
+      { label: 'Примеры', href: '/#examples' },
+      { label: 'Курс', href: '/#course' },
     ],
   },
   {
@@ -20,8 +21,10 @@ const columns = [
     ],
   },
   {
-    title: 'Контакты',
+    title: 'Open source',
     links: [
+      { label: 'GitHub', href: 'https://github.com/SturtapHab/OpenSaas' },
+      { label: 'Skills для агентов', href: 'https://github.com/SturtapHab/OpenSaas/tree/main/.claude/skills' },
       { label: 'Автор шаблона', href: 'https://t.me/wellcome_ai' },
     ],
   },
@@ -60,7 +63,7 @@ export function Footer() {
               </span>
             </Link>
             <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.65)', lineHeight: '1.6' }}>
-              Готовая платформа для запуска онлайн-сервиса. Шаблон + 5 видеоуроков.
+              Открытый шаблон для запуска своего SaaS. Деплой и обучение — через AI-агента.
             </p>
           </div>
 
@@ -83,6 +86,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
+                      {...(link.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                       className="text-sm text-white/65 no-underline transition-colors duration-150 hover:text-white"
                     >
                       {link.label}
@@ -107,7 +111,7 @@ export function Footer() {
           }}
         >
           <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)' }}>
-            © {new Date().getFullYear()} OpenSaaS. Все права защищены.
+            © {new Date().getFullYear()} OpenSaaS · Открытый код под лицензией MIT
           </span>
         </div>
       </div>

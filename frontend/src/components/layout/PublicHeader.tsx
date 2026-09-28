@@ -5,9 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 
 const navLinks = [
-  { href: "/#what-you-get", label: "Что внутри" },
-  { href: "/#ai-agents", label: "AI" },
   { href: "/#how-to-start", label: "Как начать" },
+  { href: "/#mentor", label: "Наставник" },
+  { href: "/#examples", label: "Примеры" },
+  { href: "/#open-source", label: "Open source" },
+  { href: "/#course", label: "Курс" },
 ];
 
 export function PublicHeader() {

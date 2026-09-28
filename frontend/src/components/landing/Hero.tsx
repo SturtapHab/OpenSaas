@@ -1,11 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { Send, Zap } from "lucide-react";
 import { motion } from "framer-motion";
+import { PlayCircle, Star } from "lucide-react";
+import { AgentDemo } from "./AgentDemo";
+import { BrandIcon } from "./BrandIcon";
+import { GITHUB_URL } from "./site";
 
-const itemVariants = {
-  hidden:  { opacity: 0, y: 24 },
+const item = {
+  hidden: { opacity: 0, y: 24 },
   visible: (delay: number) => ({
     opacity: 1,
     y: 0,
@@ -13,332 +16,109 @@ const itemVariants = {
   }),
 };
 
-const stats = [
-  { label: 'Пользователи', value: '2,847', change: '+12%', color: '#0066FF', barColor: 'rgba(0,102,255,0.12)' },
-  { label: 'Выручка',      value: '₽48K',   change: '+8%',  color: '#10b981', barColor: 'rgba(16,185,129,0.12)' },
-  { label: 'Активных',    value: '1,203',   change: '+5%',  color: '#f59e0b', barColor: 'rgba(245,158,11,0.12)' },
-  { label: 'API запросов', value: '89.2K',  change: '+23%', color: '#8b5cf6', barColor: 'rgba(139,92,246,0.12)' },
-];
-
 export function Hero() {
   return (
-    <section
-      className="relative overflow-hidden noise"
-      style={{ paddingTop: '160px', paddingBottom: '120px' }}
-    >
-      {/* Mesh background */}
+    <section className="relative overflow-hidden noise" style={{ paddingTop: 140, paddingBottom: 96 }}>
       <div className="absolute inset-0 mesh-bg" style={{ zIndex: 0 }} />
-
-      {/* Static gradient orbs (paint once, no scroll jank) */}
       <div
         aria-hidden
+        className="absolute pointer-events-none"
         style={{
-          position: 'absolute',
-          width: '520px',
-          height: '520px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(0,102,255,0.38) 0%, rgba(0,102,255,0.12) 40%, transparent 70%)',
-          filter: 'blur(50px)',
-          top: '-140px',
-          left: '6%',
-          zIndex: 0,
-          pointerEvents: 'none',
+          width: 560, height: 560, borderRadius: "50%", top: -160, left: "-4%", zIndex: 0, filter: "blur(60px)",
+          background: "radial-gradient(circle, rgba(0,102,255,0.30) 0%, rgba(0,102,255,0.08) 45%, transparent 70%)",
         }}
       />
       <div
         aria-hidden
+        className="absolute pointer-events-none"
         style={{
-          position: 'absolute',
-          width: '580px',
-          height: '580px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(139,92,246,0.34) 0%, rgba(139,92,246,0.1) 45%, transparent 70%)',
-          filter: 'blur(55px)',
-          top: '-40px',
-          right: '0%',
-          zIndex: 0,
-          pointerEvents: 'none',
+          width: 520, height: 520, borderRadius: "50%", top: 40, right: "-6%", zIndex: 0, filter: "blur(60px)",
+          background: "radial-gradient(circle, rgba(217,119,87,0.22) 0%, rgba(217,119,87,0.06) 45%, transparent 70%)",
         }}
       />
       <div
         aria-hidden
+        className="absolute inset-0"
         style={{
-          position: 'absolute',
-          width: '480px',
-          height: '480px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(99,179,237,0.4) 0%, rgba(99,179,237,0.12) 40%, transparent 70%)',
-          filter: 'blur(55px)',
-          bottom: '-120px',
-          left: '38%',
           zIndex: 0,
-          pointerEvents: 'none',
+          backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+          maskImage: "radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 100%)",
+          WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 100%)",
         }}
       />
 
-      {/* Subtle dot grid */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px)',
-          backgroundSize: '28px 28px',
-          zIndex: 0,
-          WebkitMaskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 40%, transparent 100%)',
-          maskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 40%, transparent 100%)',
-        }}
-      />
-
-      {/* Bottom fade to white — seamless transition to next section */}
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: '260px',
-          background:
-            'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 55%, #ffffff 100%)',
-          zIndex: 0,
-          pointerEvents: 'none',
-        }}
-      />
-
-      <div
-        className="relative mx-auto text-center px-6"
-        style={{ maxWidth: '900px', zIndex: 1 }}
-      >
-        {/* Pill badge */}
-        <motion.div
-          custom={0}
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex justify-center mb-8"
-        >
-          <div
-            className="inline-flex items-center gap-2 border border-black/10 rounded-full px-4 py-1.5 text-[13px] text-[#616161] bg-white/80 backdrop-blur-md"
-          >
-            <Zap size={12} strokeWidth={2.5} />
-            <span>Шаблон + 5 уроков · Запуск за выходные</span>
-          </div>
-        </motion.div>
-
-        {/* Headline */}
-        <motion.h1
-          custom={0}
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          style={{
-            fontSize: 'clamp(3rem, 7vw, 6rem)',
-            lineHeight: '1',
-            letterSpacing: '-0.04em',
-            fontWeight: 800,
-            color: '#171717',
-            marginBottom: '24px',
-          }}
-        >
-          Создай свою
-          <br />
-          <span className="gradient-text">онлайн платформу</span> за выходные
-        </motion.h1>
-
-        {/* Subheadline */}
-        <motion.p
-          custom={0.15}
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          className="mx-auto"
-          style={{
-            fontSize: '18px',
-            color: '#616161',
-            maxWidth: '580px',
-            lineHeight: '1.65',
-            marginBottom: '40px',
-          }}
-        >
-          Готовый шаблон + видеоуроки по запуску.
-          <br />
-          Без найма разработчика.
-        </motion.p>
-
-        {/* CTA buttons */}
-        <motion.div
-          custom={0.3}
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-wrap items-center justify-center gap-3"
-          style={{ marginBottom: '64px' }}
-        >
-          <Link href="#" className="btn-primary-new">
-            <span aria-hidden>💳</span>
-            Купить за 3000₽
-          </Link>
-          <Link
-            href="https://t.me/wellcome_ai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-secondary-new"
-          >
-            <Send size={15} />
-            Автор шаблона
-          </Link>
-        </motion.div>
-
-        {/* Dashboard preview */}
-        <motion.div
-          custom={0.3}
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <div
-            className="mx-auto"
-            style={{
-              borderRadius: '20px',
-              border: '1px solid rgba(0,0,0,0.08)',
-              boxShadow: '0 0 0 1px rgba(255,255,255,0.6) inset, 0 24px 80px rgba(0,0,0,0.12)',
-              overflow: 'hidden',
-              background: '#fafafa',
-              maxWidth: '860px',
-            }}
-          >
-            {/* Browser chrome */}
-            <div
-              style={{
-                background: '#f0f0f2',
-                padding: '10px 16px',
-                borderBottom: '1px solid rgba(0,0,0,0.06)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-              }}
+      <div className="relative mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1.05fr_1fr] gap-14 items-center" style={{ maxWidth: 1200, zIndex: 1 }}>
+        {/* Текст */}
+        <div className="text-center lg:text-left min-w-0">
+          <motion.div custom={0} variants={item} initial="hidden" animate="visible" className="flex justify-center lg:justify-start mb-7">
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border border-black/10 rounded-full pl-1.5 pr-4 py-1 text-[13px] text-[#3a3a3a] bg-white/80 backdrop-blur-md no-underline hover:border-[#0066FF]/40 transition-colors"
             >
-              <div style={{ display: 'flex', gap: '5px' }}>
-                <div style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#ff5f57' }} />
-                <div style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#febc2e' }} />
-                <div style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#28c840' }} />
-              </div>
-              <div
-                style={{
-                  flex: 1,
-                  background: 'white',
-                  borderRadius: '6px',
-                  padding: '4px 12px',
-                  fontSize: '11.5px',
-                  color: '#9e9ea8',
-                  fontFamily: 'Geist Mono, monospace',
-                  border: '1px solid rgba(0,0,0,0.06)',
-                }}
-              >
-                app.opensaas.dev/dashboard
-              </div>
-            </div>
+              <span className="inline-flex items-center gap-1 rounded-full bg-[#171717] text-white px-2 py-0.5 text-[11px] font-semibold">
+                <BrandIcon name="github" size={11} color="#fff" /> MIT
+              </span>
+              100% Open Source · бесплатно навсегда
+            </a>
+          </motion.div>
 
-            {/* Dashboard body */}
-            <div style={{ display: 'flex', background: '#fafafa' }}>
-              {/* Sidebar strip */}
-              <div
-                style={{
-                  width: '48px',
-                  background: 'white',
-                  borderRight: '1px solid rgba(0,0,0,0.05)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  paddingTop: '16px',
-                  gap: '10px',
-                  flexShrink: 0,
-                }}
-              >
-                {[
-                  { bg: '#0066FF', active: true },
-                  { bg: '#e5e7eb', active: false },
-                  { bg: '#e5e7eb', active: false },
-                  { bg: '#e5e7eb', active: false },
-                ].map((item, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      width: '28px',
-                      height: '6px',
-                      borderRadius: '3px',
-                      background: item.bg,
-                    }}
-                  />
-                ))}
-              </div>
+          <motion.h1
+            custom={0.05}
+            variants={item}
+            initial="hidden"
+            animate="visible"
+            style={{ fontSize: "clamp(2.05rem, 4vw, 3.4rem)", lineHeight: 1.04, letterSpacing: "-0.04em", fontWeight: 800, color: "#171717", marginBottom: 22 }}
+          >
+            Свой SaaS-сервис <span className="gradient-text whitespace-nowrap">за 15 минут</span>
+            <br />
+            одним сообщением агенту
+          </motion.h1>
 
-              {/* Main content */}
-              <div style={{ flex: 1, padding: '20px' }}>
-                {/* Top stats */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', marginBottom: '14px' }}>
-                  {stats.map(item => (
-                    <div
-                      key={item.label}
-                      style={{
-                        background: 'white',
-                        borderRadius: '10px',
-                        padding: '12px 14px',
-                        border: '1px solid rgba(0,0,0,0.05)',
-                      }}
-                    >
-                      <div style={{ fontSize: '10px', color: '#9e9ea8', marginBottom: '5px', fontWeight: 500 }}>{item.label}</div>
-                      <div style={{ fontSize: '17px', fontWeight: 700, color: '#171717', letterSpacing: '-0.02em', marginBottom: '3px' }}>{item.value}</div>
-                      <div
-                        style={{
-                          fontSize: '10px',
-                          color: item.color,
-                          fontWeight: 600,
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          background: item.barColor,
-                          padding: '1px 6px',
-                          borderRadius: '4px',
-                        }}
-                      >
-                        {item.change}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+          <motion.p
+            custom={0.15}
+            variants={item}
+            initial="hidden"
+            animate="visible"
+            className="mx-auto lg:mx-0"
+            style={{ fontSize: 18, color: "#616161", maxWidth: 540, lineHeight: 1.65, marginBottom: 34 }}
+          >
+            Скопируйте репозиторий, откройте его в Claude Code или Codex и напишите:
+            <span className="font-mono text-[15px] text-[#171717] bg-black/[0.05] rounded-md px-1.5 py-0.5 mx-1">
+              «вот ключ Timeweb — задеплой»
+            </span>
+            Агент сам создаст базу, соберёт приложение и выдаст ссылку с паролем админа.
+          </motion.p>
 
-                {/* Chart */}
-                <div
-                  style={{
-                    background: 'white',
-                    borderRadius: '10px',
-                    padding: '14px 16px',
-                    border: '1px solid rgba(0,0,0,0.05)',
-                    height: '88px',
-                    position: 'relative',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <div style={{ fontSize: '10px', color: '#9e9ea8', fontWeight: 500, marginBottom: '8px' }}>Выручка за 12 месяцев</div>
-                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '50px' }}>
-                    {[30, 52, 38, 65, 48, 72, 58, 80, 55, 88, 70, 100].map((h, i) => (
-                      <div
-                        key={i}
-                        style={{
-                          flex: 1,
-                          height: `${h}%`,
-                          background: i === 11
-                            ? 'linear-gradient(180deg, #0066FF, #6366f1)'
-                            : `rgba(0,102,255,${0.08 + (h / 100) * 0.18})`,
-                          borderRadius: '3px 3px 0 0',
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <motion.div custom={0.25} variants={item} initial="hidden" animate="visible" className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-10">
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="btn-primary-new" style={{ background: "#171717", boxShadow: "0 6px 20px rgba(0,0,0,0.22)" }}>
+              <BrandIcon name="github" size={17} color="#fff" />
+              Забрать код на GitHub
+            </a>
+            <Link href="#video" className="btn-secondary-new">
+              <PlayCircle size={17} />
+              Как запустить за 10 минут
+            </Link>
+          </motion.div>
+
+          <motion.div custom={0.35} variants={item} initial="hidden" animate="visible" className="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3 text-[13px] text-[#8a8a92]">
+            <span className="inline-flex items-center gap-2">
+              <span className="text-[#b0b0b8]">Работает с</span>
+              <BrandIcon name="claude" size={18} />
+              <BrandIcon name="openai" size={17} color="#171717" />
+              <BrandIcon name="cursor" size={16} color="#171717" />
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Star size={14} className="text-[#f59e0b]" fill="#f59e0b" /> Без скрытых платежей и привязки
+            </span>
+          </motion.div>
+        </div>
+
+        {/* Демо агента */}
+        <motion.div custom={0.2} variants={item} initial="hidden" animate="visible" className="min-w-0">
+          <AgentDemo />
         </motion.div>
       </div>
     </section>

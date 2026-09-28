@@ -1,13 +1,16 @@
 import { PublicHeader } from "@/components/layout/PublicHeader";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/landing/Hero";
-import { LiveDemo } from "@/components/landing/LiveDemo";
-import { WhatYouGet } from "@/components/landing/WhatYouGet";
+import { TrustStrip } from "@/components/landing/TrustStrip";
+import { VideoSection } from "@/components/landing/VideoSection";
+import { HowToStartSection } from "@/components/landing/HowToStart";
+import { MentorAgentSection } from "@/components/landing/MentorAgent";
 import { WhatCanCreate } from "@/components/landing/WhatCanCreate";
 import { WhatInside } from "@/components/landing/WhatInside";
-import { AIAgentsSection } from "@/components/landing/AIAgents";
-import { HowToStartSection } from "@/components/landing/HowToStart";
-import { ManifestoSection } from "@/components/landing/Manifesto";
+import { LiveDemo } from "@/components/landing/LiveDemo";
+import { OpenSourceSection } from "@/components/landing/OpenSource";
+import { CourseSection } from "@/components/landing/Course";
+import { FAQ } from "@/components/landing/FAQ";
 import { CTA } from "@/components/landing/CTA";
 
 export default function LandingPage() {
@@ -16,13 +19,16 @@ export default function LandingPage() {
       <PublicHeader />
       <main>
         <Hero />
-        <LiveDemo />
-        <WhatYouGet />
+        <TrustStrip />
+        <VideoSection />
+        <HowToStartSection />
+        <MentorAgentSection />
         <WhatCanCreate />
         <WhatInside />
-        <AIAgentsSection />
-        <HowToStartSection />
-        <ManifestoSection />
+        <LiveDemo />
+        <OpenSourceSection />
+        <CourseSection />
+        <FAQ />
         <CTA />
       </main>
       <Footer />

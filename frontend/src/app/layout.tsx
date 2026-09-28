@@ -4,9 +4,9 @@ import "./globals.css";
 import { Providers } from "@/components/Providers";
 
 export const metadata: Metadata = {
-  title: "OpenSaaS — Open source SaaS boilerplate",
+  title: "OpenSaaS — свой SaaS за 15 минут с Claude Code или Codex",
   description:
-    "Полнофункциональный SaaS-шаблон на FastAPI + Next.js. Аутентификация, биллинг, реферальная программа, API-ключи и админка из коробки.",
+    "Открытый SaaS-шаблон (MIT) на FastAPI + Next.js. Отдайте AI-агенту ключ Timeweb — он сам задеплоит сервис с регистрацией, оплатой через Робокассу, кабинетом и админкой.",
   icons: {
     icon: "/favicon/favicon.ico",
     apple: "/favicon/apple-touch-icon.png",

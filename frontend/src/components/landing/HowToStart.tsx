@@ -1,223 +1,76 @@
-"use client";
-
-import { useScrollReveal } from '@/hooks/useScrollReveal';
-
-const steps = [
-  {
-    num: '1',
-    title: 'Купи шаблон',
-    text: 'Оплати один раз — получи шаблон и доступ к 5 видеоурокам навсегда.',
-  },
-  {
-    num: '2',
-    title: 'Разверни по уроку',
-    text: 'Следуй видеоуроку — платформа запускается на твоём домене за один день.',
-  },
-  {
-    num: '3',
-    title: 'Дорабатывай с AI',
-    text: 'Описывай задачи AI-ассистенту — он вносит изменения без найма разработчика.',
-  },
-];
+import { BrandIcon } from "./BrandIcon";
+import { PromptLine } from "./CopyButton";
+import { SectionHeading } from "./SectionHeading";
+import { DEPLOY_PROMPT, DEPLOY_SKILL_URL, GITHUB_URL, TIMEWEB_URL } from "./site";
 
 export function HowToStartSection() {
-  const sectionRef = useScrollReveal();
-
   return (
-    <section
-      id="how-to-start"
-      ref={sectionRef as React.RefObject<HTMLElement>}
-      className="reveal"
-      style={{
-        position: 'relative',
-        overflow: 'hidden',
-        background:
-          'linear-gradient(180deg, #ffffff 0%, #f5f5f7 12%, #f5f5f7 88%, #ffffff 100%)',
-        padding: '120px 0',
-      }}
-    >
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '600px',
-          height: '600px',
-          borderRadius: '50%',
-          background: 'rgba(99,102,241,0.06)',
-          filter: 'blur(80px)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
-        {/* Header */}
-        <div className="text-center" style={{ marginBottom: '72px' }}>
-          <div
-            style={{
-              fontSize: '12px',
-              color: '#0066FF',
-              fontWeight: 600,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              marginBottom: '16px',
-            }}
-          >
-            05 / КАК НАЧАТЬ
+    <section id="how-to-start" style={{ background: "#ffffff", padding: "110px 0" }}>
+      <div className="mx-auto px-6" style={{ maxWidth: 1100 }}>
+        <SectionHeading
+          tag="Как начать · 3 шага"
+          title={<>Вы даёте ключ — <span className="gradient-text">агент делает остальное</span></>}
+          text="Никаких серверов, консолей и настройки вручную. Инструкция для агента уже лежит в репозитории — он её прочитает сам."
+        />
+
+        <div className="mt-14 grid md:grid-cols-3 gap-5">
+          {/* Шаг 1 */}
+          <div className="bento-card p-7 flex flex-col">
+            <StepNum n={1} />
+            <h3 className="text-[19px] font-bold text-[#171717] tracking-tight mb-2">Скопируйте репозиторий</h3>
+            <p className="text-[14.5px] text-[#616161] leading-relaxed mb-5 flex-1">
+              Нажмите «Fork» на GitHub — у вас появится собственная копия проекта. Код полностью ваш.
+            </p>
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[14px] font-semibold text-[#171717] no-underline hover:text-[#0066FF] transition-colors">
+              <BrandIcon name="github" size={16} color="currentColor" /> Открыть на GitHub →
+            </a>
           </div>
-          <h2
-            style={{
-              fontSize: 'clamp(2rem, 4vw, 3.5rem)',
-              fontWeight: 800,
-              letterSpacing: '-0.025em',
-              lineHeight: '1.05',
-              color: '#171717',
-            }}
-          >
-            От покупки до работающей платформы — 3 шага
-          </h2>
+
+          {/* Шаг 2 */}
+          <div className="bento-card p-7 flex flex-col">
+            <StepNum n={2} />
+            <h3 className="text-[19px] font-bold text-[#171717] tracking-tight mb-2">Подключите агента</h3>
+            <p className="text-[14.5px] text-[#616161] leading-relaxed mb-5 flex-1">
+              Откройте свою копию в Claude Code (claude.ai/code) или Codex. Подойдёт и Cursor — агент сам найдёт инструкции в AGENTS.md.
+            </p>
+            <div className="flex items-center gap-4">
+              <BrandIcon name="claudecode" size={26} />
+              <BrandIcon name="openai" size={24} color="#171717" />
+              <BrandIcon name="cursor" size={22} color="#171717" />
+            </div>
+          </div>
+
+          {/* Шаг 3 */}
+          <div className="bento-card p-7 flex flex-col" style={{ borderColor: "rgba(0,102,255,0.25)" }}>
+            <StepNum n={3} />
+            <h3 className="text-[19px] font-bold text-[#171717] tracking-tight mb-2">Отправьте ключ Timeweb</h3>
+            <p className="text-[14.5px] text-[#616161] leading-relaxed mb-5 flex-1">
+              Создайте API-ключ в <a href={TIMEWEB_URL} target="_blank" rel="noopener noreferrer" className="text-[#0066FF] no-underline hover:underline">Timeweb Cloud</a> и напишите агенту одну фразу. Через 10–15 минут у вас будет ссылка и пароль админа.
+            </p>
+            <a href={DEPLOY_SKILL_URL} target="_blank" rel="noopener noreferrer" className="text-[13px] text-[#8a8a92] no-underline hover:text-[#0066FF]">
+              Посмотреть, что делает агент →
+            </a>
+          </div>
         </div>
 
-        {/* Timeline */}
-        <div className="hts-timeline">
-          {/* Horizontal line (desktop only) */}
-          <div className="hts-line-track" aria-hidden="true">
-            <div className="hts-line-fill" />
-          </div>
-
-          <div className="hts-grid">
-            {steps.map((step, i) => (
-              <div key={step.num} className="hts-step" style={{ animationDelay: `${i * 0.15}s` }}>
-                {/* Connector dot */}
-                <div className="hts-dot" />
-
-                <div className="hts-card">
-                  <div className="hts-num gradient-text">{step.num}</div>
-                  <div className="hts-title">{step.title}</div>
-                  <p className="hts-text">{step.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="mt-6 mx-auto" style={{ maxWidth: 720 }}>
+          <PromptLine text={DEPLOY_PROMPT} />
+          <p className="text-center text-[13px] text-[#8a8a92] mt-3">
+            Перед созданием серверов агент покажет цену и спросит согласие. Ключ никуда не сохраняется.
+          </p>
         </div>
       </div>
-
-      <style jsx>{`
-        .hts-timeline {
-          position: relative;
-        }
-        .hts-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 32px;
-          position: relative;
-          z-index: 1;
-        }
-
-        .hts-step {
-          position: relative;
-          opacity: 0;
-          transform: translateY(16px);
-        }
-        :global(.reveal.visible) .hts-step {
-          animation: hts-step-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes hts-step-in {
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hts-dot {
-          display: none;
-        }
-
-        .hts-card {
-          background: white;
-          border: 1px solid rgba(0, 0, 0, 0.07);
-          border-radius: 16px;
-          padding: 28px;
-          transition: all 0.2s ease;
-        }
-        .hts-card:hover {
-          transform: translateY(-4px);
-          border-color: rgba(0, 102, 255, 0.25);
-          box-shadow: 0 8px 32px rgba(0, 102, 255, 0.1);
-        }
-
-        .hts-num {
-          font-size: 48px;
-          font-weight: 800;
-          line-height: 1;
-          margin-bottom: 12px;
-        }
-        .hts-title {
-          font-size: 20px;
-          font-weight: 700;
-          color: #171717;
-          letter-spacing: -0.01em;
-          margin-bottom: 12px;
-        }
-        .hts-text {
-          font-size: 15px;
-          color: #616161;
-          line-height: 1.6;
-          margin: 0;
-        }
-
-        .hts-line-track {
-          display: none;
-        }
-
-        @media (min-width: 768px) {
-          .hts-grid {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-          }
-          .hts-line-track {
-            display: block;
-            position: absolute;
-            top: 28px;
-            left: 12%;
-            right: 12%;
-            height: 2px;
-            background: rgba(0, 102, 255, 0.12);
-            border-radius: 2px;
-            overflow: hidden;
-            z-index: 0;
-          }
-          .hts-line-fill {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, #0066FF, #6366f1);
-            transform: scaleX(0);
-            transform-origin: left center;
-          }
-          :global(.reveal.visible) .hts-line-fill {
-            animation: hts-line-grow 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-          }
-          @keyframes hts-line-grow {
-            to { transform: scaleX(1); }
-          }
-          .hts-dot {
-            display: block;
-            position: absolute;
-            top: 22px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: white;
-            border: 3px solid #0066FF;
-            box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.1);
-            z-index: 2;
-          }
-          .hts-card {
-            margin-top: 56px;
-          }
-        }
-      `}</style>
     </section>
+  );
+}
+
+function StepNum({ n }: { n: number }) {
+  return (
+    <div
+      className="w-10 h-10 rounded-xl flex items-center justify-center mb-5 font-bold text-[16px] text-white"
+      style={{ background: "linear-gradient(135deg,#0066FF,#6366f1)", boxShadow: "0 6px 16px rgba(0,102,255,0.28)" }}
+    >
+      {n}
+    </div>
   );
 }
