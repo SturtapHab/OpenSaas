@@ -4,15 +4,17 @@ from __future__ import annotations
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from config import settings
 from database import get_db
 from dependencies import AdminUser, require_admin
 from modules.admin import service as admin_service
 from modules.auth.models import UserRole
 from modules.auth.schemas import UserPublic
+from modules.email import service as email_service
 from modules.billing.schemas import PaymentPublic
 from modules.referrals import service as ref_service
 from modules.referrals.models import ReferralPayoutStatus
@@ -23,6 +25,22 @@ router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[Depends(requir
 
 class RoleUpdate(BaseModel):
     role: UserRole
+
+
+@router.post("/email/test")
+async def send_test_email(admin: AdminUser):
+    """Отправить проверочное письмо админу и вернуть ошибку SMTP, если она есть."""
+    if not settings.email_enabled:
+        raise HTTPException(
+            status_code=400, detail="SMTP не настроен: задайте SMTP_USER и SMTP_PASSWORD"
+        )
+    try:
+        await email_service.send_test_email(admin.email)
+    except Exception as exc:  # noqa: BLE001 — показываем админу причину как есть
+        raise HTTPException(
+            status_code=502, detail=f"{type(exc).__name__}: {exc}"
+        ) from exc
+    return {"detail": f"Письмо отправлено на {admin.email}"}
 
 
 @router.get("/stats")

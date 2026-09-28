@@ -56,7 +56,7 @@ export default function AdminReferralsPage() {
   return (
     <>
       <div>
-        <h1 className="text-3xl font-bold">Реферальные выплаты</h1>
+        <h1 className="font-display text-[28px] leading-tight sm:text-[32px]">Реферальные выплаты</h1>
       </div>
 
       <div className="flex gap-2 border-b">

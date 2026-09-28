@@ -7,6 +7,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 
+import { AuthCard, authLinkClass } from "@/components/auth/AuthCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,38 +35,27 @@ export default function LoginPage() {
       await login(values.email, values.password);
     } catch (e) {
       const err = e as AxiosError<{ detail?: string }>;
-      toast.error(err.response?.data?.detail ?? "Не удалось войти");
+      const detail = err.response?.data?.detail;
+      toast.error(detail === "Invalid credentials" ? "Неверный email или пароль" : detail ?? "Не удалось войти");
     }
   }
 
   return (
-    <div
-      style={{
-        background: 'white',
-        border: '1px solid rgba(0,0,0,0.07)',
-        borderRadius: '24px',
-        padding: '40px 36px',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.08), 0 0 0 1px rgba(255,255,255,0.6) inset',
-      }}
+    <AuthCard
+      title="С возвращением"
+      description="Войдите, чтобы продолжить работу."
+      footer={
+        <>
+          Нет аккаунта?{" "}
+          <Link href="/register" className={authLinkClass}>
+            Зарегистрироваться
+          </Link>
+        </>
+      }
     >
-      <h1
-        style={{
-          fontSize: '26px',
-          fontWeight: 800,
-          color: '#171717',
-          letterSpacing: '-0.025em',
-          marginBottom: '6px',
-        }}
-      >
-        Добро пожаловать
-      </h1>
-      <p style={{ fontSize: '14px', color: '#8e8e93', marginBottom: '28px', lineHeight: 1.5 }}>
-        Введите данные, чтобы войти в аккаунт
-      </p>
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <Label htmlFor="email" style={{ fontSize: '13px', fontWeight: 500 }}>Email</Label>
+        <div className="space-y-1.5">
+          <Label htmlFor="email">Email</Label>
           <Input
             id="email"
             type="email"
@@ -73,19 +63,13 @@ export default function LoginPage() {
             placeholder="you@company.com"
             {...register("email")}
           />
-          {errors.email && (
-            <p className="mt-1 text-xs text-destructive">{errors.email.message}</p>
-          )}
+          {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
         </div>
 
-        <div>
-          <div className="flex items-center justify-between mb-1.5">
-            <Label htmlFor="password" style={{ fontSize: '13px', fontWeight: 500 }}>Пароль</Label>
-            <Link
-              href="/forgot-password"
-              className="text-xs text-[#0066FF] hover:underline"
-              style={{ textDecoration: 'none' }}
-            >
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password">Пароль</Label>
+            <Link href="/forgot-password" className="text-xs text-muted-foreground hover:text-clay">
               Забыли пароль?
             </Link>
           </div>
@@ -96,29 +80,13 @@ export default function LoginPage() {
             placeholder="••••••••"
             {...register("password")}
           />
-          {errors.password && (
-            <p className="mt-1 text-xs text-destructive">
-              {errors.password.message}
-            </p>
-          )}
+          {errors.password && <p className="text-xs text-destructive">{errors.password.message}</p>}
         </div>
 
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={isSubmitting}
-          style={{ height: '46px', fontWeight: 600, letterSpacing: '-0.01em' }}
-        >
-          {isSubmitting ? "Вход..." : "Войти"}
+        <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? "Входим…" : "Войти"}
         </Button>
       </form>
-
-      <p className="mt-6 text-center" style={{ fontSize: '14px', color: '#8e8e93' }}>
-        Нет аккаунта?{" "}
-        <Link href="/register" className="font-semibold text-[#0066FF] hover:underline">
-          Зарегистрируйтесь
-        </Link>
-      </p>
-    </div>
+    </AuthCard>
   );
 }

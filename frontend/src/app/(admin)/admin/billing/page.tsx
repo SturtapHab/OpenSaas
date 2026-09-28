@@ -50,7 +50,7 @@ export default function AdminBillingPage() {
   return (
     <>
       <div>
-        <h1 className="text-3xl font-bold">Платежи</h1>
+        <h1 className="font-display text-[28px] leading-tight sm:text-[32px]">Платежи</h1>
       </div>
 
       <Card>

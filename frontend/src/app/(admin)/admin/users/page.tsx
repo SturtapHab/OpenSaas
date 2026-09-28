@@ -68,7 +68,7 @@ export default function AdminUsersPage() {
   return (
     <>
       <div>
-        <h1 className="text-3xl font-bold">Пользователи</h1>
+        <h1 className="font-display text-[28px] leading-tight sm:text-[32px]">Пользователи</h1>
       </div>
 
       <Card>

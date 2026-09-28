@@ -1,6 +1,7 @@
 """Отправка писем через SMTP (aiosmtplib + Jinja2).
 
-В development при пустом SMTP_USER письма пишутся в лог вместо отправки.
+Пока SMTP не настроен (settings.email_enabled == False), письма пишутся
+в лог вместо отправки, а регистрация идёт без подтверждения email.
 """
 from __future__ import annotations
 
@@ -31,8 +32,10 @@ def render(template_name: str, **context: Any) -> str:
     return tpl.render(app_name=settings.app_name, app_url=app_url(), **context)
 
 
-async def send_email(to: str, subject: str, html: str) -> None:
-    if not settings.smtp_user:
+async def send_email(
+    to: str, subject: str, html: str, *, raise_errors: bool = False
+) -> None:
+    if not settings.email_enabled:
         logger.info(
             "[email:dev] To=%s Subject=%s\n%s", to, subject, html[:500]
         )
@@ -53,9 +56,14 @@ async def send_email(to: str, subject: str, html: str) -> None:
             username=settings.smtp_user,
             password=settings.smtp_password,
             start_tls=settings.smtp_use_tls,
+            timeout=20,
         )
     except Exception:
         logger.exception("Failed to send email to %s", to)
+        if raise_errors:
+            raise
+    else:
+        logger.info("Email sent to %s: %s", to, subject)
 
 
 async def send_confirmation_email(to: str, token: str) -> None:
@@ -65,11 +73,17 @@ async def send_confirmation_email(to: str, token: str) -> None:
 
 
 async def send_verification_code_email(to: str, code: str) -> None:
-    if not settings.smtp_user:
+    if not settings.email_enabled:
         logger.info("[email:dev] Verification code for %s: %s", to, code)
         return
     html = render("verification_code.html", code=code)
     await send_email(to, f"Код подтверждения — {settings.app_name}", html)
+
+
+async def send_test_email(to: str) -> None:
+    """Проверка SMTP из админки: ошибки пробрасываются наверх."""
+    html = render("test_email.html")
+    await send_email(to, f"Проверка почты — {settings.app_name}", html, raise_errors=True)
 
 
 async def send_welcome_email(to: str) -> None:

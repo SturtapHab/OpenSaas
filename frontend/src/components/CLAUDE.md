@@ -11,8 +11,11 @@
 - `referrals/` — ReferralWidget, PayoutHistory.
 - `AuthGuard.tsx` — обёртка для защищённых страниц (требует логин,
   опционально требует admin).
-- `EmailBanner.tsx` — баннер «подтвердите email» (показывается только
-  если `user.is_email_verified === false`).
+- `EmailBanner.tsx` — баннер «подтвердите email» (показывается, только
+  если на сервере настроена почта и `user.is_email_verified === false`).
+- `auth/` — `AuthCard` (карточка страниц входа), `AltchaCheck` (невидимая
+  проверка «не робот», решает задачу ALTCHA в браузере), `VerifyCodeForm`
+  (ввод 6-значного кода из письма).
 - `Providers.tsx` — `QueryClientProvider` + `Toaster`.
 
 ## Соглашения
@@ -32,6 +35,8 @@
 
 ## Тема / бренд
 
-Цвета приходят из `globals.css` через CSS-переменные. Чтобы изменить
-основной цвет — поменяйте `--primary` и `--primary-foreground`
-в `:root` и `.dark`.
+Цвета приходят из `globals.css` через CSS-переменные. Кабинет и страницы
+входа используют ту же палитру, что лендинг (`.lx-*`): тёплая бумага
+(`--background`), чернильные кнопки (`--primary`), акцент «глина»
+(`--clay`, классы `text-clay`, `bg-clay-soft`), зелёный `--sage` для
+успеха. Заголовки — `font-display` (Unbounded), текст — Onest.

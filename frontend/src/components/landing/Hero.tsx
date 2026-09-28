@@ -104,7 +104,7 @@ export function Hero() {
               <FloatCard icon={<CreditCard size={16} />} title="+ 990 ₽" text="оплата через Робокассу" accent />
             </motion.div>
             <motion.div style={{ y: floatL }} className="hidden lg:block absolute -left-[262px] bottom-[110px]">
-              <FloatCard icon={<Users size={16} />} title="Новый пользователь" text="подтвердил email" />
+              <FloatCard icon={<Users size={16} />} title="Новый пользователь" text="зарегистрировался" />
             </motion.div>
           </div>
         </motion.div>

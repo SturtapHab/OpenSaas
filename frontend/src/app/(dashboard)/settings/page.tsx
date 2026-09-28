@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { usersApi } from "@/api/users";
+import { useAuthConfig } from "@/hooks/useAuthConfig";
 
 const schema = z.object({
   first_name: z.string().max(100).optional().nullable(),
@@ -25,6 +26,7 @@ type FormValues = z.infer<typeof schema>;
 
 export default function SettingsPage() {
   const qc = useQueryClient();
+  const { data: config } = useAuthConfig();
   const { data: user } = useQuery({
     queryKey: ["user-me"],
     queryFn: () => usersApi.me(),
@@ -64,8 +66,8 @@ export default function SettingsPage() {
   return (
     <>
       <div>
-        <h1 className="text-3xl font-bold">Настройки</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="font-display text-[28px] leading-tight sm:text-[32px]">Настройки</h1>
+        <p className="mt-2 text-[15px] text-muted-foreground">
           Профиль и аккаунт.
         </p>
       </div>
@@ -80,20 +82,20 @@ export default function SettingsPage() {
             <span className="flex items-center gap-2">
               {user?.email}
               {user?.is_email_verified ? (
-                <Badge variant="success">verified</Badge>
+                <Badge variant="success">подтверждён</Badge>
               ) : (
-                <Badge variant="warning">not verified</Badge>
+                config?.email_enabled && <Badge variant="warning">не подтверждён</Badge>
               )}
             </span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground">Роль</span>
-            <Badge variant="secondary">{user?.role}</Badge>
+            <Badge variant="secondary">{user?.role === "admin" ? "Администратор" : "Пользователь"}</Badge>
           </div>
           <div>
             <Link
               href="/settings/security"
-              className="text-sm text-primary hover:underline"
+              className="text-sm font-medium text-foreground underline decoration-clay/40 underline-offset-4 hover:text-clay"
             >
               Сменить пароль →
             </Link>

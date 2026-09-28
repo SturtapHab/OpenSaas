@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 
+import { PageHeader } from "@/components/layout/PageHeader";
 import { TrialBanner } from "@/components/billing/TrialBanner";
 import { PlanCard } from "@/components/billing/PlanCard";
 import { PaymentHistory } from "@/components/billing/PaymentHistory";
@@ -45,6 +46,14 @@ function PaymentStatusHandler() {
   return null;
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  trial: "Пробный период",
+  active: "Активна",
+  cancelled: "Отменена",
+  expired: "Истекла",
+  past_due: "Ждёт оплаты",
+};
+
 export default function BillingPage() {
   const { data: plans } = usePlans();
   const { data: sub } = useSubscription();
@@ -76,24 +85,9 @@ export default function BillingPage() {
         <PaymentStatusHandler />
       </Suspense>
 
-      <div style={{ marginBottom: '8px' }}>
-        <h1
-          style={{
-            fontSize: '28px',
-            fontWeight: 800,
-            color: '#171717',
-            letterSpacing: '-0.025em',
-            marginBottom: '4px',
-          }}
-        >
-          Подписка
-        </h1>
-        <p style={{ fontSize: '14px', color: '#8e8e93' }}>
-          Управление подпиской и платежами
-        </p>
-      </div>
+      <PageHeader title="Подписка" description="Тариф, срок действия и история платежей." />
 
-      <TrialBanner />
+      <TrialBanner showLink={false} />
 
       {sub && (
         <Card>
@@ -104,7 +98,7 @@ export default function BillingPage() {
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">Статус</span>
               <Badge variant={sub.status === "active" ? "success" : "secondary"}>
-                {sub.status}
+                {STATUS_LABELS[sub.status] ?? sub.status}
               </Badge>
             </div>
             <div className="flex items-center justify-between">
@@ -127,7 +121,7 @@ export default function BillingPage() {
       )}
 
       <div>
-        <h2 className="mb-3 text-xl font-semibold">Тарифы</h2>
+        <h2 className="mb-4 font-display text-lg">Тарифы</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {plans?.map((plan) => (
             <PlanCard

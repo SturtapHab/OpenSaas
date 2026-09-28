@@ -31,8 +31,8 @@ export default function ReferralsPage() {
   return (
     <>
       <div>
-        <h1 className="text-3xl font-bold">Реферальная программа</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="font-display text-[28px] leading-tight sm:text-[32px]">Реферальная программа</h1>
+        <p className="mt-2 text-[15px] text-muted-foreground">
           Приглашайте друзей и получайте 20% от их платежей.
         </p>
       </div>
@@ -132,19 +132,19 @@ export default function ReferralsPage() {
         <CardContent>
           <ol className="grid gap-4 text-sm md:grid-cols-3">
             <li>
-              <div className="text-2xl font-bold">1</div>
+              <div className="font-display text-2xl">1</div>
               <div className="mt-1 text-muted-foreground">
                 Поделитесь своей реферальной ссылкой с друзьями.
               </div>
             </li>
             <li>
-              <div className="text-2xl font-bold">2</div>
+              <div className="font-display text-2xl">2</div>
               <div className="mt-1 text-muted-foreground">
                 Они регистрируются по вашей ссылке и начинают триал.
               </div>
             </li>
             <li>
-              <div className="text-2xl font-bold">3</div>
+              <div className="font-display text-2xl">3</div>
               <div className="mt-1 text-muted-foreground">
                 Когда они оплачивают подписку, вы получаете 20% от платежа.
               </div>

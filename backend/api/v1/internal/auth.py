@@ -10,10 +10,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_db
+from modules.auth import altcha
 from modules.auth import service as auth_service
 from modules.auth.models import User
 from config import settings
 from modules.auth.schemas import (
+    AuthConfig,
     AuthResponse,
     ConfirmEmailRequest,
     ForgotPasswordRequest,
@@ -37,24 +39,46 @@ from modules.email import service as email_service
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
+def _require_email() -> None:
+    if not settings.email_enabled:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Почта на сайте ещё не настроена. Обратитесь к администратору.",
+        )
+
+
+@router.get("/config", response_model=AuthConfig)
+async def auth_config():
+    return AuthConfig(
+        email_enabled=settings.email_enabled,
+        captcha="altcha" if settings.altcha_enabled else None,
+    )
+
+
+@router.get("/altcha")
+async def altcha_challenge():
+    return altcha.create_challenge()
+
+
 @router.post("/register", response_model=AuthResponse)
 async def register(
     payload: RegisterRequest,
     bg: BackgroundTasks,
     db: Annotated[AsyncSession, Depends(get_db)],
 ):
-    user, access, refresh, code = await auth_service.register_user(db, payload)
-    bg.add_task(email_service.send_verification_code_email, user.email, code)
+    await altcha.verify(db, payload.altcha)
+    # Без почты подтверждать нечем: регистрация завершается сразу.
+    with_code = settings.email_enabled
+    user, access, refresh, code = await auth_service.register_user(
+        db, payload, with_code=with_code
+    )
+    if code:
+        bg.add_task(email_service.send_verification_code_email, user.email, code)
     return AuthResponse(
         access_token=access,
         refresh_token=refresh,
         user=UserPublic.model_validate(user),
-        pending_verification=True,
-        dev_code=(
-            code
-            if not settings.smtp_user and settings.environment.lower() != "production"
-            else None
-        ),
+        pending_verification=with_code,
     )
 
 
@@ -124,6 +148,7 @@ async def resend_code(
     bg: BackgroundTasks,
     db: Annotated[AsyncSession, Depends(get_db)],
 ):
+    _require_email()
     user = await db.scalar(select(User).where(User.id == payload.user_id))
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
@@ -140,6 +165,7 @@ async def resend_confirmation(
     bg: BackgroundTasks,
     db: Annotated[AsyncSession, Depends(get_db)],
 ):
+    _require_email()
     user = await db.scalar(select(User).where(User.email == payload.email))
     if user and not user.is_email_verified:
         token = await auth_service.create_email_token(db, user)
@@ -153,6 +179,8 @@ async def forgot_password(
     bg: BackgroundTasks,
     db: Annotated[AsyncSession, Depends(get_db)],
 ):
+    _require_email()
+    await altcha.verify(db, payload.altcha)
     user = await db.scalar(select(User).where(User.email == payload.email))
     if user:
         token = await auth_service.create_reset_token(db, user)

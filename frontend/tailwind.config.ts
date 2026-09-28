@@ -40,9 +40,12 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        "apple-blue": "#0066FF",
-        "apple-gray": "#f5f5f7",
-        "apple-dark": "#1d1d1f",
+        clay: {
+          DEFAULT: "hsl(var(--clay))",
+          ink: "hsl(var(--clay-ink))",
+          soft: "hsl(var(--clay-soft))",
+        },
+        sage: "hsl(var(--sage))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -50,9 +53,9 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        display: ['Geist', 'Plus Jakarta Sans', '-apple-system', 'sans-serif'],
-        body:    ['Geist', 'Plus Jakarta Sans', '-apple-system', 'sans-serif'],
-        mono:    ['Geist Mono', 'Fira Code', 'monospace'],
+        display: ['Unbounded', 'Onest', 'sans-serif'],
+        body:    ['Onest', 'Geist', '-apple-system', 'sans-serif'],
+        mono:    ['JetBrains Mono', 'Geist Mono', 'monospace'],
       },
       fontSize: {
         'display-xl': ['clamp(3.5rem, 9vw, 7.5rem)', { lineHeight: '0.95', letterSpacing: '-0.04em' }],

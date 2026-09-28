@@ -5,8 +5,8 @@ import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { useTilt } from '@/hooks/useTilt';
 
 const features = [
-  'Email + подтверждение кодом на почте',
-  'Сброс пароля по ссылке',
+  'Регистрация по email и паролю',
+  'Защита от ботов без внешних сервисов',
   'JWT токены с автообновлением',
   'Пробный период — 3 дня бесплатно',
 ];

@@ -11,6 +11,7 @@ from passlib.context import CryptContext
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from config import settings
 from modules.auth.models import User
 from modules.api_keys.models import ApiKey
 from modules.api_keys.schemas import ApiKeyCreate
@@ -32,7 +33,7 @@ def _verify_key(key: str, key_hash: str) -> bool:
 async def create_key(
     db: AsyncSession, user: User, payload: ApiKeyCreate
 ) -> tuple[ApiKey, str]:
-    if not user.is_email_verified:
+    if settings.email_enabled and not user.is_email_verified:
         raise HTTPException(
             status_code=403, detail="Confirm email before creating API keys"
         )

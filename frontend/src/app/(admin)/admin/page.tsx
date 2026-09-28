@@ -22,8 +22,8 @@ export default function AdminDashboardPage() {
   return (
     <>
       <div>
-        <h1 className="text-3xl font-bold">Админ-панель</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="font-display text-[28px] leading-tight sm:text-[32px]">Админ-панель</h1>
+        <p className="mt-2 text-[15px] text-muted-foreground">
           Сводка по системе.
         </p>
       </div>
@@ -79,7 +79,7 @@ function KpiCard({
         <Icon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
+        <div className="font-display text-2xl">{value}</div>
       </CardContent>
     </Card>
   );
