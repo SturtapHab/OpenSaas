@@ -48,14 +48,14 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
             href={item.href}
             onClick={onNavigate}
             className={cn(
-              "flex items-center gap-3 rounded-xl py-2.5 px-3 text-sm font-medium transition-all duration-200",
+              "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
               active
-                ? "bg-[rgba(0,102,255,0.08)] text-[#0066FF]"
-                : "text-[#8e8e93] hover:bg-black/[0.04] hover:text-[#171717]",
+                ? "bg-card text-foreground shadow-[0_1px_2px_rgba(22,20,15,.06),0_0_0_1px_rgba(22,20,15,.06)]"
+                : "text-muted-foreground hover:bg-foreground/[0.04] hover:text-foreground",
             )}
           >
             <Icon
-              className="h-4 w-4 shrink-0"
+              className={cn("h-4 w-4 shrink-0", active && "text-clay")}
               strokeWidth={active ? 2 : 1.75}
             />
             {item.label}
@@ -65,8 +65,8 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 
       {user?.role === "admin" && (
         <>
-          <div className="my-3 border-t border-black/[0.06]" />
-          <div className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-[#b0b0b8]">
+          <div className="my-3 border-t border-border" />
+          <div className="px-3 pb-1.5 font-display text-[10px] uppercase tracking-[0.14em] text-muted-foreground/80">
             Администрирование
           </div>
           {adminNav.map((item) => {
@@ -78,13 +78,13 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
                 href={item.href}
                 onClick={onNavigate}
                 className={cn(
-                  "flex items-center gap-3 rounded-xl py-2.5 px-3 text-sm font-medium transition-all duration-200",
+                  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
                   active
-                    ? "bg-[rgba(0,102,255,0.08)] text-[#0066FF]"
-                    : "text-[#8e8e93] hover:bg-black/[0.04] hover:text-[#171717]",
+                    ? "bg-card text-foreground shadow-[0_1px_2px_rgba(22,20,15,.06),0_0_0_1px_rgba(22,20,15,.06)]"
+                    : "text-muted-foreground hover:bg-foreground/[0.04] hover:text-foreground",
                 )}
               >
-                <Icon className="h-4 w-4 shrink-0" strokeWidth={active ? 2 : 1.75} />
+                <Icon className={cn("h-4 w-4 shrink-0", active && "text-clay")} strokeWidth={active ? 2 : 1.75} />
                 {item.label}
               </Link>
             );
@@ -98,29 +98,10 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
-      <div
-        className="flex h-14 items-center gap-2 px-5"
-        style={{ borderBottom: '1px solid rgba(0,0,0,0.06)' }}
-      >
-        <Image
-          src="/logo.png"
-          alt="logo"
-          width={26}
-          height={26}
-          style={{ borderRadius: '7px' }}
-        />
-        <span
-          style={{
-            fontFamily: 'Geist, sans-serif',
-            fontWeight: 700,
-            fontSize: '15px',
-            color: '#171717',
-            letterSpacing: '-0.02em',
-          }}
-        >
-          OpenSaaS
-        </span>
-      </div>
+      <Link href="/dashboard" className="flex h-16 items-center gap-2.5 px-5 no-underline">
+        <Image src="/logo.png" alt="" width={28} height={28} className="rounded-lg" />
+        <span className="font-display text-[15px] text-foreground">OpenSaaS</span>
+      </Link>
       <NavLinks onNavigate={onNavigate} />
     </>
   );
@@ -132,17 +113,14 @@ export function Sidebar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside
-        className="hidden w-60 shrink-0 md:block"
-        style={{ borderRight: '1px solid rgba(0,0,0,0.06)', background: '#fafafa' }}
-      >
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-r border-border bg-secondary/50 md:block">
         <SidebarContent />
       </aside>
 
       {/* Mobile backdrop */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 md:hidden backdrop-blur-sm"
+          className="fixed inset-0 z-40 bg-foreground/30 backdrop-blur-sm md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -150,10 +128,9 @@ export function Sidebar() {
       {/* Mobile drawer */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-72 bg-white transition-transform duration-300 ease-in-out md:hidden",
+          "fixed inset-y-0 left-0 z-50 w-72 border-r border-border bg-background shadow-2xl transition-transform duration-300 ease-in-out md:hidden",
           sidebarOpen ? "translate-x-0" : "-translate-x-full",
         )}
-        style={{ borderRight: '1px solid rgba(0,0,0,0.06)', boxShadow: '4px 0 24px rgba(0,0,0,0.08)' }}
       >
         <SidebarContent onNavigate={() => setSidebarOpen(false)} />
       </aside>

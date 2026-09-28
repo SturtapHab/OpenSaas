@@ -38,26 +38,26 @@ function ConfirmEmailInner() {
   }, [token, router]);
 
   return (
-    <div className="rounded-lg border bg-card p-8 text-center shadow-sm">
+    <div className="rounded-[28px] border border-border bg-card px-8 py-10 text-center shadow-[0_28px_56px_-32px_rgba(22,20,15,.22)]">
       {state === "loading" && (
         <>
           <Loader2 className="mx-auto h-10 w-10 animate-spin text-muted-foreground" />
-          <h1 className="mt-4 text-xl font-semibold">Подтверждаем email...</h1>
+          <h1 className="mt-4 font-display text-xl">Подтверждаем email...</h1>
         </>
       )}
       {state === "success" && (
         <>
-          <CheckCircle2 className="mx-auto h-10 w-10 text-green-600" />
-          <h1 className="mt-4 text-xl font-semibold">Email подтверждён</h1>
+          <CheckCircle2 className="mx-auto h-10 w-10 text-sage" />
+          <h1 className="mt-4 font-display text-xl">Email подтверждён</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Перенаправляем в Dashboard…
+            Открываем личный кабинет…
           </p>
         </>
       )}
       {state === "error" && (
         <>
           <XCircle className="mx-auto h-10 w-10 text-destructive" />
-          <h1 className="mt-4 text-xl font-semibold">Не удалось подтвердить</h1>
+          <h1 className="mt-4 font-display text-xl">Не удалось подтвердить</h1>
           <p className="mt-2 text-sm text-muted-foreground">{error}</p>
           <Button
             className="mt-4"
@@ -76,7 +76,7 @@ export default function ConfirmEmailPage() {
   return (
     <Suspense
       fallback={
-        <div className="rounded-lg border bg-card p-8 text-center shadow-sm">
+        <div className="rounded-[28px] border border-border bg-card px-8 py-10 text-center">
           <Loader2 className="mx-auto h-10 w-10 animate-spin text-muted-foreground" />
         </div>
       }

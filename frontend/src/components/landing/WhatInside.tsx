@@ -16,10 +16,16 @@ export function WhatInside() {
         <Stagger className="mt-16 grid grid-cols-1 md:grid-cols-6 gap-5">
           {/* Регистрация */}
           <StaggerItem className="lx-card lx-card-hover md:col-span-3 p-8 flex flex-col">
-            <Head Icon={Shield} title="Регистрация пользователей" text="Вход, выход, восстановление пароля и подтверждение email — работает из коробки." />
+            <Head Icon={Shield} title="Регистрация пользователей" text="Регистрация, вход и защита от ботов работают сразу после деплоя. Никаких ключей и настроек." />
             <div className="mt-8 rounded-2xl bg-[var(--lx-ivory)] border border-[var(--lx-line)] p-5 space-y-3">
               <Field label="Email" value="anna@studio.ru" />
-              <Field label="Код из письма" value="4 8 1 9 2 7" mono />
+              <Field label="Пароль" value="••••••••••" mono />
+              <div className="flex items-center gap-2.5 rounded-xl border border-[var(--lx-line)] bg-white px-3.5 py-2.5 text-[13px] text-[var(--lx-ink-2)]">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full text-white" style={{ background: "var(--lx-sage)" }}>
+                  <Check size={10} strokeWidth={3.5} />
+                </span>
+                Проверка на робота пройдена
+              </div>
               <div className="h-11 rounded-xl flex items-center justify-center text-[14px] font-semibold text-white" style={{ background: "var(--lx-ink)" }}>Создать аккаунт</div>
             </div>
           </StaggerItem>

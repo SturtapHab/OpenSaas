@@ -14,6 +14,8 @@
   plan                      показать тарифы и итоговую цену (ничего не создаёт)
   deploy --email E --yes    создать БД + приложение и задеплоить
   set-env K=V [K=V ...]     добавить/изменить ENV и дождаться передеплоя
+  unset-env K [K ...]       удалить ENV и дождаться передеплоя
+  test-email                отправить проверочное письмо админу и показать ошибку SMTP
   status                    статус приложения, БД и последнего деплоя
   logs [-n 80]              последние строки логов приложения
   redeploy                  пересобрать последний коммит ветки
@@ -381,10 +383,12 @@ def check_health(domain: str) -> str:
     return f"не ответил ({last})"
 
 
-def update_envs(api: Api, app_id: int, updates: dict) -> dict:
+def update_envs(api: Api, app_id: int, updates: dict, remove: tuple = ()) -> dict:
     app = api.get(f"/apps/{app_id}")["app"]
     envs = dict(app.get("envs") or {})
     envs.update({k: str(v) for k, v in updates.items()})
+    for k in remove:
+        envs.pop(k, None)
     known = {d["id"] for d in deploys(api, app_id)}
     api.patch(f"/apps/{app_id}", {"envs": envs})
     return wait_deploy(api, app_id, known_ids=known)
@@ -558,6 +562,8 @@ def cmd_deploy(args):
     print(f"  App ID:          {app_id}   DB ID: {db['id']}")
     print(f"  Webhook Робокассы (Result URL): {url}/api/v1/webhooks/robokassa")
     print(f"  Секреты сохранены локально: {state_path(app_name)}")
+    print("  Почта:           не настроена. Регистрация работает сразу, без кода из письма.")
+    print("                   Как включить письма: SKILL.md, шаг 5.")
     print("=" * 60)
 
 
@@ -588,6 +594,69 @@ def cmd_set_env(args):
         print("".join(app_logs(api, app_id)[-60:])[-4000:])
         die(f"Деплой после изменения ENV: {d['status']}")
     print("OK: переменные применены, приложение перезапущено")
+
+
+def cmd_unset_env(args):
+    api, repo, app_name = ctx(args)
+    app_id = _app_id(api, app_name, args)
+    step(f"Удаляю ENV: {', '.join(args.keys)} и жду передеплой")
+    d = update_envs(api, app_id, {}, remove=tuple(args.keys))
+    if d["status"] != "success":
+        print("".join(app_logs(api, app_id)[-60:])[-4000:])
+        die(f"Деплой после изменения ENV: {d['status']}")
+    print("OK: переменные удалены, приложение перезапущено")
+
+
+def _site_call(url: str, path: str, body: dict | None = None, token: str | None = None):
+    """Запрос к API задеплоенного сайта. Возвращает (HTTP-код, JSON)."""
+    headers = {"Content-Type": "application/json"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    req = urllib.request.Request(
+        url + path,
+        data=json.dumps(body).encode() if body is not None else b"",
+        method="POST",
+        headers=headers,
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=90) as r:
+            return r.status, json.loads(r.read().decode() or "{}")
+    except urllib.error.HTTPError as e:
+        try:
+            return e.code, json.loads(e.read().decode() or "{}")
+        except ValueError:
+            return e.code, {}
+
+
+def cmd_test_email(args):
+    """Логинится админом (данные берёт из ENV приложения) и шлёт проверочное письмо."""
+    api, repo, app_name = ctx(args)
+    app = api.get(f"/apps/{_app_id(api, app_name, args)}")["app"]
+    envs = app.get("envs") or {}
+    url = f"https://{app_domain(app)}"
+    if not (envs.get("SMTP_USER") and envs.get("SMTP_PASSWORD")):
+        die("SMTP не настроен: нет SMTP_USER/SMTP_PASSWORD. Сначала set-env (см. SKILL.md, шаг 5).")
+    step(f"Вхожу в {url} как {envs.get('ADMIN_EMAIL')}")
+    code, data = _site_call(url, "/api/v1/auth/login", {
+        "email": envs.get("ADMIN_EMAIL"), "password": envs.get("ADMIN_PASSWORD"),
+    })
+    if code != 200:
+        die(f"Не удалось войти админом (HTTP {code}): {data}. Возможно, пароль админа меняли на сайте.")
+    step(f"Отправляю проверочное письмо на {envs.get('ADMIN_EMAIL')} (до 30 секунд)")
+    code, data = _site_call(url, "/api/v1/admin/email/test", token=data["access_token"])
+    if code == 200:
+        print(f"OK: {data.get('detail')}. Попросите человека проверить ящик и папку «Спам».")
+        return
+    detail = str(data.get("detail", data))
+    print(f"\n[ОШИБКА SMTP] {detail}")
+    if "Timeout" in detail or "timed out" in detail.lower():
+        print(
+            "Похоже, Timeweb закрыл исходящий почтовый порт. Попросите человека написать в поддержку\n"
+            "Timeweb (текст в SKILL.md, шаг 5.1) и повторите test-email после ответа поддержки."
+        )
+    elif "Authentication" in detail or "535" in detail or "534" in detail:
+        print("Почтовый сервер не принял логин/пароль. Нужен именно пароль приложения (SKILL.md, шаг 5.2).")
+    sys.exit(1)
 
 
 def cmd_status(args):
@@ -643,6 +712,10 @@ def main():
     s = sub.add_parser("set-env")
     s.add_argument("pairs", nargs="+", metavar="KEY=VALUE")
     s.set_defaults(fn=cmd_set_env)
+    u = sub.add_parser("unset-env")
+    u.add_argument("keys", nargs="+", metavar="KEY")
+    u.set_defaults(fn=cmd_unset_env)
+    sub.add_parser("test-email").set_defaults(fn=cmd_test_email)
     sub.add_parser("status").set_defaults(fn=cmd_status)
     lg = sub.add_parser("logs")
     lg.add_argument("-n", type=int, default=80)

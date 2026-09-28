@@ -54,15 +54,20 @@ export function useAuth() {
       first_name: string,
       last_name: string,
       referral_code?: string,
+      altcha?: string,
     ) {
-      const res = await authApi.register({ email, password, first_name, last_name, referral_code });
+      const res = await authApi.register({
+        email,
+        password,
+        first_name,
+        last_name,
+        referral_code,
+        altcha,
+      });
       setSession(res.user, res.access_token, res.refresh_token);
+      // Код из письма нужен, только если на сервере настроена почта.
       if (res.pending_verification) {
-        return {
-          pendingVerification: true as const,
-          userId: res.user.id,
-          devCode: res.dev_code ?? null,
-        };
+        return { pendingVerification: true as const, userId: res.user.id };
       }
       router.push("/dashboard");
       return { pendingVerification: false as const };

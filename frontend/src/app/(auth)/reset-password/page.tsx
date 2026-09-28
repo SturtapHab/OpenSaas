@@ -8,6 +8,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 
+import { AuthCard } from "@/components/auth/AuthCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,32 +53,23 @@ function ResetPasswordInner() {
   }
 
   return (
-    <div className="rounded-lg border bg-card p-6 shadow-sm">
-      <h1 className="text-2xl font-bold">Новый пароль</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
-        <div>
+    <AuthCard title="Новый пароль" description="Придумайте новый пароль для входа.">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className="space-y-1.5">
           <Label htmlFor="password">Новый пароль</Label>
-          <Input id="password" type="password" {...register("password")} />
-          {errors.password && (
-            <p className="mt-1 text-xs text-destructive">
-              {errors.password.message}
-            </p>
-          )}
+          <Input id="password" type="password" autoComplete="new-password" placeholder="Минимум 8 символов" {...register("password")} />
+          {errors.password && <p className="text-xs text-destructive">{errors.password.message}</p>}
         </div>
-        <div>
+        <div className="space-y-1.5">
           <Label htmlFor="confirm">Повторите пароль</Label>
-          <Input id="confirm" type="password" {...register("confirm")} />
-          {errors.confirm && (
-            <p className="mt-1 text-xs text-destructive">
-              {errors.confirm.message}
-            </p>
-          )}
+          <Input id="confirm" type="password" autoComplete="new-password" placeholder="••••••••" {...register("confirm")} />
+          {errors.confirm && <p className="text-xs text-destructive">{errors.confirm.message}</p>}
         </div>
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? "Сохранение..." : "Сохранить"}
+        <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? "Сохраняем…" : "Сохранить пароль"}
         </Button>
       </form>
-    </div>
+    </AuthCard>
   );
 }
 
@@ -85,9 +77,7 @@ export default function ResetPasswordPage() {
   return (
     <Suspense
       fallback={
-        <div className="rounded-lg border bg-card p-6 shadow-sm">
-          <h1 className="text-2xl font-bold">Новый пароль</h1>
-        </div>
+<AuthCard title="Новый пароль" />
       }
     >
       <ResetPasswordInner />

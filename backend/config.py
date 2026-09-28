@@ -53,6 +53,11 @@ class Settings(BaseSettings):
     smtp_from_name: str = Field(default="OpenSaaS")
     smtp_use_tls: bool = Field(default=True)
 
+    # === ALTCHA (защита регистрации от ботов, без внешних сервисов) ===
+    altcha_enabled: bool = Field(default=True)
+    # Сложность задачи: браузер перебирает в среднем половину диапазона (~0.5 с).
+    altcha_max_number: int = Field(default=100_000)
+
     # === Робокасса ===
     robokassa_merchant_login: str = Field(default="")
     robokassa_password1: str = Field(default="")
@@ -114,6 +119,11 @@ class Settings(BaseSettings):
     @property
     def cors_origins_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+
+    @property
+    def email_enabled(self) -> bool:
+        """Почта настроена: включаются подтверждение email и сброс пароля."""
+        return bool(self.smtp_user and self.smtp_password)
 
     @property
     def redis_enabled(self) -> bool:

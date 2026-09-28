@@ -13,6 +13,8 @@ class RegisterRequest(BaseModel):
     first_name: str = Field(min_length=1, max_length=100)
     last_name: str = Field(min_length=1, max_length=100)
     referral_code: str | None = None
+    # Решение ALTCHA (base64 JSON), см. modules/auth/altcha.py
+    altcha: str | None = None
 
 
 class LoginRequest(BaseModel):
@@ -49,6 +51,7 @@ class ResendCodeRequest(BaseModel):
 
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
+    altcha: str | None = None
 
 
 class ResetPasswordRequest(BaseModel):
@@ -66,6 +69,13 @@ class UserPublic(BaseModel):
     is_email_verified: bool
     trial_ends_at: datetime | None = None
     created_at: datetime
+
+
+class AuthConfig(BaseModel):
+    """Что включено на сервере — фронт подстраивает формы под это."""
+
+    email_enabled: bool
+    captcha: str | None
 
 
 class AuthResponse(TokenPair):

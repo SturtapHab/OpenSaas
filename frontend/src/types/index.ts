@@ -19,13 +19,26 @@ export interface User {
   profile?: UserProfile | null;
 }
 
+export interface AuthConfig {
+  /** Почта настроена: регистрация с кодом из письма, работает сброс пароля. */
+  email_enabled: boolean;
+  captcha: "altcha" | null;
+}
+
+export interface AltchaChallenge {
+  algorithm: string;
+  challenge: string;
+  maxnumber: number;
+  salt: string;
+  signature: string;
+}
+
 export interface AuthResponse {
   access_token: string;
   refresh_token: string;
   token_type: string;
   user: User;
   pending_verification?: boolean;
-  dev_code?: string | null;
 }
 
 export interface TokenPair {

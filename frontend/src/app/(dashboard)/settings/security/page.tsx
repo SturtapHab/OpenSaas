@@ -50,8 +50,8 @@ export default function SecurityPage() {
   return (
     <>
       <div>
-        <h1 className="text-3xl font-bold">Безопасность</h1>
-        <p className="text-sm text-muted-foreground">Смена пароля.</p>
+        <h1 className="font-display text-[28px] leading-tight sm:text-[32px]">Безопасность</h1>
+        <p className="mt-2 text-[15px] text-muted-foreground">Смена пароля.</p>
       </div>
 
       <Card>

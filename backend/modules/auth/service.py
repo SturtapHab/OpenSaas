@@ -28,9 +28,13 @@ from modules.billing.models import Subscription, SubscriptionStatus
 
 
 async def register_user(
-    db: AsyncSession, payload: RegisterRequest
-) -> tuple[User, str, str, str]:
-    """Returns (user, access_token, refresh_token, verification_code)."""
+    db: AsyncSession, payload: RegisterRequest, *, with_code: bool = True
+) -> tuple[User, str, str, str | None]:
+    """Returns (user, access_token, refresh_token, verification_code).
+
+    with_code=False (почта не настроена): код не создаётся, регистрация
+    завершается сразу.
+    """
     existing = await db.scalar(select(User).where(User.email == payload.email))
     if existing:
         raise HTTPException(
@@ -56,14 +60,16 @@ async def register_user(
         )
     )
 
-    code = str(random.randint(100000, 999999))
-    db.add(
-        EmailVerificationCode(
-            user_id=user.id,
-            code=code,
-            expires_at=now + timedelta(minutes=10),
+    code: str | None = None
+    if with_code:
+        code = str(random.randint(100000, 999999))
+        db.add(
+            EmailVerificationCode(
+                user_id=user.id,
+                code=code,
+                expires_at=now + timedelta(minutes=10),
+            )
         )
-    )
 
     # Referral attribution
     if payload.referral_code:

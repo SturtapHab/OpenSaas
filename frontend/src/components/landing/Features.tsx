@@ -169,7 +169,7 @@ export function BentoFeaturesSection() {
           <BentoCard
             icon={<Lock size={24} />}
             title="Аутентификация"
-            desc="JWT, refresh-токены, email-подтверждение с кодом, сброс пароля."
+            desc="JWT, refresh-токены, защита от ботов (ALTCHA), сброс пароля по почте."
             decor={<LoginDecor />}
             large
           />

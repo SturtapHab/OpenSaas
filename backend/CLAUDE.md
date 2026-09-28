@@ -96,7 +96,16 @@ async def handler(
    входным данным без проверки подписи.
 5. **Защита данных пользователя** — в каждом списке/CRUD фильтр по `user_id`.
    См. `modules/demo_notes/service.py` как пример.
-6. **Email подтверждение** — без него заблокировано создание API ключей.
+6. **Email подтверждение** включается само, когда заданы `SMTP_USER` и
+   `SMTP_PASSWORD` (`settings.email_enabled`). Без SMTP регистрация идёт сразу,
+   без кода; сброс пароля отвечает 503. С SMTP неподтверждённым нельзя создавать
+   API ключи. Фронт узнаёт режим из `GET /api/v1/auth/config`.
+7. **ALTCHA** (`modules/auth/altcha.py`) — защита `register` и `forgot-password`
+   от ботов: proof-of-work без внешних сервисов, подпись от `SECRET_KEY`,
+   повторное использование решения блокируется через `rate_limit.claim_once`.
+   Выключается `ALTCHA_ENABLED=false`.
+8. **Проверка почты**: `POST /api/v1/admin/email/test` шлёт письмо админу и
+   возвращает ошибку SMTP текстом (скрипт деплоя: `test-email`).
 
 ## Как добавить новый модуль
 

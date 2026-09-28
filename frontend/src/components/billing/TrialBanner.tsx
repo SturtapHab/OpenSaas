@@ -5,8 +5,9 @@ import { Clock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useTrialStatus } from "@/hooks/useTrialStatus";
+import { cn } from "@/lib/utils";
 
-export function TrialBanner() {
+export function TrialBanner({ showLink = true }: { showLink?: boolean }) {
   const { isTrial, daysLeft, isExpired } = useTrialStatus();
 
   if (!isTrial) return null;
@@ -15,41 +16,51 @@ export function TrialBanner() {
 
   return (
     <div
-      className={
+      className={cn(
+        "flex flex-col gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between",
         isExpired
-          ? "flex items-center justify-between rounded-lg border border-destructive/40 bg-destructive/10 p-4"
+          ? "border-destructive/30 bg-destructive/5"
           : isUrgent
-          ? "flex items-center justify-between rounded-lg border border-orange-400/40 bg-orange-50 p-4"
-          : "flex items-center justify-between rounded-lg border border-primary/30 bg-primary/5 p-4"
-      }
+            ? "border-clay/30 bg-clay-soft/60"
+            : "border-border bg-card",
+      )}
     >
       <div className="flex items-center gap-3">
-        <Clock className="h-5 w-5" />
+        <span
+          className={cn(
+            "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl",
+            isExpired ? "bg-destructive/10 text-destructive" : "bg-secondary text-clay",
+          )}
+        >
+          <Clock className="h-4 w-4" />
+        </span>
         <div className="text-sm">
           {isExpired ? (
             <span className="font-medium">
-              Триал закончился — выберите тариф, чтобы продолжить
+              Пробный период закончился: выберите тариф, чтобы продолжить
             </span>
           ) : (
             <>
               <span className="font-medium">
-                Триал активен,{" "}
+                Пробный период,{" "}
                 {daysLeft === 0
                   ? "последний день"
                   : `осталось ${daysLeft} дн.`}
               </span>
-              <span className="ml-2 text-muted-foreground">
+              <span className="text-muted-foreground sm:ml-2 max-sm:block">
                 Выберите тариф, чтобы не потерять доступ.
               </span>
             </>
           )}
         </div>
       </div>
-      <Link href="/billing">
-        <Button size="sm" variant={isExpired ? "default" : "outline"}>
-          Перейти к подписке
-        </Button>
-      </Link>
+      {showLink && (
+        <Link href="/billing">
+          <Button size="sm" variant={isExpired ? "default" : "outline"}>
+            Выбрать тариф
+          </Button>
+        </Link>
+      )}
     </div>
   );
 }

@@ -1,13 +1,24 @@
 import { apiClient } from "./client";
-import type { AuthResponse, TokenPair, User } from "@/types";
+import type { AltchaChallenge, AuthConfig, AuthResponse, TokenPair, User } from "@/types";
 
 export const authApi = {
+  async config(): Promise<AuthConfig> {
+    const r = await apiClient.get("/api/v1/auth/config");
+    return r.data;
+  },
+
+  async altchaChallenge(): Promise<AltchaChallenge> {
+    const r = await apiClient.get("/api/v1/auth/altcha");
+    return r.data;
+  },
+
   async register(data: {
     email: string;
     password: string;
     first_name: string;
     last_name: string;
     referral_code?: string;
+    altcha?: string;
   }): Promise<AuthResponse> {
     const r = await apiClient.post("/api/v1/auth/register", data);
     return r.data;
@@ -48,8 +59,8 @@ export const authApi = {
     await apiClient.post("/api/v1/auth/resend-code", { user_id });
   },
 
-  async forgotPassword(email: string): Promise<void> {
-    await apiClient.post("/api/v1/auth/forgot-password", { email });
+  async forgotPassword(email: string, altcha?: string): Promise<void> {
+    await apiClient.post("/api/v1/auth/forgot-password", { email, altcha });
   },
 
   async resetPassword(token: string, new_password: string): Promise<User> {

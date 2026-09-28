@@ -1,7 +1,8 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { formatMoney } from "@/lib/utils";
+
+import { cn, formatMoney } from "@/lib/utils";
 import type { Plan } from "@/types";
 
 interface Props {
@@ -11,95 +12,56 @@ interface Props {
   onSubscribe?: (plan: Plan) => void;
 }
 
+/** Карточка тарифа. Текущий тариф — «чернильная», как тёмные блоки лендинга. */
 export function PlanCard({ plan, active, loading, onSubscribe }: Props) {
   return (
     <div
-      style={{
-        background: active
-          ? 'linear-gradient(145deg, #0052d4 0%, #4364f7 100%)'
-          : 'white',
-        border: active ? 'none' : '1px solid rgba(0,0,0,0.07)',
-        borderRadius: '20px',
-        padding: '28px',
-        boxShadow: active
-          ? '0 16px 48px rgba(0,102,255,0.25)'
-          : '0 2px 12px rgba(0,0,0,0.04)',
-        transition: 'all 0.3s ease',
-      }}
-      className={active ? 'plan-card-active' : 'plan-card'}
+      className={cn(
+        "flex flex-col rounded-3xl border p-7 transition-all duration-300",
+        active
+          ? "border-transparent bg-foreground text-background shadow-[0_28px_56px_-28px_rgba(22,20,15,.6)]"
+          : "border-border bg-card shadow-[0_1px_2px_rgba(22,20,15,.04),0_12px_32px_-16px_rgba(22,20,15,.12)] hover:-translate-y-1 hover:border-foreground/20",
+      )}
     >
-      <div
-        style={{
-          fontSize: '12px',
-          fontWeight: 600,
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          color: active ? 'rgba(255,255,255,0.65)' : '#8e8e93',
-          marginBottom: '8px',
-        }}
-      >
-        {plan.name}
+      <div className="flex items-center justify-between">
+        <span
+          className={cn(
+            "font-display text-[11px] uppercase tracking-[0.14em]",
+            active ? "text-background/60" : "text-muted-foreground",
+          )}
+        >
+          {plan.name}
+        </span>
+        {active && (
+          <span className="rounded-full bg-clay px-2.5 py-1 text-[11px] font-medium text-white">
+            Ваш тариф
+          </span>
+        )}
       </div>
 
-      <div style={{ marginBottom: '20px' }}>
-        <span
-          style={{
-            fontSize: '36px',
-            fontWeight: 800,
-            color: active ? 'white' : '#171717',
-            letterSpacing: '-0.03em',
-            lineHeight: 1,
-          }}
-        >
+      <div className="mt-4 flex items-baseline gap-1.5">
+        <span className="font-display text-[34px] leading-none">
           {formatMoney(plan.price, plan.currency)}
         </span>
-        <span
-          style={{
-            fontSize: '14px',
-            color: active ? 'rgba(255,255,255,0.55)' : '#8e8e93',
-            marginLeft: '6px',
-          }}
-        >
+        <span className={cn("text-sm", active ? "text-background/55" : "text-muted-foreground")}>
           / {plan.interval === "month" ? "мес" : "год"}
         </span>
       </div>
 
-      <div
-        style={{
-          height: '1px',
-          background: active ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.06)',
-          marginBottom: '16px',
-        }}
-      />
+      <div className={cn("my-6 h-px", active ? "bg-background/15" : "bg-border")} />
 
-      <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px' }}>
+      <ul className="mb-7 flex-1 space-y-2.5">
         {plan.features.map((f) => (
-          <li
-            key={f}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              padding: '5px 0',
-              fontSize: '14px',
-              color: active ? 'rgba(255,255,255,0.88)' : '#3a3a3e',
-            }}
-          >
+          <li key={f} className="flex items-start gap-2.5 text-sm">
             <span
-              style={{
-                width: '18px',
-                height: '18px',
-                borderRadius: '50%',
-                background: active ? 'rgba(255,255,255,0.2)' : 'rgba(0,102,255,0.1)',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}
+              className={cn(
+                "mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full",
+                active ? "bg-background/15 text-background" : "bg-clay-soft text-clay-ink",
+              )}
             >
-              <Check size={10} color={active ? 'white' : '#0066FF'} strokeWidth={3} />
+              <Check className="h-2.5 w-2.5" strokeWidth={3.5} />
             </span>
-            {f}
+            <span className={active ? "text-background/85" : "text-foreground/80"}>{f}</span>
           </li>
         ))}
       </ul>
@@ -108,32 +70,15 @@ export function PlanCard({ plan, active, loading, onSubscribe }: Props) {
         type="button"
         disabled={loading || active}
         onClick={() => onSubscribe?.(plan)}
-        style={{
-          width: '100%',
-          height: '44px',
-          borderRadius: '12px',
-          border: 'none',
-          background: active ? 'white' : '#0066FF',
-          color: active ? '#0052d4' : 'white',
-          fontSize: '14px',
-          fontWeight: 600,
-          cursor: active || loading ? 'not-allowed' : 'pointer',
-          opacity: loading ? 0.7 : 1,
-          letterSpacing: '-0.01em',
-          boxShadow: active ? '0 4px 14px rgba(0,0,0,0.12)' : '0 4px 14px rgba(0,102,255,0.25)',
-          transition: 'all 0.2s ease',
-        }}
+        className={cn(
+          "h-12 w-full rounded-full text-sm font-medium transition-all duration-200",
+          active
+            ? "cursor-default bg-background/10 text-background/80"
+            : "bg-foreground text-background hover:-translate-y-px hover:shadow-[0_12px_24px_-10px_rgba(22,20,15,.5)] disabled:opacity-60",
+        )}
       >
-        {active ? "Текущий план" : loading ? "Подождите..." : "Выбрать"}
+        {active ? "Текущий тариф" : loading ? "Подождите…" : "Выбрать тариф"}
       </button>
-
-      <style jsx>{`
-        .plan-card:hover {
-          border-color: rgba(0, 102, 255, 0.2) !important;
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
-          transform: translateY(-2px);
-        }
-      `}</style>
     </div>
   );
 }

@@ -76,6 +76,28 @@ async def _check_postgres(
     return count <= limit
 
 
+async def claim_once(db: AsyncSession, key: str, ttl_seconds: int) -> bool:
+    """True, если ключ занят впервые; False, если он уже использовался.
+
+    Нужен для одноразовых значений (например, решений ALTCHA). ttl_seconds
+    должен быть меньше 2 часов: старше этого PostgreSQL-записи удаляются.
+    """
+    if settings.redis_enabled:
+        r = await _get_redis()
+        return bool(await r.set(f"once:{key}", "1", nx=True, ex=ttl_seconds))
+
+    stmt = (
+        pg_insert(RateLimitEntry)
+        .values(identifier=key, count=1, window_start=datetime.now(timezone.utc))
+        .on_conflict_do_nothing(index_elements=[RateLimitEntry.identifier])
+        .returning(RateLimitEntry.id)
+    )
+    result = await db.execute(stmt)
+    claimed = result.scalar_one_or_none() is not None
+    await db.commit()
+    return claimed
+
+
 async def cleanup_old_entries(db: AsyncSession) -> int:
     """Удалить старые записи (старше 2 часов). Вызывается фоновой задачей."""
     cutoff = datetime.now(timezone.utc) - timedelta(hours=2)
