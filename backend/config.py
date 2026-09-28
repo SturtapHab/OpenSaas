@@ -62,7 +62,8 @@ class Settings(BaseSettings):
     robokassa_merchant_login: str = Field(default="")
     robokassa_password1: str = Field(default="")
     robokassa_password2: str = Field(default="")
-    robokassa_test_mode: bool = Field(default=True)
+    # Только боевой режим: тестовые пароли Робокассы в проекте не используются.
+    robokassa_test_mode: bool = Field(default=False)
 
     # === Stripe ===
     stripe_secret_key: str = Field(default="")
