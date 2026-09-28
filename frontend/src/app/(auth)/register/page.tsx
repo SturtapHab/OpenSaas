@@ -11,6 +11,7 @@ import { Gift } from "lucide-react";
 
 import { AltchaCheck } from "@/components/auth/AltchaCheck";
 import { AuthCard, authLinkClass } from "@/components/auth/AuthCard";
+import { RedirectIfAuthenticated } from "@/components/auth/RedirectIfAuthenticated";
 import { VerifyCodeForm } from "@/components/auth/VerifyCodeForm";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -102,6 +103,7 @@ export default function RegisterPage() {
         </>
       }
     >
+      <RedirectIfAuthenticated />
       {refCode && (
         <div className="mb-5 flex items-center gap-2.5 rounded-xl bg-clay-soft px-3.5 py-2.5 text-sm text-clay-ink">
           <Gift className="h-4 w-4 shrink-0" />

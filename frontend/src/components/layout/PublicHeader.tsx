@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { BrandIcon } from "@/components/landing/BrandIcon";
 import { GITHUB_URL } from "@/components/landing/site";
+import { useHasSession } from "@/hooks/useHasSession";
 
 const navLinks = [
   { href: "/#how-to-start", label: "Как начать" },
@@ -18,6 +19,8 @@ const navLinks = [
 export function PublicHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  // Вошедшему человеку вместо «Войти / Регистрация» показываем вход в кабинет.
+  const loggedIn = useHasSession();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -62,12 +65,20 @@ export function PublicHeader() {
           >
             <BrandIcon name="github" size={18} color="#16140f" />
           </a>
-          <Link href="/login" className="hidden sm:inline-flex items-center h-10 px-4 rounded-full text-[14px] font-medium text-[#4a463e] no-underline hover:text-[#16140f] hover:bg-black/[0.05] transition-colors">
-            Войти
-          </Link>
-          <Link href="/register" className="inline-flex items-center h-10 px-5 rounded-full text-[14px] font-semibold text-white no-underline transition-transform hover:-translate-y-px" style={{ background: "#16140f" }}>
-            Регистрация
-          </Link>
+          {loggedIn ? (
+            <Link href="/dashboard" className="inline-flex items-center h-10 px-5 rounded-full text-[14px] font-semibold text-white no-underline transition-transform hover:-translate-y-px" style={{ background: "#16140f" }}>
+              Личный кабинет
+            </Link>
+          ) : (
+            <>
+              <Link href="/login" className="hidden sm:inline-flex items-center h-10 px-4 rounded-full text-[14px] font-medium text-[#4a463e] no-underline hover:text-[#16140f] hover:bg-black/[0.05] transition-colors">
+                Войти
+              </Link>
+              <Link href="/register" className="inline-flex items-center h-10 px-5 rounded-full text-[14px] font-semibold text-white no-underline transition-transform hover:-translate-y-px" style={{ background: "#16140f" }}>
+                Регистрация
+              </Link>
+            </>
+          )}
           <button
             type="button"
             className="md:hidden inline-flex w-10 h-10 items-center justify-center rounded-full hover:bg-black/[0.05]"
@@ -90,8 +101,8 @@ export function PublicHeader() {
               {label}
             </Link>
           ))}
-          <Link href="/login" onClick={() => setOpen(false)} className="px-4 py-3 rounded-2xl text-[16px] text-[#4a463e] no-underline hover:bg-black/[0.04]">
-            Войти
+          <Link href={loggedIn ? "/dashboard" : "/login"} onClick={() => setOpen(false)} className="px-4 py-3 rounded-2xl text-[16px] text-[#4a463e] no-underline hover:bg-black/[0.04]">
+            {loggedIn ? "Личный кабинет" : "Войти"}
           </Link>
         </nav>
       )}

@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 
 import { AuthCard, authLinkClass } from "@/components/auth/AuthCard";
+import { RedirectIfAuthenticated } from "@/components/auth/RedirectIfAuthenticated";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -53,6 +54,7 @@ export default function LoginPage() {
         </>
       }
     >
+      <RedirectIfAuthenticated />
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
           <Label htmlFor="email">Email</Label>
