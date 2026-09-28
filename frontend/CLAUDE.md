@@ -96,10 +96,17 @@ const { register, handleSubmit } = useForm({ resolver: zodResolver(schema) });
 
 1. Юзер логинится → `useAuth.login` → `tokenStorage.set` + Zustand `setUser`
    → редирект на `/dashboard`.
-2. При перезагрузке: `useAuth` (useEffect) пытается `usersApi.me()` если
-   есть `tokenStorage.access`. Если 401 — interceptor пытается refresh,
-   при провале → `/login`.
-3. Защита роутов: `AuthGuard` в `(dashboard)/layout.tsx` и
+2. При перезагрузке / повторном открытии вкладки `restoreSession()` в
+   `useAuth` (один раз на загрузку): сразу показывает сохранённый профиль
+   (`tokenStorage.user`), затем проверяет `usersApi.me()`. Истёкший access
+   обновляет interceptor через refresh-токен (30 дней).
+3. Выход — **только** если сервер отверг токены (`isAuthRejection`: 400/401/
+   403/422). Сетевая ошибка или 502/503 во время перезапуска сайта сессию
+   не стирают: запрос повторяется, а без сохранённого профиля `AuthGuard`
+   показывает «Не удаётся связаться с сервером» с кнопкой «Повторить».
+4. Вошедшего человека `/login` и `/register` отправляют в `/dashboard`
+   (`RedirectIfAuthenticated`), шапка лендинга показывает «Личный кабинет».
+5. Защита роутов: `AuthGuard` в `(dashboard)/layout.tsx` и
    `(admin)/layout.tsx` (с `requireAdmin`).
 
 ## Как добавить новую страницу
