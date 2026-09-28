@@ -6,7 +6,6 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from config import settings
 from database import get_db
 from dependencies import CurrentUser
 from modules.referrals import service as ref_service
@@ -16,6 +15,7 @@ from modules.referrals.schemas import (
     ReferralStats,
     ReferralUserPublic,
 )
+from public_url import app_url
 
 router = APIRouter(prefix="/referrals", tags=["referrals"])
 
@@ -28,7 +28,7 @@ async def my_code(
     stats = await ref_service.calculate_stats(db, user)
     return MyReferralCode(
         code=code.code,
-        url=f"{settings.app_url}/ref/{code.code}",
+        url=f"{app_url()}/ref/{code.code}",
         stats=stats,
     )
 
