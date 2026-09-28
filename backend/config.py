@@ -66,7 +66,8 @@ class Settings(BaseSettings):
 
     # === App ===
     app_name: str = Field(default="OpenSaaS")
-    app_url: str = Field(default="http://localhost:3000")
+    # Пусто = брать адрес сайта из заголовка Host запроса (см. public_url.py).
+    app_url: str = Field(default="")
     api_url: str = Field(default="http://localhost:8000")
     environment: str = Field(default="development")
     cors_origins: str = Field(default="http://localhost:3000")

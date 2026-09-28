@@ -20,6 +20,7 @@ backend/
 ├── config.py            # pydantic-settings (читает .env)
 ├── database.py          # async engine, Base, get_db
 ├── dependencies.py      # CurrentUser, AdminUser, ActiveSubscription
+├── public_url.py        # app_url(): APP_URL или адрес из Host запроса
 ├── models_registry.py   # импорт всех моделей для Alembic
 │
 ├── alembic/             # миграции 0001-0007

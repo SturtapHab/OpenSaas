@@ -13,6 +13,7 @@ import aiosmtplib
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from config import settings
+from public_url import app_url
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ env = Environment(
 
 def render(template_name: str, **context: Any) -> str:
     tpl = env.get_template(template_name)
-    return tpl.render(app_name=settings.app_name, app_url=settings.app_url, **context)
+    return tpl.render(app_name=settings.app_name, app_url=app_url(), **context)
 
 
 async def send_email(to: str, subject: str, html: str) -> None:
@@ -58,7 +59,7 @@ async def send_email(to: str, subject: str, html: str) -> None:
 
 
 async def send_confirmation_email(to: str, token: str) -> None:
-    url = f"{settings.app_url}/confirm-email?token={token}"
+    url = f"{app_url()}/confirm-email?token={token}"
     html = render("confirm_email.html", confirm_url=url)
     await send_email(to, f"Подтверждение email — {settings.app_name}", html)
 
@@ -77,7 +78,7 @@ async def send_welcome_email(to: str) -> None:
 
 
 async def send_reset_password_email(to: str, token: str) -> None:
-    url = f"{settings.app_url}/reset-password?token={token}"
+    url = f"{app_url()}/reset-password?token={token}"
     html = render("reset_password.html", reset_url=url)
     await send_email(to, f"Сброс пароля — {settings.app_name}", html)
 

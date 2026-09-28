@@ -1,181 +1,98 @@
-"use client";
+import { Check, CreditCard, Gift, LayoutDashboard, Shield, type LucideIcon } from "lucide-react";
+import { Stagger, StaggerItem } from "./Reveal";
+import { SectionHeading } from "./SectionHeading";
 
-import { Shield, CreditCard, LayoutDashboard, Gift } from "lucide-react";
-import { motion } from "framer-motion";
-
-const cards = [
-  {
-    Icon: Shield,
-    color: "#0066FF",
-    bg: "rgba(0,102,255,0.08)",
-    title: "Регистрация пользователей",
-    text: "Вход, выход, восстановление пароля и подтверждение email — работает из коробки",
-  },
-  {
-    Icon: CreditCard,
-    color: "#10b981",
-    bg: "rgba(16,185,129,0.08)",
-    title: "Приём платежей",
-    text: "Подключи оплату за 5 минут — просто вставь ключи. История транзакций в админке",
-  },
-  {
-    Icon: LayoutDashboard,
-    color: "#f59e0b",
-    bg: "rgba(245,158,11,0.08)",
-    title: "Личный кабинет",
-    text: "Каждый пользователь видит свои данные, подписку и историю платежей",
-  },
-  {
-    Icon: Gift,
-    color: "#8b5cf6",
-    bg: "rgba(139,92,246,0.1)",
-    title: "Партнёрская программа",
-    text: "Пользователи приглашают друзей — платформа растёт сама",
-  },
-];
-
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.1 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
-  },
-};
-
+/** «Всё уже написано»: bento-сетка с мини-интерфейсами вместо иконок-заглушек. */
 export function WhatInside() {
   return (
-    <section style={{ position: "relative", overflow: "hidden", background: "#ffffff", padding: "120px 0" }}>
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          top: "-100px",
-          left: "-120px",
-          width: "380px",
-          height: "380px",
-          borderRadius: "50%",
-          background: "rgba(16,185,129,0.05)",
-          filter: "blur(60px)",
-          pointerEvents: "none",
-          zIndex: 0,
-        }}
-      />
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          bottom: "-120px",
-          right: "-140px",
-          width: "420px",
-          height: "420px",
-          borderRadius: "50%",
-          background: "rgba(0,102,255,0.05)",
-          filter: "blur(65px)",
-          pointerEvents: "none",
-          zIndex: 0,
-        }}
-      />
-      <div style={{ position: "relative", zIndex: 1, maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
-        <div className="text-center" style={{ marginBottom: "64px" }}>
-          <div
-            style={{
-              fontSize: "12px",
-              color: "#0066FF",
-              fontWeight: 600,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              marginBottom: "16px",
-            }}
-          >
-            03 / ВОЗМОЖНОСТИ
-          </div>
-          <h2
-            style={{
-              fontSize: "clamp(2rem, 4vw, 3.5rem)",
-              fontWeight: 800,
-              letterSpacing: "-0.025em",
-              lineHeight: "1.05",
-              color: "#171717",
-              marginBottom: "16px",
-            }}
-          >
-            Всё уже написано за вас
-          </h2>
-          <p
-            style={{
-              fontSize: "18px",
-              color: "#616161",
-              lineHeight: "1.6",
-              maxWidth: "600px",
-              margin: "0 auto",
-            }}
-          >
-            Не тратьте месяцы на инфраструктуру — сосредоточьтесь на своей идее
-          </p>
-        </div>
+    <section id="inside" className="lx-section lx-band">
+      <div className="lx-container">
+        <SectionHeading
+          tag="Уже внутри"
+          title={<>Всё уже <em>написано за вас</em></>}
+          text="Месяцы работы программистов — уже в коде. Вам остаётся только своя идея."
+        />
 
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-5"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          {cards.map((card) => (
-            <motion.div
-              key={card.title}
-              variants={itemVariants}
-              className="bento-card"
-              style={{ padding: "32px" }}
-            >
-              <div
-                style={{
-                  width: "52px",
-                  height: "52px",
-                  borderRadius: "14px",
-                  background: card.bg,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: "20px",
-                }}
-              >
-                <card.Icon size={24} color={card.color} strokeWidth={1.75} />
-              </div>
+        <Stagger className="mt-16 grid grid-cols-1 md:grid-cols-6 gap-5">
+          {/* Регистрация */}
+          <StaggerItem className="lx-card lx-card-hover md:col-span-3 p-8 flex flex-col">
+            <Head Icon={Shield} title="Регистрация пользователей" text="Вход, выход, восстановление пароля и подтверждение email — работает из коробки." />
+            <div className="mt-8 rounded-2xl bg-[var(--lx-ivory)] border border-[var(--lx-line)] p-5 space-y-3">
+              <Field label="Email" value="anna@studio.ru" />
+              <Field label="Код из письма" value="4 8 1 9 2 7" mono />
+              <div className="h-11 rounded-xl flex items-center justify-center text-[14px] font-semibold text-white" style={{ background: "var(--lx-ink)" }}>Создать аккаунт</div>
+            </div>
+          </StaggerItem>
 
-              <h3
-                style={{
-                  fontSize: "20px",
-                  fontWeight: 700,
-                  color: "#171717",
-                  letterSpacing: "-0.015em",
-                  marginBottom: "8px",
-                }}
-              >
-                {card.title}
-              </h3>
-              <p
-                style={{
-                  fontSize: "15px",
-                  color: "#616161",
-                  lineHeight: "1.6",
-                  margin: 0,
-                }}
-              >
-                {card.text}
-              </p>
-            </motion.div>
-          ))}
-        </motion.div>
+          {/* Платежи */}
+          <StaggerItem className="lx-card lx-card-hover md:col-span-3 p-8 flex flex-col">
+            <Head Icon={CreditCard} title="Приём платежей" text="Подключи оплату за 5 минут — просто вставь ключи. История транзакций в админке." />
+            <div className="mt-8 rounded-2xl bg-[var(--lx-ivory)] border border-[var(--lx-line)] divide-y divide-[var(--lx-line)]">
+              {[
+                { who: "Pro · anna@studio.ru", sum: "2 990 ₽" },
+                { who: "Basic · ivan@mail.ru", sum: "990 ₽" },
+                { who: "Pro · team@agency.ru", sum: "2 990 ₽" },
+              ].map((r) => (
+                <div key={r.who} className="flex items-center gap-3 px-5 py-3.5 text-[14px]">
+                  <span className="w-6 h-6 rounded-full flex items-center justify-center bg-[#e3efe6] text-[var(--lx-sage)]"><Check size={13} strokeWidth={2.5} /></span>
+                  <span className="text-[var(--lx-ink-2)] truncate">{r.who}</span>
+                  <span className="ml-auto font-semibold tabular-nums">{r.sum}</span>
+                </div>
+              ))}
+            </div>
+          </StaggerItem>
+
+          {/* Кабинет */}
+          <StaggerItem className="lx-card lx-card-hover md:col-span-4 p-8 flex flex-col">
+            <Head Icon={LayoutDashboard} title="Личный кабинет" text="Каждый пользователь видит свои данные, подписку и историю платежей." />
+            <div className="mt-8 grid grid-cols-3 gap-3">
+              {[
+                { k: "Тариф", v: "Pro" },
+                { k: "Продление", v: "12 окт" },
+                { k: "Запросов", v: "∞" },
+              ].map((c) => (
+                <div key={c.k} className="rounded-2xl bg-[var(--lx-ivory)] border border-[var(--lx-line)] p-4">
+                  <div className="text-[12px] text-[var(--lx-ink-3)]">{c.k}</div>
+                  <div className="lx-display text-[24px] leading-none mt-2">{c.v}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 rounded-2xl bg-[var(--lx-ivory)] border border-[var(--lx-line)] p-4">
+              <div className="flex justify-between text-[12px] text-[var(--lx-ink-3)] mb-2"><span>Использовано в этом месяце</span><span>68%</span></div>
+              <div className="h-2 rounded-full bg-[var(--lx-line)] overflow-hidden"><div className="h-full rounded-full" style={{ width: "68%", background: "linear-gradient(90deg,var(--lx-clay),#e08a68)" }} /></div>
+            </div>
+          </StaggerItem>
+
+          {/* Партнёрка */}
+          <StaggerItem className="lx-card lx-card-hover md:col-span-2 p-8 flex flex-col">
+            <Head Icon={Gift} title="Партнёрская программа" text="Пользователи приглашают друзей — платформа растёт сама." />
+            <div className="mt-8 rounded-2xl p-5 flex-1 flex flex-col justify-end" style={{ background: "var(--lx-clay-soft)" }}>
+              <div className="text-[12px] text-[var(--lx-clay-ink)]">Начислено партнёру</div>
+              <div className="lx-display text-[36px] leading-none mt-2 text-[var(--lx-clay-ink)]">+598 ₽</div>
+              <div className="text-[12.5px] text-[var(--lx-clay-ink)]/80 mt-2">20% с каждой оплаты друга</div>
+            </div>
+          </StaggerItem>
+        </Stagger>
       </div>
     </section>
+  );
+}
+
+function Head({ Icon, title, text }: { Icon: LucideIcon; title: string; text: string }) {
+  return (
+    <div>
+      <Icon size={22} strokeWidth={1.6} className="text-[var(--lx-clay)] mb-5" />
+      <h3 className="text-[20px] mb-2">{title}</h3>
+      <p className="text-[15px] text-[var(--lx-ink-2)] leading-relaxed max-w-[440px]">{text}</p>
+    </div>
+  );
+}
+
+function Field({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
+  return (
+    <div className="rounded-xl bg-white border border-[var(--lx-line)] px-4 py-2.5">
+      <div className="text-[11px] text-[var(--lx-ink-3)]">{label}</div>
+      <div className={"text-[14.5px] text-[var(--lx-ink)] " + (mono ? "lx-mono tracking-wider" : "")}>{value}</div>
+    </div>
   );
 }

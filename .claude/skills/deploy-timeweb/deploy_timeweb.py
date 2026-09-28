@@ -490,10 +490,9 @@ def cmd_deploy(args):
         "ADMIN_PASSWORD": st["admin_password"],
         "ENVIRONMENT": "production",
         "APP_NAME": args.app_title,
-        # Домен станет известен только после создания — ниже подставим реальный.
-        "APP_URL": "http://localhost:3000",
-        "API_URL": "http://localhost:3000",
-        "CORS_ORIGINS": "http://localhost:3000",
+        # APP_URL не задаём: бэкенд берёт адрес сайта из заголовка Host запроса,
+        # поэтому передеплой после выдачи домена не нужен. CORS тоже не нужен:
+        # фронт и API на одном домене.
         "ROBOKASSA_TEST_MODE": "true",
         "STRIPE_ENABLED": "false",
     }
@@ -521,7 +520,7 @@ def cmd_deploy(args):
         step(f"Приложение «{app_name}» уже есть (id {app['id']}), обновляю ENV")
         known = {d["id"] for d in deploys(api, app["id"])}
         cur = dict(app.get("envs") or {})
-        cur.update({k: v for k, v in envs.items() if k not in ("APP_URL", "API_URL", "CORS_ORIGINS")})
+        cur.update(envs)
         api.patch(f"/apps/{app['id']}", {"envs": cur})
     app_id = app["id"]
     st["app_id"] = app_id
@@ -546,12 +545,6 @@ def cmd_deploy(args):
     st["domain"] = domain
     save_state(app_name, st)
     url = f"https://{domain}"
-
-    if (app.get("envs") or {}).get("APP_URL") != url:
-        step(f"Подставляю домен {domain} в APP_URL / API_URL / CORS_ORIGINS и передеплою")
-        d = update_envs(api, app_id, {"APP_URL": url, "API_URL": url, "CORS_ORIGINS": url})
-        if d["status"] != "success":
-            die(f"Передеплой после смены домена: {d['status']}. Смотрите `logs`.")
 
     step("Проверяю, что сайт отвечает снаружи")
     health = check_health(domain)

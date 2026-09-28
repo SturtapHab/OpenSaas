@@ -1,346 +1,143 @@
 "use client";
 
-import Link from "next/link";
-import { Send, Zap } from "lucide-react";
-import { motion } from "framer-motion";
-
-const itemVariants = {
-  hidden:  { opacity: 0, y: 24 },
-  visible: (delay: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay },
-  }),
-};
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowRight, CreditCard, Database, PlayCircle, Users } from "lucide-react";
+import { AgentDemo } from "./AgentDemo";
+import { BrandIcon } from "./BrandIcon";
+import { Reveal } from "./Reveal";
+import { GITHUB_URL } from "./site";
 
 const stats = [
-  { label: 'Пользователи', value: '2,847', change: '+12%', color: '#0066FF', barColor: 'rgba(0,102,255,0.12)' },
-  { label: 'Выручка',      value: '₽48K',   change: '+8%',  color: '#10b981', barColor: 'rgba(16,185,129,0.12)' },
-  { label: 'Активных',    value: '1,203',   change: '+5%',  color: '#f59e0b', barColor: 'rgba(245,158,11,0.12)' },
-  { label: 'API запросов', value: '89.2K',  change: '+23%', color: '#8b5cf6', barColor: 'rgba(139,92,246,0.12)' },
+  { value: "15 мин", label: "от ключа до работающего сайта" },
+  { value: "0 ₽", label: "за шаблон — лицензия MIT" },
+  { value: "≈1 500 ₽", label: "в месяц за хостинг, напрямую Timeweb" },
+  { value: "100%", label: "кода открыто на GitHub" },
 ];
 
 export function Hero() {
+  const stage = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: stage, offset: ["start end", "end start"] });
+  const scale = useTransform(scrollYProgress, [0, 0.45], [0.94, 1]);
+  const floatL = useTransform(scrollYProgress, [0, 1], [40, -60]);
+  const floatR = useTransform(scrollYProgress, [0, 1], [70, -40]);
+
   return (
-    <section
-      className="relative overflow-hidden noise"
-      style={{ paddingTop: '160px', paddingBottom: '120px' }}
-    >
-      {/* Mesh background */}
-      <div className="absolute inset-0 mesh-bg" style={{ zIndex: 0 }} />
+    <section className="relative overflow-hidden lx-grain" style={{ paddingTop: 136 }}>
+      {/* Фон: мягкое тёплое свечение и тонкая сетка */}
+      <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 70% 50% at 50% 0%, #fff 0%, rgba(255,255,255,0) 70%)" }} />
+      <div aria-hidden className="absolute inset-x-0 top-0 h-[900px] lx-grid-lines pointer-events-none" style={{ maskImage: "radial-gradient(ellipse 60% 55% at 50% 30%, #000 10%, transparent 75%)", WebkitMaskImage: "radial-gradient(ellipse 60% 55% at 50% 30%, #000 10%, transparent 75%)", opacity: 0.6 }} />
+      <div aria-hidden className="absolute pointer-events-none" style={{ width: 720, height: 720, top: 260, left: "50%", transform: "translateX(-50%)", borderRadius: "50%", filter: "blur(90px)", background: "radial-gradient(circle, rgba(224,138,104,0.28) 0%, rgba(224,138,104,0) 65%)" }} />
 
-      {/* Static gradient orbs (paint once, no scroll jank) */}
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          width: '520px',
-          height: '520px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(0,102,255,0.38) 0%, rgba(0,102,255,0.12) 40%, transparent 70%)',
-          filter: 'blur(50px)',
-          top: '-140px',
-          left: '6%',
-          zIndex: 0,
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          width: '580px',
-          height: '580px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(139,92,246,0.34) 0%, rgba(139,92,246,0.1) 45%, transparent 70%)',
-          filter: 'blur(55px)',
-          top: '-40px',
-          right: '0%',
-          zIndex: 0,
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          width: '480px',
-          height: '480px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(99,179,237,0.4) 0%, rgba(99,179,237,0.12) 40%, transparent 70%)',
-          filter: 'blur(55px)',
-          bottom: '-120px',
-          left: '38%',
-          zIndex: 0,
-          pointerEvents: 'none',
-        }}
-      />
-
-      {/* Subtle dot grid */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px)',
-          backgroundSize: '28px 28px',
-          zIndex: 0,
-          WebkitMaskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 40%, transparent 100%)',
-          maskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 40%, transparent 100%)',
-        }}
-      />
-
-      {/* Bottom fade to white — seamless transition to next section */}
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: '260px',
-          background:
-            'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 55%, #ffffff 100%)',
-          zIndex: 0,
-          pointerEvents: 'none',
-        }}
-      />
-
-      <div
-        className="relative mx-auto text-center px-6"
-        style={{ maxWidth: '900px', zIndex: 1 }}
-      >
-        {/* Pill badge */}
-        <motion.div
-          custom={0}
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex justify-center mb-8"
-        >
-          <div
-            className="inline-flex items-center gap-2 border border-black/10 rounded-full px-4 py-1.5 text-[13px] text-[#616161] bg-white/80 backdrop-blur-md"
-          >
-            <Zap size={12} strokeWidth={2.5} />
-            <span>Шаблон + 5 уроков · Запуск за выходные</span>
-          </div>
-        </motion.div>
-
-        {/* Headline */}
-        <motion.h1
-          custom={0}
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          style={{
-            fontSize: 'clamp(3rem, 7vw, 6rem)',
-            lineHeight: '1',
-            letterSpacing: '-0.04em',
-            fontWeight: 800,
-            color: '#171717',
-            marginBottom: '24px',
-          }}
-        >
-          Создай свою
-          <br />
-          <span className="gradient-text">онлайн платформу</span> за выходные
-        </motion.h1>
-
-        {/* Subheadline */}
-        <motion.p
-          custom={0.15}
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          className="mx-auto"
-          style={{
-            fontSize: '18px',
-            color: '#616161',
-            maxWidth: '580px',
-            lineHeight: '1.65',
-            marginBottom: '40px',
-          }}
-        >
-          Готовый шаблон + видеоуроки по запуску.
-          <br />
-          Без найма разработчика.
-        </motion.p>
-
-        {/* CTA buttons */}
-        <motion.div
-          custom={0.3}
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-wrap items-center justify-center gap-3"
-          style={{ marginBottom: '64px' }}
-        >
-          <Link href="#" className="btn-primary-new">
-            <span aria-hidden>💳</span>
-            Купить за 3000₽
-          </Link>
-          <Link
-            href="https://t.me/wellcome_ai"
+      <div className="relative lx-container text-center">
+        <Reveal>
+          <a
+            href={GITHUB_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-secondary-new"
+            className="inline-flex items-center gap-2.5 rounded-full bg-white/80 backdrop-blur pl-1.5 pr-4 py-1.5 text-[13px] text-[var(--lx-ink-2)] no-underline border border-[var(--lx-line)] hover:border-[var(--lx-line-2)] transition-colors"
+            style={{ boxShadow: "var(--lx-shadow)" }}
           >
-            <Send size={15} />
-            Автор шаблона
-          </Link>
-        </motion.div>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--lx-ink)] text-white px-2.5 py-1 text-[11px] font-semibold">
+              <BrandIcon name="github" size={11} color="#fff" /> MIT
+            </span>
+            <span>100% open source<span className="hidden sm:inline"> · бесплатно навсегда</span></span>
+            <ArrowRight size={14} className="text-[var(--lx-ink-3)]" />
+          </a>
+        </Reveal>
 
-        {/* Dashboard preview */}
-        <motion.div
-          custom={0.3}
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <div
-            className="mx-auto"
-            style={{
-              borderRadius: '20px',
-              border: '1px solid rgba(0,0,0,0.08)',
-              boxShadow: '0 0 0 1px rgba(255,255,255,0.6) inset, 0 24px 80px rgba(0,0,0,0.12)',
-              overflow: 'hidden',
-              background: '#fafafa',
-              maxWidth: '860px',
-            }}
+        <Reveal delay={0.08}>
+          <h1
+            className="lx-display mx-auto mt-8"
+            style={{ fontSize: "clamp(2.1rem, 5vw, 4.25rem)", lineHeight: 1.05, maxWidth: 1080 }}
           >
-            {/* Browser chrome */}
-            <div
-              style={{
-                background: '#f0f0f2',
-                padding: '10px 16px',
-                borderBottom: '1px solid rgba(0,0,0,0.06)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-              }}
-            >
-              <div style={{ display: 'flex', gap: '5px' }}>
-                <div style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#ff5f57' }} />
-                <div style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#febc2e' }} />
-                <div style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#28c840' }} />
-              </div>
-              <div
-                style={{
-                  flex: 1,
-                  background: 'white',
-                  borderRadius: '6px',
-                  padding: '4px 12px',
-                  fontSize: '11.5px',
-                  color: '#9e9ea8',
-                  fontFamily: 'Geist Mono, monospace',
-                  border: '1px solid rgba(0,0,0,0.06)',
-                }}
-              >
-                app.opensaas.dev/dashboard
-              </div>
-            </div>
+            Свой <span className="whitespace-nowrap">SaaS-сервис</span> <em className="whitespace-nowrap">за 15 минут</em>
+            <br className="hidden sm:block" /> одним сообщением агенту
+          </h1>
+        </Reveal>
 
-            {/* Dashboard body */}
-            <div style={{ display: 'flex', background: '#fafafa' }}>
-              {/* Sidebar strip */}
-              <div
-                style={{
-                  width: '48px',
-                  background: 'white',
-                  borderRight: '1px solid rgba(0,0,0,0.05)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  paddingTop: '16px',
-                  gap: '10px',
-                  flexShrink: 0,
-                }}
-              >
-                {[
-                  { bg: '#0066FF', active: true },
-                  { bg: '#e5e7eb', active: false },
-                  { bg: '#e5e7eb', active: false },
-                  { bg: '#e5e7eb', active: false },
-                ].map((item, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      width: '28px',
-                      height: '6px',
-                      borderRadius: '3px',
-                      background: item.bg,
-                    }}
-                  />
-                ))}
-              </div>
+        <Reveal delay={0.16}>
+          <p className="lx-lead mx-auto mt-7" style={{ maxWidth: 640, fontSize: 19 }}>
+            Скопируйте репозиторий, откройте его в Claude Code или Codex и напишите{" "}
+            <span className="lx-mono text-[15px] text-[var(--lx-ink)] bg-white border border-[var(--lx-line)] rounded-md px-1.5 py-0.5 whitespace-nowrap">
+              «вот ключ Timeweb — задеплой»
+            </span>
+            . Агент сам создаст базу, соберёт приложение и выдаст ссылку с паролем админа.
+          </p>
+        </Reveal>
 
-              {/* Main content */}
-              <div style={{ flex: 1, padding: '20px' }}>
-                {/* Top stats */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', marginBottom: '14px' }}>
-                  {stats.map(item => (
-                    <div
-                      key={item.label}
-                      style={{
-                        background: 'white',
-                        borderRadius: '10px',
-                        padding: '12px 14px',
-                        border: '1px solid rgba(0,0,0,0.05)',
-                      }}
-                    >
-                      <div style={{ fontSize: '10px', color: '#9e9ea8', marginBottom: '5px', fontWeight: 500 }}>{item.label}</div>
-                      <div style={{ fontSize: '17px', fontWeight: 700, color: '#171717', letterSpacing: '-0.02em', marginBottom: '3px' }}>{item.value}</div>
-                      <div
-                        style={{
-                          fontSize: '10px',
-                          color: item.color,
-                          fontWeight: 600,
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          background: item.barColor,
-                          padding: '1px 6px',
-                          borderRadius: '4px',
-                        }}
-                      >
-                        {item.change}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+        <Reveal delay={0.24}>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="lx-btn lx-btn-ink">
+              <BrandIcon name="github" size={17} color="#fff" />
+              Забрать код на GitHub
+            </a>
+            <a href="#video" className="lx-btn lx-btn-ghost">
+              <PlayCircle size={17} />
+              Как запустить за 10 минут
+            </a>
+          </div>
+        </Reveal>
 
-                {/* Chart */}
-                <div
-                  style={{
-                    background: 'white',
-                    borderRadius: '10px',
-                    padding: '14px 16px',
-                    border: '1px solid rgba(0,0,0,0.05)',
-                    height: '88px',
-                    position: 'relative',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <div style={{ fontSize: '10px', color: '#9e9ea8', fontWeight: 500, marginBottom: '8px' }}>Выручка за 12 месяцев</div>
-                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '50px' }}>
-                    {[30, 52, 38, 65, 48, 72, 58, 80, 55, 88, 70, 100].map((h, i) => (
-                      <div
-                        key={i}
-                        style={{
-                          flex: 1,
-                          height: `${h}%`,
-                          background: i === 11
-                            ? 'linear-gradient(180deg, #0066FF, #6366f1)'
-                            : `rgba(0,102,255,${0.08 + (h / 100) * 0.18})`,
-                          borderRadius: '3px 3px 0 0',
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+        <Reveal delay={0.32}>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[13px] text-[var(--lx-ink-3)]">
+            <span>Работает с</span>
+            <span className="inline-flex items-center gap-2 text-[var(--lx-ink-2)] font-medium"><BrandIcon name="claude" size={18} /> Claude Code</span>
+            <span className="inline-flex items-center gap-2 text-[var(--lx-ink-2)] font-medium"><BrandIcon name="openai" size={17} color="#16140f" /> Codex</span>
+            <span className="inline-flex items-center gap-2 text-[var(--lx-ink-2)] font-medium"><BrandIcon name="cursor" size={16} color="#16140f" /> Cursor</span>
+            <span className="inline-flex items-center gap-2 text-[var(--lx-ink-2)] font-medium"><BrandIcon name="gemini" size={17} /> Gemini CLI</span>
+          </div>
+        </Reveal>
+      </div>
+
+      {/* Сцена с демо агента */}
+      <div ref={stage} className="relative lx-container mt-20">
+        <motion.div style={{ scale }} className="relative mx-auto">
+          <div className="relative mx-auto" style={{ maxWidth: 860 }}>
+            <AgentDemo />
+
+            {/* Плавающие карточки результата */}
+            <motion.div style={{ y: floatL }} className="hidden lg:block absolute -left-[262px] top-[70px]">
+              <FloatCard icon={<Database size={16} />} title="PostgreSQL" text="создана и подключена" />
+            </motion.div>
+            <motion.div style={{ y: floatR }} className="hidden lg:block absolute -right-[262px] top-[200px]">
+              <FloatCard icon={<CreditCard size={16} />} title="+ 990 ₽" text="оплата через Робокассу" accent />
+            </motion.div>
+            <motion.div style={{ y: floatL }} className="hidden lg:block absolute -left-[262px] bottom-[110px]">
+              <FloatCard icon={<Users size={16} />} title="Новый пользователь" text="подтвердил email" />
+            </motion.div>
           </div>
         </motion.div>
       </div>
+
+      {/* Цифры */}
+      <div className="relative lx-container mt-24 pb-24">
+        <div className="grid grid-cols-2 lg:grid-cols-4 border-t border-[var(--lx-line-2)]">
+          {stats.map((s, i) => (
+            <Reveal key={s.value} delay={i * 0.06} className={"pt-8 pb-2 px-2 lg:px-6 " + (i > 0 ? "lg:border-l border-[var(--lx-line)]" : "")}>
+              <div className="lx-display text-[var(--lx-ink)]" style={{ fontSize: "clamp(1.75rem, 2.8vw, 2.5rem)", lineHeight: 1 }}>{s.value}</div>
+              <div className="mt-3 text-[14px] leading-snug text-[var(--lx-ink-3)] max-w-[220px]">{s.label}</div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
     </section>
+  );
+}
+
+function FloatCard({ icon, title, text, accent = false }: { icon: React.ReactNode; title: string; text: string; accent?: boolean }) {
+  return (
+    <div className="flex items-center gap-3 rounded-2xl bg-white/90 backdrop-blur px-4 py-3 border border-[var(--lx-line)]" style={{ boxShadow: "var(--lx-shadow-lg)", width: 230 }}>
+      <span
+        className="w-9 h-9 rounded-xl flex items-center justify-center flex-none"
+        style={{ background: accent ? "var(--lx-clay-soft)" : "var(--lx-sand)", color: accent ? "var(--lx-clay-ink)" : "var(--lx-ink-2)" }}
+      >
+        {icon}
+      </span>
+      <span className="text-left">
+        <span className="block text-[14px] font-semibold text-[var(--lx-ink)]">{title}</span>
+        <span className="block text-[12.5px] text-[var(--lx-ink-3)]">{text}</span>
+      </span>
+    </div>
   );
 }

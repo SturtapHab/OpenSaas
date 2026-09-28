@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.v1.router import api_router
 from config import settings
+from public_url import RequestOriginMiddleware
 
 logging.basicConfig(
     level=logging.INFO,
@@ -47,6 +48,8 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type", "X-Requested-With", "Accept"],
 )
+
+app.add_middleware(RequestOriginMiddleware)
 
 app.include_router(api_router)
 
