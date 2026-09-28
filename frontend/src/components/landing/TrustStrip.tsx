@@ -1,16 +1,13 @@
 import { BrandIcon } from "./BrandIcon";
 import type { BrandKey } from "./brand-icons-data";
 
-const agents: { key: BrandKey; label: string; color?: string }[] = [
+const items: { key: BrandKey; label: string; color?: string }[] = [
   { key: "claudecode", label: "Claude Code" },
-  { key: "openai", label: "Codex", color: "#171717" },
-  { key: "cursor", label: "Cursor", color: "#171717" },
+  { key: "openai", label: "Codex", color: "#16140f" },
+  { key: "cursor", label: "Cursor", color: "#16140f" },
   { key: "gemini", label: "Gemini CLI" },
-  { key: "github", label: "GitHub", color: "#171717" },
-];
-
-const stack: { key: BrandKey; label: string }[] = [
-  { key: "nextjs", label: "Next.js" },
+  { key: "github", label: "GitHub", color: "#16140f" },
+  { key: "nextjs", label: "Next.js", color: "#16140f" },
   { key: "react", label: "React" },
   { key: "typescript", label: "TypeScript" },
   { key: "tailwind", label: "Tailwind" },
@@ -20,31 +17,27 @@ const stack: { key: BrandKey; label: string }[] = [
   { key: "docker", label: "Docker" },
 ];
 
+/** Бегущая лента: AI-агенты и проверенный стек. */
 export function TrustStrip() {
   return (
-    <section className="relative" style={{ background: "#ffffff", padding: "8px 0 72px" }}>
-      <div className="mx-auto px-6" style={{ maxWidth: 1100 }}>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div className="rounded-2xl border border-black/[0.07] bg-[#fafafa] px-6 py-5">
-            <div className="text-[11px] font-semibold tracking-[0.1em] uppercase text-[#9e9ea8] mb-4">Любой AI-агент</div>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-              {agents.map((a) => (
-                <span key={a.label} className="inline-flex items-center gap-2 text-[14px] font-medium text-[#3a3a3a]">
-                  <BrandIcon name={a.key} size={20} color={a.color} />
-                  {a.label}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="rounded-2xl border border-black/[0.07] bg-[#fafafa] px-6 py-5">
-            <div className="text-[11px] font-semibold tracking-[0.1em] uppercase text-[#9e9ea8] mb-4">Проверенный стек</div>
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
-              {stack.map((s) => (
-                <span key={s.label} className="tooltip inline-flex" data-tip={s.label}>
-                  <BrandIcon name={s.key} size={24} />
-                </span>
-              ))}
-            </div>
+    <section className="relative border-y border-[var(--lx-line)] bg-white/60" aria-label="Совместимость">
+      <div className="lx-container py-7 flex flex-col md:flex-row md:items-center gap-5 md:gap-10">
+        <div className="text-[12px] font-semibold tracking-[0.16em] uppercase text-[var(--lx-ink-3)] md:w-[180px] flex-none leading-relaxed">
+          Любой AI-агент.
+          <br className="hidden md:block" /> Проверенный стек.
+        </div>
+        <div className="lx-marquee-wrap lx-fade-x overflow-hidden flex-1">
+          <div className="lx-marquee">
+            {[0, 1].map((copy) => (
+              <div key={copy} className="flex items-center gap-12 pr-12" aria-hidden={copy === 1}>
+                {items.map((it) => (
+                  <span key={it.label} className="inline-flex items-center gap-2.5 text-[15px] font-medium text-[var(--lx-ink-2)] whitespace-nowrap">
+                    <BrandIcon name={it.key} size={22} color={it.color} />
+                    {it.label}
+                  </span>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
       </div>

@@ -6,10 +6,9 @@ import { Check, Copy } from "lucide-react";
 interface CopyButtonProps {
   text: string;
   label?: string;
-  dark?: boolean;
 }
 
-export function CopyButton({ text, label = "Скопировать", dark = false }: CopyButtonProps) {
+export function CopyButton({ text, label = "Скопировать" }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
   const onCopy = async () => {
@@ -27,11 +26,8 @@ export function CopyButton({ text, label = "Скопировать", dark = fals
       type="button"
       onClick={onCopy}
       aria-label={label}
-      className={
-        dark
-          ? "inline-flex items-center gap-1.5 rounded-lg px-2.5 h-8 text-[12px] font-medium text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-          : "inline-flex items-center gap-1.5 rounded-lg px-2.5 h-8 text-[12px] font-medium text-[#616161] hover:text-[#171717] hover:bg-black/[0.05] transition-colors"
-      }
+      className="inline-flex flex-none items-center gap-1.5 rounded-full px-4 h-10 text-[13px] font-semibold text-white transition-colors"
+      style={{ background: copied ? "var(--lx-sage)" : "var(--lx-ink)" }}
     >
       {copied ? <Check size={14} /> : <Copy size={14} />}
       {copied ? "Скопировано" : label}
@@ -40,26 +36,14 @@ export function CopyButton({ text, label = "Скопировать", dark = fals
 }
 
 /** Строка с промптом, который человек копирует в своего агента. */
-export function PromptLine({ text, dark = false }: { text: string; dark?: boolean }) {
+export function PromptLine({ text }: { text: string }) {
   return (
-    <div
-      className={
-        dark
-          ? "flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.04] pl-4 pr-1.5 py-1.5"
-          : "flex items-center justify-between gap-3 rounded-xl border border-black/[0.08] bg-[#fafafa] pl-4 pr-1.5 py-1.5"
-      }
-    >
-      <code
-        className={
-          dark
-            ? "font-mono text-[13px] text-white/90 truncate"
-            : "font-mono text-[13px] text-[#171717] truncate"
-        }
-      >
-        <span className={dark ? "text-[#D97757] mr-2" : "text-[#0066FF] mr-2"}>&gt;</span>
+    <div className="flex items-center justify-between gap-3 rounded-full bg-white pl-5 pr-1.5 py-1.5 border border-[var(--lx-line-2)]" style={{ boxShadow: "var(--lx-shadow)" }}>
+      <code className="lx-mono text-[13.5px] text-[var(--lx-ink)] truncate">
+        <span className="text-[var(--lx-clay)] mr-2">&gt;</span>
         {text}
       </code>
-      <CopyButton text={text} dark={dark} />
+      <CopyButton text={text} />
     </div>
   );
 }

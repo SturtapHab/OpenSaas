@@ -1,126 +1,143 @@
 "use client";
 
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { PlayCircle, Star } from "lucide-react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowRight, CreditCard, Database, PlayCircle, Users } from "lucide-react";
 import { AgentDemo } from "./AgentDemo";
 import { BrandIcon } from "./BrandIcon";
+import { Reveal } from "./Reveal";
 import { GITHUB_URL } from "./site";
 
-const item = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (delay: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay },
-  }),
-};
+const stats = [
+  { value: "15 мин", label: "от ключа до работающего сайта" },
+  { value: "0 ₽", label: "за шаблон — лицензия MIT" },
+  { value: "≈1 500 ₽", label: "в месяц за хостинг, напрямую Timeweb" },
+  { value: "100%", label: "кода открыто на GitHub" },
+];
 
 export function Hero() {
+  const stage = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: stage, offset: ["start end", "end start"] });
+  const scale = useTransform(scrollYProgress, [0, 0.45], [0.94, 1]);
+  const floatL = useTransform(scrollYProgress, [0, 1], [40, -60]);
+  const floatR = useTransform(scrollYProgress, [0, 1], [70, -40]);
+
   return (
-    <section className="relative overflow-hidden noise" style={{ paddingTop: 140, paddingBottom: 96 }}>
-      <div className="absolute inset-0 mesh-bg" style={{ zIndex: 0 }} />
-      <div
-        aria-hidden
-        className="absolute pointer-events-none"
-        style={{
-          width: 560, height: 560, borderRadius: "50%", top: -160, left: "-4%", zIndex: 0, filter: "blur(60px)",
-          background: "radial-gradient(circle, rgba(0,102,255,0.30) 0%, rgba(0,102,255,0.08) 45%, transparent 70%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute pointer-events-none"
-        style={{
-          width: 520, height: 520, borderRadius: "50%", top: 40, right: "-6%", zIndex: 0, filter: "blur(60px)",
-          background: "radial-gradient(circle, rgba(217,119,87,0.22) 0%, rgba(217,119,87,0.06) 45%, transparent 70%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{
-          zIndex: 0,
-          backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-          maskImage: "radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 100%)",
-          WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 100%)",
-        }}
-      />
+    <section className="relative overflow-hidden lx-grain" style={{ paddingTop: 136 }}>
+      {/* Фон: мягкое тёплое свечение и тонкая сетка */}
+      <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 70% 50% at 50% 0%, #fff 0%, rgba(255,255,255,0) 70%)" }} />
+      <div aria-hidden className="absolute inset-x-0 top-0 h-[900px] lx-grid-lines pointer-events-none" style={{ maskImage: "radial-gradient(ellipse 60% 55% at 50% 30%, #000 10%, transparent 75%)", WebkitMaskImage: "radial-gradient(ellipse 60% 55% at 50% 30%, #000 10%, transparent 75%)", opacity: 0.6 }} />
+      <div aria-hidden className="absolute pointer-events-none" style={{ width: 720, height: 720, top: 260, left: "50%", transform: "translateX(-50%)", borderRadius: "50%", filter: "blur(90px)", background: "radial-gradient(circle, rgba(224,138,104,0.28) 0%, rgba(224,138,104,0) 65%)" }} />
 
-      <div className="relative mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1.05fr_1fr] gap-14 items-center" style={{ maxWidth: 1200, zIndex: 1 }}>
-        {/* Текст */}
-        <div className="text-center lg:text-left min-w-0">
-          <motion.div custom={0} variants={item} initial="hidden" animate="visible" className="flex justify-center lg:justify-start mb-7">
-            <a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 border border-black/10 rounded-full pl-1.5 pr-4 py-1 text-[13px] text-[#3a3a3a] bg-white/80 backdrop-blur-md no-underline hover:border-[#0066FF]/40 transition-colors"
-            >
-              <span className="inline-flex items-center gap-1 rounded-full bg-[#171717] text-white px-2 py-0.5 text-[11px] font-semibold">
-                <BrandIcon name="github" size={11} color="#fff" /> MIT
-              </span>
-              100% Open Source · бесплатно навсегда
-            </a>
-          </motion.div>
-
-          <motion.h1
-            custom={0.05}
-            variants={item}
-            initial="hidden"
-            animate="visible"
-            style={{ fontSize: "clamp(2.05rem, 4vw, 3.4rem)", lineHeight: 1.04, letterSpacing: "-0.04em", fontWeight: 800, color: "#171717", marginBottom: 22 }}
+      <div className="relative lx-container text-center">
+        <Reveal>
+          <a
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2.5 rounded-full bg-white/80 backdrop-blur pl-1.5 pr-4 py-1.5 text-[13px] text-[var(--lx-ink-2)] no-underline border border-[var(--lx-line)] hover:border-[var(--lx-line-2)] transition-colors"
+            style={{ boxShadow: "var(--lx-shadow)" }}
           >
-            Свой SaaS-сервис <span className="gradient-text whitespace-nowrap">за 15 минут</span>
-            <br />
-            одним сообщением агенту
-          </motion.h1>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--lx-ink)] text-white px-2.5 py-1 text-[11px] font-semibold">
+              <BrandIcon name="github" size={11} color="#fff" /> MIT
+            </span>
+            100% open source<span className="hidden sm:inline"> · бесплатно навсегда</span>
+            <ArrowRight size={14} className="text-[var(--lx-ink-3)]" />
+          </a>
+        </Reveal>
 
-          <motion.p
-            custom={0.15}
-            variants={item}
-            initial="hidden"
-            animate="visible"
-            className="mx-auto lg:mx-0"
-            style={{ fontSize: 18, color: "#616161", maxWidth: 540, lineHeight: 1.65, marginBottom: 34 }}
+        <Reveal delay={0.08}>
+          <h1
+            className="lx-serif mx-auto mt-8"
+            style={{ fontSize: "clamp(3rem, 7vw, 6.25rem)", lineHeight: 0.95, letterSpacing: "-0.025em", maxWidth: 1040 }}
           >
-            Скопируйте репозиторий, откройте его в Claude Code или Codex и напишите:
-            <span className="font-mono text-[15px] text-[#171717] bg-black/[0.05] rounded-md px-1.5 py-0.5 mx-1">
+            Свой SaaS-сервис <em className="italic text-[var(--lx-clay)] whitespace-nowrap">за 15 минут</em>
+            <br className="hidden sm:block" /> одним сообщением агенту
+          </h1>
+        </Reveal>
+
+        <Reveal delay={0.16}>
+          <p className="lx-lead mx-auto mt-7" style={{ maxWidth: 640, fontSize: 19 }}>
+            Скопируйте репозиторий, откройте его в Claude Code или Codex и напишите{" "}
+            <span className="lx-mono text-[15px] text-[var(--lx-ink)] bg-white border border-[var(--lx-line)] rounded-md px-1.5 py-0.5 whitespace-nowrap">
               «вот ключ Timeweb — задеплой»
             </span>
-            Агент сам создаст базу, соберёт приложение и выдаст ссылку с паролем админа.
-          </motion.p>
+            . Агент сам создаст базу, соберёт приложение и выдаст ссылку с паролем админа.
+          </p>
+        </Reveal>
 
-          <motion.div custom={0.25} variants={item} initial="hidden" animate="visible" className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-10">
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="btn-primary-new" style={{ background: "#171717", boxShadow: "0 6px 20px rgba(0,0,0,0.22)" }}>
+        <Reveal delay={0.24}>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="lx-btn lx-btn-ink">
               <BrandIcon name="github" size={17} color="#fff" />
               Забрать код на GitHub
             </a>
-            <Link href="#video" className="btn-secondary-new">
+            <a href="#video" className="lx-btn lx-btn-ghost">
               <PlayCircle size={17} />
               Как запустить за 10 минут
-            </Link>
-          </motion.div>
+            </a>
+          </div>
+        </Reveal>
 
-          <motion.div custom={0.35} variants={item} initial="hidden" animate="visible" className="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3 text-[13px] text-[#8a8a92]">
-            <span className="inline-flex items-center gap-2">
-              <span className="text-[#b0b0b8]">Работает с</span>
-              <BrandIcon name="claude" size={18} />
-              <BrandIcon name="openai" size={17} color="#171717" />
-              <BrandIcon name="cursor" size={16} color="#171717" />
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <Star size={14} className="text-[#f59e0b]" fill="#f59e0b" /> Без скрытых платежей и привязки
-            </span>
-          </motion.div>
-        </div>
+        <Reveal delay={0.32}>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[13px] text-[var(--lx-ink-3)]">
+            <span>Работает с</span>
+            <span className="inline-flex items-center gap-2 text-[var(--lx-ink-2)] font-medium"><BrandIcon name="claude" size={18} /> Claude Code</span>
+            <span className="inline-flex items-center gap-2 text-[var(--lx-ink-2)] font-medium"><BrandIcon name="openai" size={17} color="#16140f" /> Codex</span>
+            <span className="inline-flex items-center gap-2 text-[var(--lx-ink-2)] font-medium"><BrandIcon name="cursor" size={16} color="#16140f" /> Cursor</span>
+            <span className="inline-flex items-center gap-2 text-[var(--lx-ink-2)] font-medium"><BrandIcon name="gemini" size={17} /> Gemini CLI</span>
+          </div>
+        </Reveal>
+      </div>
 
-        {/* Демо агента */}
-        <motion.div custom={0.2} variants={item} initial="hidden" animate="visible" className="min-w-0">
-          <AgentDemo />
+      {/* Сцена с демо агента */}
+      <div ref={stage} className="relative lx-container mt-20">
+        <motion.div style={{ scale }} className="relative mx-auto">
+          <div className="relative mx-auto" style={{ maxWidth: 860 }}>
+            <AgentDemo />
+
+            {/* Плавающие карточки результата */}
+            <motion.div style={{ y: floatL }} className="hidden lg:block absolute -left-[262px] top-[70px]">
+              <FloatCard icon={<Database size={16} />} title="PostgreSQL" text="создана и подключена" />
+            </motion.div>
+            <motion.div style={{ y: floatR }} className="hidden lg:block absolute -right-[262px] top-[200px]">
+              <FloatCard icon={<CreditCard size={16} />} title="+ 990 ₽" text="оплата через Робокассу" accent />
+            </motion.div>
+            <motion.div style={{ y: floatL }} className="hidden lg:block absolute -left-[262px] bottom-[110px]">
+              <FloatCard icon={<Users size={16} />} title="Новый пользователь" text="подтвердил email" />
+            </motion.div>
+          </div>
         </motion.div>
       </div>
+
+      {/* Цифры */}
+      <div className="relative lx-container mt-24 pb-24">
+        <div className="grid grid-cols-2 lg:grid-cols-4 border-t border-[var(--lx-line-2)]">
+          {stats.map((s, i) => (
+            <Reveal key={s.value} delay={i * 0.06} className={"pt-8 pb-2 px-2 lg:px-6 " + (i > 0 ? "lg:border-l border-[var(--lx-line)]" : "")}>
+              <div className="lx-serif text-[var(--lx-ink)]" style={{ fontSize: "clamp(2.4rem, 4vw, 3.4rem)", lineHeight: 1 }}>{s.value}</div>
+              <div className="mt-3 text-[14px] leading-snug text-[var(--lx-ink-3)] max-w-[220px]">{s.label}</div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
     </section>
+  );
+}
+
+function FloatCard({ icon, title, text, accent = false }: { icon: React.ReactNode; title: string; text: string; accent?: boolean }) {
+  return (
+    <div className="flex items-center gap-3 rounded-2xl bg-white/90 backdrop-blur px-4 py-3 border border-[var(--lx-line)]" style={{ boxShadow: "var(--lx-shadow-lg)", width: 230 }}>
+      <span
+        className="w-9 h-9 rounded-xl flex items-center justify-center flex-none"
+        style={{ background: accent ? "var(--lx-clay-soft)" : "var(--lx-sand)", color: accent ? "var(--lx-clay-ink)" : "var(--lx-ink-2)" }}
+      >
+        {icon}
+      </span>
+      <span className="text-left">
+        <span className="block text-[14px] font-semibold text-[var(--lx-ink)]">{title}</span>
+        <span className="block text-[12.5px] text-[var(--lx-ink-3)]">{text}</span>
+      </span>
+    </div>
   );
 }

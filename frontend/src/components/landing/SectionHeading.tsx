@@ -1,32 +1,22 @@
+import { Reveal } from "./Reveal";
+
 interface SectionHeadingProps {
   tag: string;
   title: React.ReactNode;
   text?: React.ReactNode;
   align?: "center" | "left";
-  dark?: boolean;
 }
 
-export function SectionHeading({ tag, title, text, align = "center", dark = false }: SectionHeadingProps) {
+/** Заголовок секции: подпись, крупный антиквенный заголовок (акцент — в <em>) и лид. */
+export function SectionHeading({ tag, title, text, align = "center" }: SectionHeadingProps) {
+  const center = align === "center";
   return (
-    <div className={align === "center" ? "text-center mx-auto" : ""} style={{ maxWidth: align === "center" ? 760 : undefined }}>
-      <div className="section-tag" style={dark ? { color: "#7aa7ff" } : undefined}>{tag}</div>
-      <h2
-        style={{
-          fontSize: "clamp(2rem, 4vw, 3.25rem)",
-          fontWeight: 800,
-          letterSpacing: "-0.025em",
-          lineHeight: 1.05,
-          color: dark ? "#ffffff" : "#171717",
-          marginBottom: text ? 18 : 0,
-        }}
-      >
-        {title}
-      </h2>
-      {text && (
-        <p style={{ fontSize: 17, lineHeight: 1.65, color: dark ? "rgba(255,255,255,0.65)" : "#616161" }}>
-          {text}
-        </p>
-      )}
-    </div>
+    <Reveal className={center ? "text-center mx-auto" : ""}>
+      <div style={{ maxWidth: center ? 780 : 560, margin: center ? "0 auto" : undefined }}>
+        <div className="lx-eyebrow mb-6">{tag}</div>
+        <h2 className="lx-h2">{title}</h2>
+        {text && <p className="lx-lead mt-6">{text}</p>}
+      </div>
+    </Reveal>
   );
 }

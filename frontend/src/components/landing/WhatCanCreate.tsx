@@ -1,59 +1,46 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { Bot, GraduationCap, KeyRound, Repeat, ShoppingBag, Users } from "lucide-react";
+import { Stagger, StaggerItem } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
 
 const examples = [
-  { Icon: GraduationCap, color: "#8b5cf6", title: "Онлайн-школа или клуб", text: "Закрытые уроки по подписке, пробный период, приглашения друзей за бонус.", uses: ["Подписки", "Триал", "Рефералы"] },
-  { Icon: Bot, color: "#D97757", title: "AI-сервис", text: "Генерация текстов, картинок, ответов по документам — с оплатой за тариф.", uses: ["Тарифы", "Лимиты", "API-ключи"] },
-  { Icon: KeyRound, color: "#0066FF", title: "API для разработчиков", text: "Продавайте доступ к данным или функции по ключу — как делают большие сервисы.", uses: ["API-ключи", "Rate limit", "Биллинг"] },
-  { Icon: Repeat, color: "#10b981", title: "Сервис подписок", text: "Шаблоны, чек-листы, база знаний, трекер — всё, за что платят каждый месяц.", uses: ["Подписки", "Кабинет", "Письма"] },
-  { Icon: Users, color: "#f59e0b", title: "CRM для ниши", text: "Запись клиентов для салонов, учёт заявок для строителей, кабинет для репетиторов.", uses: ["Кабинет", "Админка", "Уведомления"] },
-  { Icon: ShoppingBag, color: "#ec4899", title: "Маркетплейс услуг", text: "Исполнители и заказчики находят друг друга, платформа берёт подписку.", uses: ["Кабинет", "Оплата", "Партнёрка"] },
+  { Icon: GraduationCap, title: "Онлайн-школа или клуб", text: "Закрытые уроки по подписке, пробный период, приглашения друзей за бонус.", uses: ["Подписки", "Триал", "Рефералы"] },
+  { Icon: Bot, title: "AI-сервис", text: "Генерация текстов, картинок, ответов по документам — с оплатой за тариф.", uses: ["Тарифы", "Лимиты", "API-ключи"] },
+  { Icon: KeyRound, title: "API для разработчиков", text: "Продавайте доступ к данным или функции по ключу — как делают большие сервисы.", uses: ["API-ключи", "Rate limit", "Биллинг"] },
+  { Icon: Repeat, title: "Сервис подписок", text: "Шаблоны, чек-листы, база знаний, трекер — всё, за что платят каждый месяц.", uses: ["Подписки", "Кабинет", "Письма"] },
+  { Icon: Users, title: "CRM для ниши", text: "Запись клиентов для салонов, учёт заявок для строителей, кабинет для репетиторов.", uses: ["Кабинет", "Админка", "Уведомления"] },
+  { Icon: ShoppingBag, title: "Маркетплейс услуг", text: "Исполнители и заказчики находят друг друга, платформа берёт подписку.", uses: ["Кабинет", "Оплата", "Партнёрка"] },
 ];
 
 export function WhatCanCreate() {
   return (
-    <section id="examples" style={{ background: "linear-gradient(180deg,#ffffff 0%,#f5f5f7 14%,#f5f5f7 86%,#ffffff 100%)", padding: "110px 0" }}>
-      <div className="mx-auto px-6" style={{ maxWidth: 1100 }}>
+    <section id="examples" className="lx-section">
+      <div className="lx-container">
         <SectionHeading
           tag="Что можно создать"
-          title="Одна основа — десятки бизнесов"
+          title={<>Одна основа — <em>десятки бизнесов</em></>}
           text="Регистрация, оплата, кабинет и админка уже работают. Вы добавляете только свою идею — вместе с агентом."
         />
 
-        <motion.div
-          className="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07 } } }}
-        >
-          {examples.map(({ Icon, color, title, text, uses }) => (
-            <motion.div
+        <Stagger className="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-[var(--lx-line-2)]">
+          {examples.map(({ Icon, title, text, uses }, i) => (
+            <StaggerItem
               key={title}
-              className="bento-card p-7 flex flex-col"
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
-              }}
+              className="group relative p-8 lg:p-10 border-r border-b border-[var(--lx-line-2)] bg-transparent hover:bg-white transition-colors duration-500"
             >
-              <div className="w-12 h-12 rounded-[14px] flex items-center justify-center mb-5" style={{ background: `${color}14` }}>
-                <Icon size={22} color={color} strokeWidth={1.75} />
+              <div className="flex items-start justify-between mb-10">
+                <Icon size={26} strokeWidth={1.4} className="text-[var(--lx-ink)] group-hover:text-[var(--lx-clay)] transition-colors duration-500" />
+                <span className="lx-mono text-[12px] text-[var(--lx-ink-3)]">{String(i + 1).padStart(2, "0")}</span>
               </div>
-              <h3 className="text-[18px] font-bold text-[#171717] tracking-tight mb-2">{title}</h3>
-              <p className="text-[14.5px] text-[#616161] leading-relaxed mb-5 flex-1">{text}</p>
+              <h3 className="lx-serif text-[30px] leading-[1.05] mb-3">{title}</h3>
+              <p className="text-[15px] text-[var(--lx-ink-2)] leading-relaxed mb-6">{text}</p>
               <div className="flex flex-wrap gap-1.5">
                 {uses.map((u) => (
-                  <span key={u} className="text-[11.5px] font-medium rounded-md px-2 py-0.5 bg-black/[0.04] text-[#616161]">
-                    ✓ {u}
-                  </span>
+                  <span key={u} className="lx-chip">{u}</span>
                 ))}
               </div>
-            </motion.div>
+            </StaggerItem>
           ))}
-        </motion.div>
+        </Stagger>
       </div>
     </section>
   );

@@ -1,93 +1,58 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
 
 const columns = [
   {
-    title: 'Продукт',
+    title: "Продукт",
     links: [
-      { label: 'Как начать', href: '/#how-to-start' },
-      { label: 'Наставник', href: '/#mentor' },
-      { label: 'Примеры', href: '/#examples' },
-      { label: 'Курс', href: '/#course' },
+      { label: "Как начать", href: "/#how-to-start" },
+      { label: "Наставник", href: "/#mentor" },
+      { label: "Примеры", href: "/#examples" },
+      { label: "Курс", href: "/#course" },
     ],
   },
   {
-    title: 'Аккаунт',
+    title: "Аккаунт",
     links: [
-      { label: 'Войти', href: '/login' },
-      { label: 'Регистрация', href: '/register' },
+      { label: "Войти", href: "/login" },
+      { label: "Регистрация", href: "/register" },
     ],
   },
   {
-    title: 'Open source',
+    title: "Open source",
     links: [
-      { label: 'GitHub', href: 'https://github.com/SturtapHab/OpenSaas' },
-      { label: 'Skills для агентов', href: 'https://github.com/SturtapHab/OpenSaas/tree/main/.claude/skills' },
-      { label: 'Автор шаблона', href: 'https://t.me/wellcome_ai' },
+      { label: "GitHub", href: "https://github.com/SturtapHab/OpenSaas" },
+      { label: "Skills для агентов", href: "https://github.com/SturtapHab/OpenSaas/tree/main/.claude/skills" },
+      { label: "Автор шаблона", href: "https://t.me/wellcome_ai" },
     ],
   },
 ];
 
 export function Footer() {
   return (
-    <footer
-      style={{
-        background: 'linear-gradient(180deg, #0a3fa8 0%, #072f82 60%, #051f5e 100%)',
-        color: 'white',
-        padding: '64px 0 32px',
-        marginTop: '-1px',
-      }}
-    >
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
-        {/* Top section */}
-        <div className="grid md:grid-cols-4 gap-10 mb-12">
-          {/* Brand */}
+    <footer style={{ background: "#f0ece3", color: "#16140f", fontFamily: "Onest, Geist, sans-serif", borderTop: "1px solid rgba(22,20,15,0.08)" }}>
+      <div className="mx-auto px-6 pt-20 pb-10" style={{ maxWidth: 1180 }}>
+        <div className="grid md:grid-cols-[1.4fr_1fr_1fr_1fr] gap-12 mb-20">
           <div>
-            <Link
-              href="/"
-              className="flex items-center gap-1.5 mb-3"
-              style={{ textDecoration: 'none' }}
-            >
-              <Image src="/logo.png" alt="logo" width={28} height={28} style={{ borderRadius: '6px' }} />
-              <span
-                style={{
-                  fontWeight: 600,
-                  fontSize: '17px',
-                  color: 'white',
-                  letterSpacing: '-0.01em',
-                }}
-              >
-                OpenSaaS
-              </span>
+            <Link href="/" className="inline-flex items-center gap-2.5 mb-5 no-underline">
+              <Image src="/logo.png" alt="OpenSaaS" width={30} height={30} style={{ borderRadius: 8 }} />
+              <span className="font-semibold text-[17px] tracking-tight text-[#16140f]">OpenSaaS</span>
             </Link>
-            <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.65)', lineHeight: '1.6' }}>
+            <p className="text-[14.5px] leading-relaxed text-[#4a463e] max-w-[300px]">
               Открытый шаблон для запуска своего SaaS. Деплой и обучение — через AI-агента.
             </p>
           </div>
 
-          {/* Columns */}
-          {columns.map(col => (
+          {columns.map((col) => (
             <div key={col.title}>
-              <div
-                style={{
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  color: 'white',
-                  marginBottom: '12px',
-                  letterSpacing: '-0.01em',
-                }}
-              >
-                {col.title}
-              </div>
-              <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {col.links.map(link => (
+              <div className="text-[12px] font-semibold tracking-[0.16em] uppercase text-[#857f73] mb-5">{col.title}</div>
+              <ul className="flex flex-col gap-3 list-none m-0 p-0">
+                {col.links.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      {...(link.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                      className="text-sm text-white/65 no-underline transition-colors duration-150 hover:text-white"
+                      {...(link.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      className="text-[15px] text-[#16140f] no-underline opacity-80 hover:opacity-100 transition-opacity"
                     >
                       {link.label}
                     </Link>
@@ -98,21 +63,18 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Bottom bar */}
+        {/* Крупный знак бренда */}
         <div
-          style={{
-            borderTop: '1px solid rgba(255,255,255,0.12)',
-            paddingTop: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '12px',
-          }}
+          aria-hidden
+          className="select-none text-center leading-none"
+          style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: "clamp(4.5rem, 17vw, 15rem)", letterSpacing: "-0.03em", color: "transparent", WebkitTextStroke: "1px rgba(22,20,15,0.18)" }}
         >
-          <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)' }}>
-            © {new Date().getFullYear()} OpenSaaS · Открытый код под лицензией MIT
-          </span>
+          OpenSaaS
+        </div>
+
+        <div className="mt-8 pt-6 flex flex-wrap items-center justify-between gap-3 text-[13px] text-[#857f73]" style={{ borderTop: "1px solid rgba(22,20,15,0.08)" }}>
+          <span>© {new Date().getFullYear()} OpenSaaS · Открытый код под лицензией MIT</span>
+          <span>Сделано с Claude Code</span>
         </div>
       </div>
     </footer>

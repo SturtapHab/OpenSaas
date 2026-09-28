@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Check, PlayCircle } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
+import { Reveal, Stagger, StaggerItem } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
 import { COURSE_PRICE, COURSE_URL } from "./site";
 
@@ -16,55 +17,48 @@ const perks = ["Записанные уроки — смотрите в своё
 
 export function CourseSection() {
   return (
-    <section id="course" className="relative overflow-hidden" style={{ background: "linear-gradient(180deg,#ffffff 0%,#eef3ff 40%,#ffffff 100%)", padding: "110px 0" }}>
-      <div className="mx-auto px-6" style={{ maxWidth: 1100 }}>
+    <section id="course" className="lx-section" style={{ background: "var(--lx-sand)" }}>
+      <div className="lx-container">
         <SectionHeading
           tag="Курс · что дальше"
-          title={<>Запустили за 15 минут.<br /><span className="gradient-text">Теперь — развиваем</span></>}
+          title={<>Запустили за 15 минут. <em>Теперь&nbsp;— развиваем</em></>}
           text="Шаблон бесплатный и таким останется. Курс — для тех, кто хочет превратить его в свой бизнес и уверенно дорабатывать через Claude Code."
         />
 
-        <div className="mt-14 grid lg:grid-cols-[1.5fr_1fr] gap-5">
-          <div className="bento-card p-7 sm:p-8">
-            <div className="flex items-center gap-2 mb-6 text-[13px] font-semibold text-[#171717]">
-              <PlayCircle size={17} className="text-[#8b5cf6]" /> Программа
-            </div>
-            <div className="grid sm:grid-cols-2 gap-x-8 gap-y-6">
-              {modules.map((m) => (
-                <div key={m.n} className="flex gap-3">
-                  <span className="font-mono text-[12px] font-bold text-[#8b5cf6] pt-1 w-6 flex-none">{m.n}</span>
-                  <div>
-                    <div className="font-semibold text-[15px] text-[#171717] mb-0.5">{m.title}</div>
-                    <div className="text-[13.5px] text-[#616161] leading-relaxed">{m.text}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+        <div className="mt-16 grid lg:grid-cols-[1.55fr_1fr] gap-6 items-stretch">
+          <Stagger className="lx-card p-8 sm:p-10 grid sm:grid-cols-2 gap-x-10 gap-y-8">
+            {modules.map((m) => (
+              <StaggerItem key={m.n} className="border-t border-[var(--lx-line-2)] pt-5">
+                <div className="lx-serif text-[var(--lx-clay)] text-[28px] leading-none mb-3">{m.n}</div>
+                <div className="font-semibold text-[17px] mb-1.5">{m.title}</div>
+                <div className="text-[14.5px] text-[var(--lx-ink-2)] leading-relaxed">{m.text}</div>
+              </StaggerItem>
+            ))}
+          </Stagger>
 
-          <div
-            className="rounded-[20px] p-8 flex flex-col text-white"
-            style={{ background: "linear-gradient(160deg,#0066FF 0%,#4f46e5 60%,#6d28d9 100%)", boxShadow: "0 24px 60px rgba(79,70,229,0.35)" }}
-          >
-            <div className="text-[13px] font-semibold text-white/75 mb-2">Записанный курс</div>
-            <div className="text-[44px] font-extrabold tracking-tight leading-none mb-1">{COURSE_PRICE}</div>
-            <div className="text-[13px] text-white/70 mb-7">разовый платёж</div>
-            <ul className="space-y-3 mb-8 flex-1">
-              {perks.map((p) => (
-                <li key={p} className="flex gap-2.5 text-[14.5px] text-white/90">
-                  <Check size={17} className="flex-none mt-0.5" /> {p}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href={COURSE_URL}
-              className="inline-flex items-center justify-center rounded-xl h-[52px] font-semibold text-[15px] text-[#3730a3] bg-white no-underline transition-transform hover:scale-[1.02]"
-              style={{ boxShadow: "0 6px 20px rgba(0,0,0,0.18)" }}
+          <Reveal delay={0.1}>
+            <div
+              className="relative h-full rounded-[28px] p-9 flex flex-col overflow-hidden text-white"
+              style={{ background: "linear-gradient(165deg,#221f19 0%,#16140f 100%)", boxShadow: "var(--lx-shadow-lg)" }}
             >
-              Купить курс
-            </Link>
-            <div className="text-center text-[12px] text-white/60 mt-3">Оплата картой через Робокассу</div>
-          </div>
+              <div aria-hidden className="absolute pointer-events-none" style={{ width: 420, height: 420, top: -180, right: -160, borderRadius: "50%", filter: "blur(60px)", background: "radial-gradient(circle, rgba(224,138,104,0.45) 0%, transparent 65%)" }} />
+              <div className="relative text-[12px] font-semibold tracking-[0.16em] uppercase text-white/55 mb-5">Записанный курс</div>
+              <div className="relative lx-serif leading-none" style={{ fontSize: 72 }}>{COURSE_PRICE}</div>
+              <div className="relative text-[14px] text-white/55 mt-2 mb-9">разовый платёж</div>
+              <ul className="relative space-y-4 mb-10 flex-1">
+                {perks.map((p) => (
+                  <li key={p} className="flex gap-3 text-[15px] text-white/85">
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center flex-none mt-0.5 bg-white/10"><Check size={12} strokeWidth={2.5} /></span>
+                    {p}
+                  </li>
+                ))}
+              </ul>
+              <Link href={COURSE_URL} className="relative lx-btn w-full bg-white text-[var(--lx-ink)] hover:-translate-y-0.5" style={{ boxShadow: "0 10px 30px -10px rgba(0,0,0,.5)" }}>
+                Купить курс <ArrowRight size={17} />
+              </Link>
+              <div className="relative text-center text-[12.5px] text-white/45 mt-4">Оплата картой через Робокассу</div>
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>

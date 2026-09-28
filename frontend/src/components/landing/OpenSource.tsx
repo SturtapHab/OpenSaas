@@ -1,5 +1,6 @@
 import { Eye, Lock, Scale, Wallet } from "lucide-react";
 import { BrandIcon } from "./BrandIcon";
+import { Reveal, Stagger, StaggerItem } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
 import { GITHUB_URL, SKILL_URL } from "./site";
 
@@ -24,52 +25,54 @@ const facts = [
 
 export function OpenSourceSection() {
   return (
-    <section id="open-source" style={{ background: "#ffffff", padding: "110px 0" }}>
-      <div className="mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1fr_1.05fr] gap-14 items-center" style={{ maxWidth: 1150 }}>
+    <section id="open-source" className="lx-section" style={{ background: "var(--lx-sand)" }}>
+      <div className="lx-container grid grid-cols-1 lg:grid-cols-[1fr_1.05fr] gap-16 items-center">
         <div className="min-w-0">
           <SectionHeading
             align="left"
             tag="Полностью open source"
-            title="Никакой магии. Всё открыто и проверяемо"
+            title={<>Никакой магии. <em>Всё открыто</em> и проверяемо</>}
             text="Навыки агента — это обычные текстовые инструкции в репозитории. Скачайте их и отдайте любому агенту: Claude Code, Codex, Cursor или Gemini."
           />
-          <div className="mt-8 grid sm:grid-cols-2 gap-x-6 gap-y-6">
+          <Stagger className="mt-10 grid sm:grid-cols-2 gap-x-8 gap-y-7">
             {facts.map(({ Icon, title, text }) => (
-              <div key={title}>
-                <div className="flex items-center gap-2 mb-1.5">
-                  <Icon size={17} className="text-[#0066FF]" strokeWidth={2} />
-                  <span className="font-semibold text-[15px] text-[#171717]">{title}</span>
+              <StaggerItem key={title}>
+                <div className="flex items-center gap-2.5 mb-2">
+                  <Icon size={18} className="text-[var(--lx-clay)]" strokeWidth={1.75} />
+                  <span className="font-semibold text-[16px]">{title}</span>
                 </div>
-                <p className="text-[14px] text-[#616161] leading-relaxed">{text}</p>
-              </div>
+                <p className="text-[14.5px] text-[var(--lx-ink-2)] leading-relaxed">{text}</p>
+              </StaggerItem>
             ))}
-          </div>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="btn-primary-new" style={{ background: "#171717", boxShadow: "0 6px 20px rgba(0,0,0,0.2)" }}>
+          </Stagger>
+          <Reveal className="mt-10 flex flex-wrap gap-3">
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="lx-btn lx-btn-ink">
               <BrandIcon name="github" size={17} color="#fff" /> Репозиторий
             </a>
-            <a href={SKILL_URL} target="_blank" rel="noopener noreferrer" className="btn-secondary-new">
+            <a href={SKILL_URL} target="_blank" rel="noopener noreferrer" className="lx-btn lx-btn-ghost">
               Скачать skills
             </a>
-          </div>
+          </Reveal>
         </div>
 
-        {/* Дерево репозитория */}
-        <div className="rounded-[20px] overflow-hidden border border-black/[0.08]" style={{ background: "#0b0b0f", boxShadow: "0 24px 70px rgba(10,20,60,0.18)" }}>
-          <div className="flex items-center gap-2 px-5 h-11 border-b border-white/[0.07]">
-            <BrandIcon name="github" size={15} color="rgba(255,255,255,0.7)" />
-            <span className="font-mono text-[12px] text-white/50">SturtapHab / OpenSaas</span>
-            <span className="ml-auto text-[11px] rounded-full px-2 py-0.5 border border-white/15 text-white/50">Public</span>
+        {/* Дерево репозитория — в стиле «бумажного» окна GitHub */}
+        <Reveal delay={0.1} className="min-w-0">
+          <div className="lx-card overflow-hidden" style={{ borderRadius: 28, boxShadow: "var(--lx-shadow-lg)" }}>
+            <div className="flex items-center gap-2.5 px-6 h-14 border-b border-[var(--lx-line)] bg-[var(--lx-ivory)]">
+              <BrandIcon name="github" size={17} color="#16140f" />
+              <span className="lx-mono text-[13px] text-[var(--lx-ink-2)]">SturtapHab / <b className="text-[var(--lx-ink)]">OpenSaas</b></span>
+              <span className="ml-auto text-[11.5px] rounded-full px-2.5 py-0.5 border border-[var(--lx-line-2)] text-[var(--lx-ink-3)]">Public</span>
+            </div>
+            <div className="p-6 lx-mono text-[13.5px] leading-[2.1]">
+              {tree.map((r) => (
+                <div key={r.name} className="flex items-center gap-3" style={{ paddingLeft: r.depth * 22 }}>
+                  <span className={"whitespace-nowrap " + (r.hl ? "text-[var(--lx-clay-ink)] font-medium" : r.name.endsWith("/") ? "text-[var(--lx-ink)]" : "text-[var(--lx-ink-2)]")}>{r.name}</span>
+                  {r.note && <span className="hidden sm:inline text-[var(--lx-ink-3)] text-[12.5px] truncate"># {r.note}</span>}
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="p-5 font-mono text-[13px] leading-[2]">
-            {tree.map((r) => (
-              <div key={r.name} className="flex items-center gap-3" style={{ paddingLeft: r.depth * 20 }}>
-                <span className={"whitespace-nowrap " + (r.hl ? "text-[#f0a488]" : r.name.endsWith("/") ? "text-[#7aa7ff]" : "text-white/80")}>{r.name}</span>
-                {r.note && <span className="hidden sm:inline text-white/30 text-[12px] truncate"># {r.note}</span>}
-              </div>
-            ))}
-          </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Menu, X } from "lucide-react";
+import { BrandIcon } from "@/components/landing/BrandIcon";
+import { GITHUB_URL } from "@/components/landing/site";
 
 const navLinks = [
   { href: "/#how-to-start", label: "Как начать" },
@@ -14,105 +17,84 @@ const navLinks = [
 
 export function PublicHeader() {
   const [scrolled, setScrolled] = useState(false);
-  const [hovered, setHovered] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const baseShadow = scrolled
-    ? '0 8px 32px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5) inset'
-    : '0 2px 12px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.5) inset';
-  const hoverShadow = '0 14px 40px rgba(0,102,255,0.18), 0 0 0 1px rgba(0,102,255,0.18) inset';
-
   return (
-    <header
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        position: 'fixed',
-        top: '12px',
-        left: '16px',
-        right: '16px',
-        zIndex: 50,
-        height: '52px',
-        borderRadius: '14px',
-        transition: 'box-shadow 0.3s ease, background 0.3s ease, transform 0.3s ease, border-color 0.3s ease',
-        background: hovered ? 'rgba(255,255,255,0.96)' : 'rgba(255,255,255,0.88)',
-        backdropFilter: 'blur(24px) saturate(180%)',
-        border: hovered ? '1px solid rgba(0,102,255,0.18)' : '1px solid rgba(0,0,0,0.08)',
-        boxShadow: hovered ? hoverShadow : baseShadow,
-        transform: hovered ? 'translateY(-1px)' : 'translateY(0)',
-      }}
-    >
+    <header className="fixed top-0 inset-x-0 z-50 px-3 sm:px-4 pt-3" style={{ fontFamily: "Onest, Geist, sans-serif" }}>
       <div
-        style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}
-        className="flex h-full items-center justify-between"
+        className="mx-auto flex items-center justify-between h-[60px] pl-5 pr-2 rounded-full transition-all duration-500"
+        style={{
+          maxWidth: 1180,
+          background: scrolled || open ? "rgba(255,255,255,0.82)" : "rgba(255,255,255,0.4)",
+          backdropFilter: "blur(20px) saturate(160%)",
+          WebkitBackdropFilter: "blur(20px) saturate(160%)",
+          border: "1px solid rgba(22,20,15,0.08)",
+          boxShadow: scrolled ? "0 1px 2px rgba(22,20,15,0.04), 0 16px 40px -16px rgba(22,20,15,0.18)" : "none",
+        }}
       >
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
-          <Image
-            src="/logo.png"
-            alt="OpenSaaS"
-            width={26}
-            height={26}
-            style={{ borderRadius: '7px' }}
-            priority
-          />
-          <span
-            style={{
-              fontFamily: 'Geist, sans-serif',
-              fontWeight: 700,
-              fontSize: '15px',
-              color: '#171717',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            OpenSaaS
-          </span>
+        <Link href="/" className="flex items-center gap-2.5 no-underline" onClick={() => setOpen(false)}>
+          <Image src="/logo.png" alt="OpenSaaS" width={28} height={28} style={{ borderRadius: 8 }} priority />
+          <span className="font-semibold text-[16px] tracking-tight text-[#16140f]">OpenSaaS</span>
         </Link>
 
-        {/* Nav */}
-        <nav className="hidden md:flex items-center gap-5">
+        <nav className="hidden md:flex items-center gap-7">
           {navLinks.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className="text-[13px] text-[#616161] no-underline font-normal tracking-tight transition-colors duration-150 hover:text-[#171717]"
-            >
+            <Link key={href} href={href} className="text-[14px] text-[#4a463e] no-underline transition-colors hover:text-[#16140f]">
               {label}
             </Link>
           ))}
         </nav>
 
-        {/* CTA buttons */}
-        <div className="flex items-center gap-1.5">
-          <Link href="/login" className="no-underline">
-            <button
-              type="button"
-              className="text-[#616161] text-[13px] font-medium px-3 h-8 rounded-[9px] cursor-pointer transition-colors duration-150 hover:text-[#171717] hover:bg-black/[0.04]"
-              style={{ background: 'transparent', border: 'none' }}
-            >
-              Войти
-            </button>
+        <div className="flex items-center gap-1">
+          <a
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            className="hidden sm:inline-flex w-10 h-10 items-center justify-center rounded-full hover:bg-black/[0.05] transition-colors"
+          >
+            <BrandIcon name="github" size={18} color="#16140f" />
+          </a>
+          <Link href="/login" className="hidden sm:inline-flex items-center h-10 px-4 rounded-full text-[14px] font-medium text-[#4a463e] no-underline hover:text-[#16140f] hover:bg-black/[0.05] transition-colors">
+            Войти
           </Link>
-          <Link href="/register" className="no-underline">
-            <button
-              type="button"
-              className="text-white text-[13px] font-semibold px-3.5 h-8 rounded-[9px] cursor-pointer tracking-tight transition-all duration-200 hover:bg-[#0052CC] hover:shadow-[0_4px_14px_rgba(0,102,255,0.4)]"
-              style={{
-                background: '#0066FF',
-                border: 'none',
-                boxShadow: '0 2px 8px rgba(0,102,255,0.3)',
-              }}
-            >
-              Регистрация
-            </button>
+          <Link href="/register" className="inline-flex items-center h-10 px-5 rounded-full text-[14px] font-semibold text-white no-underline transition-transform hover:-translate-y-px" style={{ background: "#16140f" }}>
+            Регистрация
           </Link>
+          <button
+            type="button"
+            className="md:hidden inline-flex w-10 h-10 items-center justify-center rounded-full hover:bg-black/[0.05]"
+            aria-label={open ? "Закрыть меню" : "Открыть меню"}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
       </div>
+
+      {open && (
+        <nav
+          className="md:hidden mx-auto mt-2 rounded-3xl p-3 flex flex-col"
+          style={{ maxWidth: 1180, background: "rgba(255,255,255,0.95)", backdropFilter: "blur(20px)", border: "1px solid rgba(22,20,15,0.08)", boxShadow: "0 16px 40px -16px rgba(22,20,15,0.18)" }}
+        >
+          {navLinks.map(({ href, label }) => (
+            <Link key={href} href={href} onClick={() => setOpen(false)} className="px-4 py-3 rounded-2xl text-[16px] text-[#16140f] no-underline hover:bg-black/[0.04]">
+              {label}
+            </Link>
+          ))}
+          <Link href="/login" onClick={() => setOpen(false)} className="px-4 py-3 rounded-2xl text-[16px] text-[#4a463e] no-underline hover:bg-black/[0.04]">
+            Войти
+          </Link>
+        </nav>
+      )}
     </header>
   );
 }
