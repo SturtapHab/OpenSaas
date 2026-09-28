@@ -9,10 +9,10 @@ import { Reveal } from "./Reveal";
 import { GITHUB_URL } from "./site";
 
 const stats = [
-  { value: "15 мин", label: "от ключа до работающего сайта" },
-  { value: "0 ₽", label: "за шаблон — лицензия MIT" },
-  { value: "≈1 500 ₽", label: "в месяц за хостинг, напрямую Timeweb" },
-  { value: "100%", label: "кода открыто на GitHub" },
+  { value: "15 мин", label: "от ключа до работающего сайта" },
+  { value: "0 ₽", label: "за шаблон — лицензия MIT" },
+  { value: "≈1 500 ₽", label: "в месяц за хостинг, напрямую Timeweb" },
+  { value: "100%", label: "кода открыто на GitHub" },
 ];
 
 export function Hero() {
@@ -24,7 +24,7 @@ export function Hero() {
 
   return (
     <section className="relative overflow-hidden lx-grain" style={{ paddingTop: 136 }}>
-      {/* Фон: мягкое тёплое свечение и тонкая сетка */}
+      {/* Фон: мягкое тёплое свечение и тонкая сетка */}
       <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 70% 50% at 50% 0%, #fff 0%, rgba(255,255,255,0) 70%)" }} />
       <div aria-hidden className="absolute inset-x-0 top-0 h-[900px] lx-grid-lines pointer-events-none" style={{ maskImage: "radial-gradient(ellipse 60% 55% at 50% 30%, #000 10%, transparent 75%)", WebkitMaskImage: "radial-gradient(ellipse 60% 55% at 50% 30%, #000 10%, transparent 75%)", opacity: 0.6 }} />
       <div aria-hidden className="absolute pointer-events-none" style={{ width: 720, height: 720, top: 260, left: "50%", transform: "translateX(-50%)", borderRadius: "50%", filter: "blur(90px)", background: "radial-gradient(circle, rgba(224,138,104,0.28) 0%, rgba(224,138,104,0) 65%)" }} />
@@ -41,28 +41,28 @@ export function Hero() {
             <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--lx-ink)] text-white px-2.5 py-1 text-[11px] font-semibold">
               <BrandIcon name="github" size={11} color="#fff" /> MIT
             </span>
-            100% open source<span className="hidden sm:inline"> · бесплатно навсегда</span>
+            <span>100% open source<span className="hidden sm:inline"> · бесплатно навсегда</span></span>
             <ArrowRight size={14} className="text-[var(--lx-ink-3)]" />
           </a>
         </Reveal>
 
         <Reveal delay={0.08}>
           <h1
-            className="lx-serif mx-auto mt-8"
-            style={{ fontSize: "clamp(3rem, 7vw, 6.25rem)", lineHeight: 0.95, letterSpacing: "-0.025em", maxWidth: 1040 }}
+            className="lx-display mx-auto mt-8"
+            style={{ fontSize: "clamp(2.1rem, 5vw, 4.25rem)", lineHeight: 1.05, maxWidth: 1080 }}
           >
-            Свой SaaS-сервис <em className="italic text-[var(--lx-clay)] whitespace-nowrap">за 15 минут</em>
+            Свой <span className="whitespace-nowrap">SaaS-сервис</span> <em className="whitespace-nowrap">за 15 минут</em>
             <br className="hidden sm:block" /> одним сообщением агенту
           </h1>
         </Reveal>
 
         <Reveal delay={0.16}>
           <p className="lx-lead mx-auto mt-7" style={{ maxWidth: 640, fontSize: 19 }}>
-            Скопируйте репозиторий, откройте его в Claude Code или Codex и напишите{" "}
+            Скопируйте репозиторий, откройте его в Claude Code или Codex и напишите{" "}
             <span className="lx-mono text-[15px] text-[var(--lx-ink)] bg-white border border-[var(--lx-line)] rounded-md px-1.5 py-0.5 whitespace-nowrap">
-              «вот ключ Timeweb — задеплой»
+              «вот ключ Timeweb — задеплой»
             </span>
-            . Агент сам создаст базу, соберёт приложение и выдаст ссылку с паролем админа.
+            . Агент сам создаст базу, соберёт приложение и выдаст ссылку с паролем админа.
           </p>
         </Reveal>
 
@@ -70,11 +70,11 @@ export function Hero() {
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="lx-btn lx-btn-ink">
               <BrandIcon name="github" size={17} color="#fff" />
-              Забрать код на GitHub
+              Забрать код на GitHub
             </a>
             <a href="#video" className="lx-btn lx-btn-ghost">
               <PlayCircle size={17} />
-              Как запустить за 10 минут
+              Как запустить за 10 минут
             </a>
           </div>
         </Reveal>
@@ -90,7 +90,7 @@ export function Hero() {
         </Reveal>
       </div>
 
-      {/* Сцена с демо агента */}
+      {/* Сцена с демо агента */}
       <div ref={stage} className="relative lx-container mt-20">
         <motion.div style={{ scale }} className="relative mx-auto">
           <div className="relative mx-auto" style={{ maxWidth: 860 }}>
@@ -98,10 +98,10 @@ export function Hero() {
 
             {/* Плавающие карточки результата */}
             <motion.div style={{ y: floatL }} className="hidden lg:block absolute -left-[262px] top-[70px]">
-              <FloatCard icon={<Database size={16} />} title="PostgreSQL" text="создана и подключена" />
+              <FloatCard icon={<Database size={16} />} title="PostgreSQL" text="создана и подключена" />
             </motion.div>
             <motion.div style={{ y: floatR }} className="hidden lg:block absolute -right-[262px] top-[200px]">
-              <FloatCard icon={<CreditCard size={16} />} title="+ 990 ₽" text="оплата через Робокассу" accent />
+              <FloatCard icon={<CreditCard size={16} />} title="+ 990 ₽" text="оплата через Робокассу" accent />
             </motion.div>
             <motion.div style={{ y: floatL }} className="hidden lg:block absolute -left-[262px] bottom-[110px]">
               <FloatCard icon={<Users size={16} />} title="Новый пользователь" text="подтвердил email" />
@@ -115,7 +115,7 @@ export function Hero() {
         <div className="grid grid-cols-2 lg:grid-cols-4 border-t border-[var(--lx-line-2)]">
           {stats.map((s, i) => (
             <Reveal key={s.value} delay={i * 0.06} className={"pt-8 pb-2 px-2 lg:px-6 " + (i > 0 ? "lg:border-l border-[var(--lx-line)]" : "")}>
-              <div className="lx-serif text-[var(--lx-ink)]" style={{ fontSize: "clamp(2.4rem, 4vw, 3.4rem)", lineHeight: 1 }}>{s.value}</div>
+              <div className="lx-display text-[var(--lx-ink)]" style={{ fontSize: "clamp(1.75rem, 2.8vw, 2.5rem)", lineHeight: 1 }}>{s.value}</div>
               <div className="mt-3 text-[14px] leading-snug text-[var(--lx-ink-3)] max-w-[220px]">{s.label}</div>
             </Reveal>
           ))}

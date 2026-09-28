@@ -5,7 +5,7 @@ const columns = [
   {
     title: "Продукт",
     links: [
-      { label: "Как начать", href: "/#how-to-start" },
+      { label: "Как начать", href: "/#how-to-start" },
       { label: "Наставник", href: "/#mentor" },
       { label: "Примеры", href: "/#examples" },
       { label: "Курс", href: "/#course" },
@@ -22,7 +22,7 @@ const columns = [
     title: "Open source",
     links: [
       { label: "GitHub", href: "https://github.com/SturtapHab/OpenSaas" },
-      { label: "Skills для агентов", href: "https://github.com/SturtapHab/OpenSaas/tree/main/.claude/skills" },
+      { label: "Skills для агентов", href: "https://github.com/SturtapHab/OpenSaas/tree/main/.claude/skills" },
       { label: "Автор шаблона", href: "https://t.me/wellcome_ai" },
     ],
   },
@@ -30,16 +30,16 @@ const columns = [
 
 export function Footer() {
   return (
-    <footer style={{ background: "#f0ece3", color: "#16140f", fontFamily: "Onest, Geist, sans-serif", borderTop: "1px solid rgba(22,20,15,0.08)" }}>
-      <div className="mx-auto px-6 pt-20 pb-10" style={{ maxWidth: 1180 }}>
+    <footer style={{ background: "linear-gradient(180deg, #f8f6f1 0, #f0ece3 240px)", color: "#16140f", fontFamily: "Onest, Geist, sans-serif" }}>
+      <div className="mx-auto px-6 pt-28 pb-10" style={{ maxWidth: 1180 }}>
         <div className="grid md:grid-cols-[1.4fr_1fr_1fr_1fr] gap-12 mb-20">
           <div>
             <Link href="/" className="inline-flex items-center gap-2.5 mb-5 no-underline">
               <Image src="/logo.png" alt="OpenSaaS" width={30} height={30} style={{ borderRadius: 8 }} />
-              <span className="font-semibold text-[17px] tracking-tight text-[#16140f]">OpenSaaS</span>
+              <span className="text-[16px] font-medium tracking-tight text-[#16140f]" style={{ fontFamily: "Unbounded, sans-serif" }}>OpenSaaS</span>
             </Link>
             <p className="text-[14.5px] leading-relaxed text-[#4a463e] max-w-[300px]">
-              Открытый шаблон для запуска своего SaaS. Деплой и обучение — через AI-агента.
+              Открытый шаблон для запуска своего SaaS. Деплой и обучение — через AI-агента.
             </p>
           </div>
 
@@ -67,14 +67,14 @@ export function Footer() {
         <div
           aria-hidden
           className="select-none text-center leading-none"
-          style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontSize: "clamp(4.5rem, 17vw, 15rem)", letterSpacing: "-0.03em", color: "transparent", WebkitTextStroke: "1px rgba(22,20,15,0.18)" }}
+          style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 600, fontSize: "clamp(3rem, 12.5vw, 11rem)", letterSpacing: "-0.05em", color: "transparent", WebkitTextStroke: "1px rgba(22,20,15,0.18)" }}
         >
           OpenSaaS
         </div>
 
         <div className="mt-8 pt-6 flex flex-wrap items-center justify-between gap-3 text-[13px] text-[#857f73]" style={{ borderTop: "1px solid rgba(22,20,15,0.08)" }}>
-          <span>© {new Date().getFullYear()} OpenSaaS · Открытый код под лицензией MIT</span>
-          <span>Сделано с Claude Code</span>
+          <span>© {new Date().getFullYear()} OpenSaaS · Открытый код под лицензией MIT</span>
+          <span>Сделано с Claude Code</span>
         </div>
       </div>
     </footer>

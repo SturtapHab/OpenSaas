@@ -6,33 +6,33 @@ import { GITHUB_URL, SKILL_URL } from "./site";
 
 const tree: { depth: number; name: string; note?: string; hl?: boolean }[] = [
   { depth: 0, name: "OpenSaas/" },
-  { depth: 1, name: "AGENTS.md", note: "инструкции для любого агента", hl: true },
+  { depth: 1, name: "AGENTS.md", note: "инструкции для любого агента", hl: true },
   { depth: 1, name: ".claude/skills/" },
-  { depth: 2, name: "deploy-timeweb/", note: "деплой по одному ключу", hl: true },
+  { depth: 2, name: "deploy-timeweb/", note: "деплой по одному ключу", hl: true },
   { depth: 2, name: "opensaas-mentor/", note: "агент-наставник", hl: true },
   { depth: 1, name: "backend/", note: "FastAPI · оплата, auth, API" },
-  { depth: 1, name: "frontend/", note: "Next.js · сайт и кабинет" },
-  { depth: 1, name: "docs/", note: "документация на русском" },
+  { depth: 1, name: "frontend/", note: "Next.js · сайт и кабинет" },
+  { depth: 1, name: "docs/", note: "документация на русском" },
   { depth: 1, name: "LICENSE", note: "MIT" },
 ];
 
 const facts = [
-  { Icon: Scale, title: "Лицензия MIT", text: "Используйте в коммерческих проектах, меняйте, продавайте — без отчислений." },
-  { Icon: Eye, title: "Весь код открыт", text: "Каждая строка на GitHub. Можно проверить, что внутри нет ничего лишнего." },
-  { Icon: Lock, title: "Ваш сервер, ваши данные", text: "Сервис разворачивается в вашем аккаунте Timeweb. Доступ есть только у вас." },
-  { Icon: Wallet, title: "Платите только хостингу", text: "Около 1 500 ₽ в месяц напрямую Timeweb. Нам — ничего, шаблон бесплатный." },
+  { Icon: Scale, title: "Лицензия MIT", text: "Используйте в коммерческих проектах, меняйте, продавайте — без отчислений." },
+  { Icon: Eye, title: "Весь код открыт", text: "Каждая строка на GitHub. Можно проверить, что внутри нет ничего лишнего." },
+  { Icon: Lock, title: "Ваш сервер, ваши данные", text: "Сервис разворачивается в вашем аккаунте Timeweb. Доступ есть только у вас." },
+  { Icon: Wallet, title: "Платите только хостингу", text: "Около 1 500 ₽ в месяц напрямую Timeweb. Нам — ничего, шаблон бесплатный." },
 ];
 
 export function OpenSourceSection() {
   return (
-    <section id="open-source" className="lx-section" style={{ background: "var(--lx-sand)" }}>
+    <section id="open-source" className="lx-section lx-band">
       <div className="lx-container grid grid-cols-1 lg:grid-cols-[1fr_1.05fr] gap-16 items-center">
         <div className="min-w-0">
           <SectionHeading
             align="left"
             tag="Полностью open source"
-            title={<>Никакой магии. <em>Всё открыто</em> и проверяемо</>}
-            text="Навыки агента — это обычные текстовые инструкции в репозитории. Скачайте их и отдайте любому агенту: Claude Code, Codex, Cursor или Gemini."
+            title={<>Никакой магии. <em>Всё открыто</em> и проверяемо</>}
+            text="Навыки агента — это обычные текстовые инструкции в репозитории. Скачайте их и отдайте любому агенту: Claude Code, Codex, Cursor или Gemini."
           />
           <Stagger className="mt-10 grid sm:grid-cols-2 gap-x-8 gap-y-7">
             {facts.map(({ Icon, title, text }) => (
@@ -55,7 +55,7 @@ export function OpenSourceSection() {
           </Reveal>
         </div>
 
-        {/* Дерево репозитория — в стиле «бумажного» окна GitHub */}
+        {/* Дерево репозитория — в стиле «бумажного» окна GitHub */}
         <Reveal delay={0.1} className="min-w-0">
           <div className="lx-card overflow-hidden" style={{ borderRadius: 28, boxShadow: "var(--lx-shadow-lg)" }}>
             <div className="flex items-center gap-2.5 px-6 h-14 border-b border-[var(--lx-line)] bg-[var(--lx-ivory)]">

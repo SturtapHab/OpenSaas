@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Onest:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Onest:wght@400;500;600;700&family=Unbounded:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -415,37 +415,61 @@
   --lx-clay-soft: #f6e6dc;
   --lx-sage: #4f7a5f;
   --lx-shadow: 0 1px 2px rgba(22, 20, 15, 0.04), 0 12px 32px -12px rgba(22, 20, 15, 0.12);
-  --lx-shadow-lg: 0 2px 4px rgba(22, 20, 15, 0.04), 0 40px 80px -24px rgba(22, 20, 15, 0.22);
+  --lx-shadow-lg: 0 1px 2px rgba(22, 20, 15, 0.03), 0 28px 56px -32px rgba(22, 20, 15, 0.16);
   background: var(--lx-ivory);
   color: var(--lx-ink);
   font-family: 'Onest', 'Geist', -apple-system, sans-serif;
   font-feature-settings: normal;
 }
-.lx-serif {
-  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  font-variant-numeric: lining-nums;
+/* Фирменный шрифт — Unbounded: заголовки, цифры, кнопки, навигация.
+   Длинный текст остаётся в Onest: широкий Unbounded тяжело читать абзацами. */
+.lx-display,
+.lx h3,
+.lx-btn,
+.lx-eyebrow,
+.lx-chip {
+  font-family: 'Unbounded', 'Onest', sans-serif;
 }
+.lx-display {
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+.lx h3 { font-weight: 500; letter-spacing: -0.02em; }
+.lx-btn { font-weight: 500; font-size: 14px; letter-spacing: -0.01em; }
 .lx-mono { font-family: 'JetBrains Mono', 'Geist Mono', monospace; }
 .lx-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
 .lx-section { padding: 128px 0; position: relative; }
+/* Песочная «полоса» без резких краёв: цвет плавно проявляется и уходит
+   на 220px сверху и снизу, поэтому стыки секций не видны. */
+.lx-band {
+  background: linear-gradient(180deg,
+    rgba(240, 236, 227, 0) 0,
+    var(--lx-sand) 220px,
+    var(--lx-sand) calc(100% - 220px),
+    rgba(240, 236, 227, 0) 100%);
+}
 @media (max-width: 768px) { .lx-section { padding: 88px 0; } }
 
 .lx-h2 {
-  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
-  font-weight: 600;
-  font-size: clamp(2.5rem, 5vw, 4.25rem);
-  line-height: 1;
-  letter-spacing: -0.015em;
-  font-variant-numeric: lining-nums;
+  font-family: 'Unbounded', 'Onest', sans-serif;
+  font-weight: 500;
+  font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
   color: var(--lx-ink);
 }
-.lx-h2 em { font-style: italic; color: var(--lx-clay); }
+/* Unbounded без курсива — акцентное слово выделяем цветом. */
+.lx-h2 em, .lx-display em { font-style: normal; color: var(--lx-clay); }
 .lx-lead { font-size: 18px; line-height: 1.65; color: var(--lx-ink-2); }
+/* Переносы: заголовки делим на строки равной длины, в абзацах не оставляем
+   одно слово на последней строке. Предлоги и тире привязаны неразрывными
+   пробелами прямо в текстах компонентов (U+00A0) — не заменяйте их обычными. */
+.lx h1, .lx h2, .lx h3 { text-wrap: balance; }
+.lx p, .lx li { text-wrap: pretty; }
 .lx-eyebrow {
   display: inline-flex; align-items: center; gap: 10px;
-  font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--lx-ink-3);
 }
 .lx-eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--lx-clay); }
@@ -484,6 +508,8 @@
 
 .lx-grain::after {
   content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .35; mix-blend-mode: multiply;
+  mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 .lx-grid-lines {

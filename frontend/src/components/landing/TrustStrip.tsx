@@ -17,10 +17,10 @@ const items: { key: BrandKey; label: string; color?: string }[] = [
   { key: "docker", label: "Docker" },
 ];
 
-/** Бегущая лента: AI-агенты и проверенный стек. */
+/** Бегущая лента: AI-агенты и проверенный стек. */
 export function TrustStrip() {
   return (
-    <section className="relative border-y border-[var(--lx-line)] bg-white/60" aria-label="Совместимость">
+    <section className="relative" aria-label="Совместимость">
       <div className="lx-container py-7 flex flex-col md:flex-row md:items-center gap-5 md:gap-10">
         <div className="text-[12px] font-semibold tracking-[0.16em] uppercase text-[var(--lx-ink-3)] md:w-[180px] flex-none leading-relaxed">
           Любой AI-агент.

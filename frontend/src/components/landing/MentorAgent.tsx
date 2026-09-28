@@ -6,10 +6,10 @@ import { SectionHeading } from "./SectionHeading";
 import { EXPLAIN_PROMPT, MENTOR_SKILL_URL } from "./site";
 
 const points = [
-  { Icon: MessageCircleQuestion, title: "Объясняет простыми словами", text: "Без жаргона: что такое бэкенд, база, вебхук — через понятные аналогии." },
-  { Icon: Lightbulb, title: "Подсказывает идеи", text: "Какие сервисы можно построить на этом шаблоне именно под вашу задачу." },
-  { Icon: ListChecks, title: "Ведёт по шагам", text: "Хотите доработку — разобьёт на маленькие шаги и сделает вместе с вами." },
-  { Icon: Brain, title: "Вы понимаете, что делаете", text: "Не жмёте кнопки вслепую: перед каждым изменением агент объясняет, зачем оно." },
+  { Icon: MessageCircleQuestion, title: "Объясняет простыми словами", text: "Без жаргона: что такое бэкенд, база, вебхук — через понятные аналогии." },
+  { Icon: Lightbulb, title: "Подсказывает идеи", text: "Какие сервисы можно построить на этом шаблоне именно под вашу задачу." },
+  { Icon: ListChecks, title: "Ведёт по шагам", text: "Хотите доработку — разобьёт на маленькие шаги и сделает вместе с вами." },
+  { Icon: Brain, title: "Вы понимаете, что делаете", text: "Не жмёте кнопки вслепую: перед каждым изменением агент объясняет, зачем оно." },
 ];
 
 export function MentorAgentSection() {
@@ -22,8 +22,8 @@ export function MentorAgentSection() {
           <SectionHeading
             align="left"
             tag="Встроенный наставник"
-            title={<>В проект встроен агент, <em>который учит</em></>}
-            text="Скопировали репозиторий, открыли в Claude Code или Codex — и просто спросите. Включится агент-наставник: расскажет, как устроен ваш сервис, для чего каждая часть и что на нём можно построить."
+            title={<>В проект встроен агент, <em>который учит</em></>}
+            text="Скопировали репозиторий, открыли в Claude Code или Codex — и просто спросите. Включится агент-наставник: расскажет, как устроен ваш сервис, для чего каждая часть и что на нём можно построить."
           />
 
           <Stagger className="mt-10 grid sm:grid-cols-2 gap-x-8 gap-y-7">
@@ -39,12 +39,12 @@ export function MentorAgentSection() {
           <Reveal className="mt-10 max-w-md">
             <PromptLine text={EXPLAIN_PROMPT} />
             <a href={MENTOR_SKILL_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 mt-4 text-[13.5px] text-[var(--lx-ink-3)] hover:text-[var(--lx-ink)] no-underline transition-colors">
-              Инструкция наставника открыта — можно почитать <ArrowUpRight size={14} />
+              Инструкция наставника открыта — можно почитать <ArrowUpRight size={14} />
             </a>
           </Reveal>
         </div>
 
-        {/* Диалог с наставником в Claude Code */}
+        {/* Диалог с наставником в Claude Code */}
         <Reveal delay={0.1} className="min-w-0">
           <div className="lx-card overflow-hidden" style={{ boxShadow: "var(--lx-shadow-lg)", borderRadius: 28 }}>
             <div className="flex items-center gap-2.5 px-6 h-14 border-b border-[var(--lx-line)] bg-[var(--lx-ivory)]">
@@ -57,7 +57,7 @@ export function MentorAgentSection() {
             <div className="p-6 sm:p-8 space-y-6 text-[15px] leading-relaxed">
               <div className="flex justify-end">
                 <div className="rounded-[20px] rounded-br-md px-4 py-2.5 text-white max-w-[85%]" style={{ background: "var(--lx-ink)" }}>
-                  Объясни, как работает этот проект
+                  Объясни, как работает этот проект
                 </div>
               </div>
               <div className="flex gap-3">
@@ -66,19 +66,19 @@ export function MentorAgentSection() {
                 </span>
                 <div className="text-[var(--lx-ink-2)] space-y-3 min-w-0">
                   <p>
-                    Представьте <b className="text-[var(--lx-ink)]">кафе</b>. Зал с меню, где сидят гости, — это <Hl>фронтенд</Hl>: страницы, которые видит пользователь.
+                    Представьте <b className="text-[var(--lx-ink)]">кафе</b>. Зал с меню, где сидят гости, — это <Hl>фронтенд</Hl>: страницы, которые видит пользователь.
                   </p>
                   <p>
-                    Кухня, где готовят заказы, — <Hl>бэкенд</Hl>. Он проверяет пароли, считает подписки, принимает оплату.
+                    Кухня, где готовят заказы, — <Hl>бэкенд</Hl>. Он проверяет пароли, считает подписки, принимает оплату.
                   </p>
                   <p>
-                    Склад продуктов — <Hl>база данных</Hl>: там хранятся пользователи и платежи. А <Hl>Робокасса</Hl> — кассовый терминал, который приносит деньги прямо в ваш ресторан.
+                    Склад продуктов — <Hl>база данных</Hl>: там хранятся пользователи и платежи. А <Hl>Робокасса</Hl> — кассовый терминал, который приносит деньги прямо в ваш ресторан.
                   </p>
-                  <p className="text-[var(--lx-ink-3)]">Хотите, покажу это на вашем сайте: что происходит, когда человек нажимает «Зарегистрироваться»?</p>
+                  <p className="text-[var(--lx-ink-3)]">Хотите, покажу это на вашем сайте: что происходит, когда человек нажимает «Зарегистрироваться»?</p>
                 </div>
               </div>
               <div className="flex flex-wrap gap-2 pl-11">
-                {["Да, покажи", "Что можно построить?", "Хочу добавить свою функцию"].map((c) => (
+                {["Да, покажи", "Что можно построить?", "Хочу добавить свою функцию"].map((c) => (
                   <span key={c} className="rounded-full border border-[var(--lx-line-2)] px-3.5 py-1.5 text-[13px] text-[var(--lx-ink-2)] bg-white">{c}</span>
                 ))}
               </div>

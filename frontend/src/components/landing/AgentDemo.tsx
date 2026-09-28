@@ -13,15 +13,15 @@ type Step =
   | { kind: "result" };
 
 const script: Step[] = [
-  { kind: "user", text: "Вот мой ключ от Timeweb — задеплой сервис", secret: "eyJhbGci••••" },
-  { kind: "agent", text: "Нашёл в репозитории skill deploy-timeweb. Проверяю ключ и GitHub…" },
-  { kind: "ok", text: "Ключ рабочий, баланс 2 450 ₽" },
+  { kind: "user", text: "Вот мой ключ от Timeweb — задеплой сервис", secret: "eyJhbGci••••" },
+  { kind: "agent", text: "Нашёл в репозитории skill deploy-timeweb. Проверяю ключ и GitHub…" },
+  { kind: "ok", text: "Ключ рабочий, баланс 2 450 ₽" },
   { kind: "ok", text: "GitHub подключён, репозиторий виден" },
-  { kind: "agent", text: "Будет создано: база + приложение ≈ 1 500 ₽/мес. Продолжаем? На какой email сделать админа?" },
+  { kind: "agent", text: "Будет создано: база + приложение ≈ 1 500 ₽/мес. Продолжаем? На какой email сделать админа?" },
   { kind: "user", text: "Да, admin@my-saas.ru" },
-  { kind: "ok", text: "PostgreSQL создана", meta: "6 мин" },
-  { kind: "ok", text: "Приложение собрано из Dockerfile", meta: "4 мин" },
-  { kind: "ok", text: "Сайт отвечает, /health → 200", meta: "10 с" },
+  { kind: "ok", text: "PostgreSQL создана", meta: "6 мин" },
+  { kind: "ok", text: "Приложение собрано из Dockerfile", meta: "4 мин" },
+  { kind: "ok", text: "Сайт отвечает, /health → 200", meta: "10 с" },
   { kind: "result" },
 ];
 
@@ -37,7 +37,7 @@ export function AgentDemo() {
   const [shown, setShown] = useState(0);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const ref = useRef<HTMLDivElement>(null);
-  // Сценарий проигрывается заново каждый раз, когда окно появляется на экране.
+  // Сценарий проигрывается заново каждый раз, когда окно появляется на экране.
   const inView = useInView(ref, { amount: 0.3 });
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export function AgentDemo() {
       t += d;
       timers.current.push(setTimeout(() => setShown(i + 1), t));
     });
-    // Повторяем сценарий по кругу, переключая агента
+    // Повторяем сценарий по кругу, переключая агента
     timers.current.push(setTimeout(() => setAgent((a) => (a === "claude" ? "codex" : "claude")), t + 7000));
 
     return () => timers.current.forEach(clearTimeout);
@@ -148,7 +148,7 @@ export function AgentDemo() {
               className="animate-fade-up mt-3 rounded-2xl p-4"
               style={{ background: "linear-gradient(135deg, rgba(143,199,160,0.14), rgba(224,138,104,0.12))", border: "1px solid rgba(143,199,160,0.28)", fontFamily: "Onest, sans-serif" }}
             >
-              <div className="text-[#a9d8b6] font-semibold text-[14px] mb-2">Сайт работает — за 10 минут</div>
+              <div className="text-[#a9d8b6] font-semibold text-[14px] mb-2">Сайт работает — за 10 минут</div>
               <div className="lx-mono text-[12.5px] space-y-1 text-white/85">
                 <div><span className="text-white/40">сайт:   </span>https://my-saas.twc1.net</div>
                 <div><span className="text-white/40">логин:  </span>admin@my-saas.ru</div>

@@ -4,11 +4,11 @@ import { SectionHeading } from "./SectionHeading";
 import { VIDEO_URL } from "./site";
 
 const chapters = [
-  { t: "0:00", title: "Копируем репозиторий на GitHub" },
-  { t: "1:30", title: "Регистрируемся в Timeweb и берём API-ключ" },
-  { t: "3:00", title: "Открываем проект в Claude Code или Codex" },
-  { t: "4:00", title: "Одно сообщение — и агент деплоит" },
-  { t: "8:00", title: "Заходим в админку готового сервиса" },
+  { t: "0:00", title: "Копируем репозиторий на GitHub" },
+  { t: "1:30", title: "Регистрируемся в Timeweb и берём API-ключ" },
+  { t: "3:00", title: "Открываем проект в Claude Code или Codex" },
+  { t: "4:00", title: "Одно сообщение — и агент деплоит" },
+  { t: "8:00", title: "Заходим в админку готового сервиса" },
 ];
 
 export function VideoSection() {
@@ -16,9 +16,9 @@ export function VideoSection() {
     <section id="video" className="lx-section">
       <div className="lx-container">
         <SectionHeading
-          tag="Видео · 10 минут"
-          title={<>Как запустить <em>свой первый</em> SaaS</>}
-          text="Повторяйте за экраном: от пустого аккаунта до работающего сайта с оплатой и админкой."
+          tag="Видео · 10 минут"
+          title={<>Как запустить <em>свой первый</em> SaaS</>}
+          text="Повторяйте за экраном: от пустого аккаунта до работающего сайта с оплатой и админкой."
         />
 
         <div className="mt-16 grid lg:grid-cols-[1.65fr_1fr] gap-6 items-stretch">
@@ -30,7 +30,7 @@ export function VideoSection() {
               {VIDEO_URL ? (
                 <iframe
                   src={VIDEO_URL}
-                  title="Как запустить свой первый SaaS за 10 минут"
+                  title="Как запустить свой первый SaaS за 10 минут"
                   className="absolute inset-0 w-full h-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
@@ -45,7 +45,7 @@ export function VideoSection() {
                     <Clock size={13} /> Видео скоро появится
                   </div>
                   <p className="relative text-[var(--lx-ink-2)] text-[15px] max-w-sm">
-                    Пока его нет — пролистайте ниже: там те же три шага текстом и готовые промпты.
+                    Пока его нет — пролистайте ниже: там те же три шага текстом и готовые промпты.
                   </p>
                 </div>
               )}
@@ -54,7 +54,7 @@ export function VideoSection() {
 
           <Reveal delay={0.1} className="min-w-0">
             <div className="lx-card p-8 h-full flex flex-col">
-              <div className="text-[12px] font-semibold tracking-[0.16em] uppercase text-[var(--lx-ink-3)] mb-6">Что в видео</div>
+              <div className="text-[12px] font-semibold tracking-[0.16em] uppercase text-[var(--lx-ink-3)] mb-6">Что в видео</div>
               <Stagger className="flex-1">
                 {chapters.map((c) => (
                   <StaggerItem key={c.t} className="flex gap-4 py-3.5 border-b border-[var(--lx-line)] last:border-0">
@@ -64,7 +64,7 @@ export function VideoSection() {
                 ))}
               </Stagger>
               <div className="mt-6 pt-5 border-t border-[var(--lx-line)] text-[13.5px] leading-relaxed text-[var(--lx-ink-3)]">
-                Понадобится: аккаунт GitHub, аккаунт Timeweb Cloud с балансом от 500 ₽ и Claude Code или Codex.
+                Понадобится: аккаунт GitHub, аккаунт Timeweb Cloud с балансом от 500 ₽ и Claude Code или Codex.
               </div>
             </div>
           </Reveal>

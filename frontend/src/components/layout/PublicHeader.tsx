@@ -8,7 +8,7 @@ import { BrandIcon } from "@/components/landing/BrandIcon";
 import { GITHUB_URL } from "@/components/landing/site";
 
 const navLinks = [
-  { href: "/#how-to-start", label: "Как начать" },
+  { href: "/#how-to-start", label: "Как начать" },
   { href: "/#mentor", label: "Наставник" },
   { href: "/#examples", label: "Примеры" },
   { href: "/#open-source", label: "Open source" },
@@ -41,12 +41,12 @@ export function PublicHeader() {
       >
         <Link href="/" className="flex items-center gap-2.5 no-underline" onClick={() => setOpen(false)}>
           <Image src="/logo.png" alt="OpenSaaS" width={28} height={28} style={{ borderRadius: 8 }} priority />
-          <span className="font-semibold text-[16px] tracking-tight text-[#16140f]">OpenSaaS</span>
+          <span className="text-[15px] font-medium tracking-tight text-[#16140f]" style={{ fontFamily: "Unbounded, sans-serif" }}>OpenSaaS</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-7">
           {navLinks.map(({ href, label }) => (
-            <Link key={href} href={href} className="text-[14px] text-[#4a463e] no-underline transition-colors hover:text-[#16140f]">
+            <Link key={href} href={href} className="text-[13px] text-[#4a463e] no-underline transition-colors hover:text-[#16140f]" style={{ fontFamily: "Unbounded, sans-serif", letterSpacing: "-0.01em" }}>
               {label}
             </Link>
           ))}

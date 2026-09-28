@@ -16,11 +16,11 @@ export function CTA() {
           >
             <div aria-hidden className="absolute inset-0 lx-grid-lines opacity-40 pointer-events-none" style={{ maskImage: "radial-gradient(ellipse 60% 60% at 50% 40%, #000, transparent 80%)", WebkitMaskImage: "radial-gradient(ellipse 60% 60% at 50% 40%, #000, transparent 80%)" }} />
             <div className="relative mx-auto" style={{ maxWidth: 860 }}>
-              <h2 className="lx-serif" style={{ fontSize: "clamp(2.75rem, 6.5vw, 5.5rem)", lineHeight: 0.98, letterSpacing: "-0.02em" }}>
-                Каждый, у кого есть идея, <em className="italic text-[var(--lx-clay)]">заслуживает её запустить</em>
+              <h2 className="lx-display" style={{ fontSize: "clamp(2.1rem, 4.6vw, 4rem)", lineHeight: 1.05 }}>
+                Каждый, у кого есть идея, <em>заслуживает её запустить</em>
               </h2>
               <p className="lx-lead mx-auto mt-7" style={{ maxWidth: 540 }}>
-                Заберите код, дайте агенту ключ — и через 15 минут у вас свой работающий сервис.
+                Заберите код, дайте агенту ключ — и через 15 минут у вас свой работающий сервис.
               </p>
 
               <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
@@ -29,7 +29,7 @@ export function CTA() {
                   Забрать бесплатно
                 </a>
                 <Link href={COURSE_URL} className="lx-btn lx-btn-ghost">
-                  Курс по развитию <ArrowRight size={16} />
+                  Курс по развитию <ArrowRight size={16} />
                 </Link>
               </div>
 
@@ -37,7 +37,7 @@ export function CTA() {
                 <PromptLine text={DEPLOY_PROMPT} />
               </div>
 
-              <p className="mt-6 text-[13px] text-[var(--lx-ink-3)]">Open source · MIT · Без подписки на шаблон</p>
+              <p className="mt-6 text-[13px] text-[var(--lx-ink-3)]">Open source · MIT · Без подписки на шаблон</p>
             </div>
           </div>
         </Reveal>

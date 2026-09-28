@@ -7,7 +7,7 @@ interface SectionHeadingProps {
   align?: "center" | "left";
 }
 
-/** Заголовок секции: подпись, крупный антиквенный заголовок (акцент — в <em>) и лид. */
+/** Заголовок секции: подпись, крупный заголовок Unbounded (акцент — в <em>) и лид. */
 export function SectionHeading({ tag, title, text, align = "center" }: SectionHeadingProps) {
   const center = align === "center";
   return (

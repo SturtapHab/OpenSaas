@@ -3,9 +3,9 @@ import { ArrowRight, LayoutDashboard, Sparkles, UserPlus } from "lucide-react";
 import { Reveal, Stagger, StaggerItem } from "./Reveal";
 
 const cards = [
-  { Icon: UserPlus, title: "Зарегистрируйся", text: "Та же форма, что получишь ты" },
-  { Icon: LayoutDashboard, title: "Загляни в кабинет", text: "Подписки, рефералы, настройки" },
-  { Icon: Sparkles, title: "Исследуй сам", text: "Всё, что видишь, — бесплатно и твоё" },
+  { Icon: UserPlus, title: "Зарегистрируйся", text: "Та же форма, что получишь ты" },
+  { Icon: LayoutDashboard, title: "Загляни в кабинет", text: "Подписки, рефералы, настройки" },
+  { Icon: Sparkles, title: "Исследуй сам", text: "Всё, что видишь, — бесплатно и твоё" },
 ];
 
 export function LiveDemo() {
@@ -24,12 +24,12 @@ export function LiveDemo() {
                 <span className="lx-live-dot" /> Живое демо · протестируйте
               </div>
               <h2 className="lx-h2 mt-7 mx-auto" style={{ maxWidth: 820 }}>
-                «Этот сайт — <em>и есть шаблон</em>»
+                «Этот сайт — <em>и есть шаблон</em>»
               </h2>
               <p className="lx-lead mt-6 mx-auto" style={{ maxWidth: 640 }}>
-                То, что вы видите, — не макет. Это работающий сервис на том самом открытом коде.
-                Зарегистрируйтесь и потрогайте всё руками: через 15 минут у вас будет такой же —
-                со своим брендом, своими пользователями и своими подписками.
+                То, что вы видите, — не макет. Это работающий сервис на том самом открытом коде.
+                Зарегистрируйтесь и потрогайте всё руками: через 15 минут у вас будет такой же —
+                со своим брендом, своими пользователями и своими подписками.
               </p>
 
               <Stagger className="mt-12 grid md:grid-cols-3 gap-4 text-left">
