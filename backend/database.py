@@ -23,7 +23,7 @@ class Base(DeclarativeBase):
     """Базовый класс для всех ORM моделей."""
 
 
-# SSL context для asyncpg / Render
+# SSL context для asyncpg (управляемая PostgreSQL Timeweb)
 # Нужен чтобы asyncpg не пытался читать
 # системные SSL сертификаты из /root/.postgresql/
 ssl_ctx = ssl.create_default_context()

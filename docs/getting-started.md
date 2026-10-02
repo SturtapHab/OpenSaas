@@ -92,5 +92,4 @@ npm run dev
 
 - [Архитектура](architecture.md) — как всё устроено
 - [Добавление модулей](adding-modules.md) — расширение шаблона
-- [Деплой на Render](deployment-render.md)
-- [Деплой Docker](deployment-docker.md)
+- [Деплой в Timeweb Cloud](../DEPLOY.md)

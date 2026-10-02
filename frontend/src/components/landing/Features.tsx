@@ -214,7 +214,7 @@ export function BentoFeaturesSection() {
           <BentoCard
             icon={<Bell size={24} />}
             title="Docker"
-            desc="Один Dockerfile, supervisord, nginx. docker-compose up и всё готово."
+            desc="Один Dockerfile, supervisord, nginx. Деплой в Timeweb Cloud одной командой."
             decor={<DockerDecor />}
           />
         </div>

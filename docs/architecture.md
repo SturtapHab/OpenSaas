@@ -91,13 +91,15 @@ PostgreSQL fallback (таблица `rate_limit_entries`).
 `--profile with-redis`). Backend/frontend запускаются с хоста для
 быстрой разработки.
 
-### Production
+### Production (Timeweb Cloud)
 
-`docker-compose.prod.yml` — postgres + redis (опц.) + backend + frontend
-+ nginx (как reverse proxy + TLS).
+Единственный способ деплоя — Timeweb Cloud App Platform, инструкция в
+[`DEPLOY.md`](../DEPLOY.md). Корневой `Dockerfile` собирает всё в один
+контейнер: Next.js + FastAPI/gunicorn + nginx (порт 10000) под supervisord.
+База — управляемая PostgreSQL Timeweb.
 
-Backend Dockerfile запускает миграции (`alembic upgrade head`) и
-`create_admin.py` перед стартом uvicorn — это безопасно и идемпотентно.
+`start.sh` при старте контейнера запускает миграции (`alembic upgrade head`)
+и `create_admin.py` — это безопасно и идемпотентно.
 
 ## Опциональный Redis
 
