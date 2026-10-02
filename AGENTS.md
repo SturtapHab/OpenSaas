@@ -3,7 +3,8 @@
 ## Деплой в Timeweb Cloud
 
 Если человек просит задеплоить проект в Timeweb (таймвеб) или присылает API-ключ Timeweb,
-следуй инструкции `.claude/skills/deploy-timeweb/SKILL.md` и используй скрипт
+выполняй по шагам [`DEPLOY.md`](DEPLOY.md) (это единственный способ деплоя) и
+инструкцию `.claude/skills/deploy-timeweb/SKILL.md` и используй скрипт
 `.claude/skills/deploy-timeweb/deploy_timeweb.py`. Через тот же скрипт добавляются ENV
 для продакшна: SMTP, Робокасса, свой домен.
 

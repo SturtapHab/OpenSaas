@@ -10,8 +10,7 @@ Markdown-документация для разработчиков, испол�
 - `getting-started.md` — установка и первый запуск
 - `architecture.md` — обзор архитектуры (backend, frontend, инфраструктура)
 - `adding-modules.md` — пошаговая инструкция: как добавить свой модуль
-- `deployment-render.md` — деплой на Render + Vercel
-- `deployment-docker.md` — деплой через Docker Compose на VPS
+- Деплой — только Timeweb Cloud, инструкция в `DEPLOY.md` в корне репозитория
 
 ## Соглашения
 
@@ -27,4 +26,4 @@ Markdown-документация для разработчиков, испол�
 изменения формата токенов) — синхронизируйте `architecture.md`.
 
 При добавлении новых переменных окружения — обновите `.env.example` И
-секции в `deployment-*.md`.
+`.claude/skills/deploy-timeweb/deploy_timeweb.py` (ENV при деплое).

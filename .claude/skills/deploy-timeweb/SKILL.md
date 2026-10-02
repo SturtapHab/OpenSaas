@@ -23,7 +23,8 @@ description: Деплой OpenSaaS в Timeweb Cloud (App Platform + управл
 - Регистрация работает сразу после деплоя: без SMTP подтверждение email выключено, от ботов
   защищает встроенная ALTCHA (без ключей). Почта включается позже, см. шаг 5.1.
 - Нужна внешняя PostgreSQL → создаём управляемую БД Timeweb.
-- `backend/Dockerfile`, `frontend/Dockerfile` и `docker-compose*.yml` для Timeweb **не используются**.
+- Это единственный способ сборки и деплоя. `docker-compose*.yml` нужны только для запуска на
+  своём компьютере (`LOCAL_SETUP.md`). Пошаговая инструкция: `DEPLOY.md` в корне.
 
 ## Шаг 0. Что человек делает сам (API это не умеет)
 

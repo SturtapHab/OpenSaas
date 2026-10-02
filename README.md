@@ -8,6 +8,7 @@ Open source SaaS boilerplate на Python (FastAPI) + Next.js 14. Лицензи�
 2. Откройте свою копию в Claude Code или Codex (подойдут и другие агенты, которые читают `AGENTS.md`).
 3. Напишите агенту: «Вот мой ключ от Timeweb — задеплой сервис: <ключ>».
    Агент покажет цену, спросит согласие и email админа, а затем выдаст ссылку и пароль.
+   Агент действует по пошаговой инструкции [`DEPLOY.md`](DEPLOY.md).
 
 Не понимаете, как всё устроено? Напишите агенту «Объясни, как работает этот проект».
 Включится наставник (`.claude/skills/opensaas-mentor`): он объяснит всё простыми словами
@@ -25,10 +26,11 @@ Alembic, Pydantic v2, JWT, bcrypt, aiosmtplib, Redis (опционально).
 **Frontend:** Next.js 14 App Router, TypeScript strict, shadcn/ui,
 Tailwind CSS, TanStack Query, Zustand, react-hook-form + zod.
 
-**Инфраструктура:** Docker + docker-compose, PostgreSQL 15, Redis 7
-(опционально), Nginx (production).
+**Инфраструктура:** один Docker-контейнер (Next.js + FastAPI + Nginx) в
+Timeweb Cloud App Platform, управляемая PostgreSQL 15, Redis 7 (опционально).
+Локально — docker-compose.
 
-## Быстрый старт
+## Локальная разработка
 
 ```bash
 # 1. Клонировать репозиторий
@@ -77,7 +79,8 @@ opensaas/
 │   └── src/components/
 ├── docs/             # Документация
 ├── docker-compose.yml
-├── docker-compose.prod.yml
+├── Dockerfile        # единственная сборка для продакшна (Timeweb)
+├── DEPLOY.md         # пошаговая инструкция деплоя
 └── .env.example
 ```
 
@@ -89,8 +92,8 @@ opensaas/
 - [Getting Started](docs/getting-started.md)
 - [Архитектура](docs/architecture.md)
 - [Добавление модулей](docs/adding-modules.md)
-- [Деплой на Render](docs/deployment-render.md)
-- [Деплой через Docker](docs/deployment-docker.md)
+- [Деплой в Timeweb Cloud](DEPLOY.md)
+- [Запуск на своём компьютере](LOCAL_SETUP.md)
 
 ## Лицензия
 
