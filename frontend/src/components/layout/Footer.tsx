@@ -39,7 +39,7 @@ export function Footer() {
               <span className="text-[16px] font-medium tracking-tight text-[#16140f]" style={{ fontFamily: "Unbounded, sans-serif" }}>OpenSaaS</span>
             </Link>
             <p className="text-[14.5px] leading-relaxed text-[#4a463e] max-w-[300px]">
-              Открытый шаблон для запуска своего SaaS. Деплой и обучение — через AI-агента.
+              Открытый шаблон для запуска своего онлайн-бизнеса. Деплой и обучение — через AI-агента.
             </p>
           </div>
 

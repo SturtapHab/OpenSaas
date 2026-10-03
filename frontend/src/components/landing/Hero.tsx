@@ -4,9 +4,10 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, CreditCard, Database, PlayCircle, Users } from "lucide-react";
 import { AgentDemo } from "./AgentDemo";
+import { CodingAgentCard } from "./CodingAgentCard";
 import { BrandIcon } from "./BrandIcon";
 import { Reveal } from "./Reveal";
-import { GITHUB_URL } from "./site";
+import { CODING_AGENT_DEPLOY_PRICE, GITHUB_URL } from "./site";
 
 const stats = [
   { value: "15 мин", label: "от ключа до работающего сайта" },
@@ -51,9 +52,16 @@ export function Hero() {
             className="lx-display mx-auto mt-8"
             style={{ fontSize: "clamp(2.1rem, 5vw, 4.25rem)", lineHeight: 1.05, maxWidth: 1080 }}
           >
-            Свой <span className="whitespace-nowrap">SaaS-сервис</span> <em className="whitespace-nowrap">за 15 минут</em>
-            <br className="hidden sm:block" /> одним сообщением агенту
+            Свой <span className="whitespace-nowrap">онлайн-бизнес</span> <em className="whitespace-nowrap">за 15 минут</em>
+            <br className="hidden sm:block" /> одним сообщением ИИ-агенту
           </h1>
+        </Reveal>
+
+        <Reveal delay={0.12}>
+          <p className="mx-auto mt-5 text-[15px] leading-relaxed text-[var(--lx-ink-3)]" style={{ maxWidth: 560 }}>
+            Это сайт, где клиенты регистрируются и платят за доступ, как в Notion или Тильде.
+            Такие сервисы называют SaaS.
+          </p>
         </Reveal>
 
         <Reveal delay={0.16}>
@@ -63,6 +71,13 @@ export function Hero() {
               «вот ключ Timeweb — задеплой»
             </span>
             . Агент сам создаст базу, соберёт приложение и выдаст ссылку с паролем админа.
+          </p>
+          <p className="mx-auto mt-4 text-[15px] text-[var(--lx-ink-3)]">
+            Нет подписки?{" "}
+            <a href="#coding-agent" className="font-semibold text-[var(--lx-clay-ink)] underline underline-offset-4 decoration-[var(--lx-clay-soft)] hover:decoration-[var(--lx-clay)]">
+              Задеплойте через наш CodingAgent
+            </a>{" "}
+            с оплатой в рублях — около {CODING_AGENT_DEPLOY_PRICE} →
           </p>
         </Reveal>
 
@@ -120,6 +135,8 @@ export function Hero() {
             </Reveal>
           ))}
         </div>
+
+        <CodingAgentCard />
       </div>
     </section>
   );
