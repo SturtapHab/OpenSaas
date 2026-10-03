@@ -4,7 +4,7 @@ import "./globals.css";
 import { Providers } from "@/components/Providers";
 
 export const metadata: Metadata = {
-  title: "OpenSaaS — свой SaaS за 15 минут с Claude Code или Codex",
+  title: "OpenSaaS — свой онлайн-бизнес за 15 минут с Claude Code или Codex",
   description:
     "Открытый SaaS-шаблон (MIT) на FastAPI + Next.js. Отдайте AI-агенту ключ Timeweb — он сам задеплоит сервис с регистрацией, оплатой через Робокассу, кабинетом и админкой.",
   icons: {

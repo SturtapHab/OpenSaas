@@ -51,9 +51,16 @@ export function Hero() {
             className="lx-display mx-auto mt-8"
             style={{ fontSize: "clamp(2.1rem, 5vw, 4.25rem)", lineHeight: 1.05, maxWidth: 1080 }}
           >
-            Свой <span className="whitespace-nowrap">SaaS-сервис</span> <em className="whitespace-nowrap">за 15 минут</em>
-            <br className="hidden sm:block" /> одним сообщением агенту
+            Свой <span className="whitespace-nowrap">онлайн-бизнес</span> <em className="whitespace-nowrap">за 15 минут</em>
+            <br className="hidden sm:block" /> одним сообщением ИИ-агенту
           </h1>
+        </Reveal>
+
+        <Reveal delay={0.12}>
+          <p className="mx-auto mt-5 text-[15px] leading-relaxed text-[var(--lx-ink-3)]" style={{ maxWidth: 560 }}>
+            Это сайт, где клиенты регистрируются и платят за доступ, как в Notion или Тильде.
+            Такие сервисы называют SaaS.
+          </p>
         </Reveal>
 
         <Reveal delay={0.16}>

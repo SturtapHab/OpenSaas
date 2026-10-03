@@ -17,7 +17,7 @@ export function VideoSection() {
       <div className="lx-container">
         <SectionHeading
           tag="Видео · 10 минут"
-          title={<>Как запустить <em>свой первый</em> SaaS</>}
+          title={<>Как запустить <em>свой первый</em> онлайн-бизнес</>}
           text="Повторяйте за экраном: от пустого аккаунта до работающего сайта с оплатой и админкой."
         />
 
@@ -30,7 +30,7 @@ export function VideoSection() {
               {VIDEO_URL ? (
                 <iframe
                   src={VIDEO_URL}
-                  title="Как запустить свой первый SaaS за 10 минут"
+                  title="Как запустить свой первый онлайн-бизнес за 10 минут"
                   className="absolute inset-0 w-full h-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen

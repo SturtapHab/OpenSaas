@@ -55,7 +55,7 @@ export function WhatIsItSection() {
                 marginBottom: '24px',
               }}
             >
-              Готовая база для любого SaaS-проекта
+              Готовая основа для любого онлайн-бизнеса
             </h2>
             <p style={{ fontSize: '16px', color: '#616161', lineHeight: '1.7', marginBottom: '16px' }}>
               OpenSaaS — это open-source шаблон, который можно форкнуть и запустить под себя за считанные часы. Никакого vendor lock-in, никаких скрытых платежей.
