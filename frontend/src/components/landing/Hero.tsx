@@ -4,9 +4,10 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, CreditCard, Database, PlayCircle, Users } from "lucide-react";
 import { AgentDemo } from "./AgentDemo";
+import { CodingAgentCard } from "./CodingAgentCard";
 import { BrandIcon } from "./BrandIcon";
 import { Reveal } from "./Reveal";
-import { GITHUB_URL } from "./site";
+import { CODING_AGENT_DEPLOY_PRICE, GITHUB_URL } from "./site";
 
 const stats = [
   { value: "15 мин", label: "от ключа до работающего сайта" },
@@ -71,6 +72,13 @@ export function Hero() {
             </span>
             . Агент сам создаст базу, соберёт приложение и выдаст ссылку с паролем админа.
           </p>
+          <p className="mx-auto mt-4 text-[15px] text-[var(--lx-ink-3)]">
+            Нет подписки?{" "}
+            <a href="#coding-agent" className="font-semibold text-[var(--lx-clay-ink)] underline underline-offset-4 decoration-[var(--lx-clay-soft)] hover:decoration-[var(--lx-clay)]">
+              Задеплойте через наш CodingAgent
+            </a>{" "}
+            с оплатой в рублях — около {CODING_AGENT_DEPLOY_PRICE} →
+          </p>
         </Reveal>
 
         <Reveal delay={0.24}>
@@ -127,6 +135,8 @@ export function Hero() {
             </Reveal>
           ))}
         </div>
+
+        <CodingAgentCard />
       </div>
     </section>
   );
