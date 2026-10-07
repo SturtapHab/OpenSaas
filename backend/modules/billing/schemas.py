@@ -50,18 +50,3 @@ class PaymentPublic(BaseModel):
     status: str
     provider: str
     created_at: datetime
-
-
-class CourseInfo(BaseModel):
-    """Публичная информация о курсе (для лендинга)."""
-
-    enabled: bool
-    price: Decimal
-    currency: str = "RUB"
-
-
-class CourseAccess(CourseInfo):
-    """Курс для текущего пользователя. telegram_url — только если курс оплачен."""
-
-    purchased: bool
-    telegram_url: str | None = None

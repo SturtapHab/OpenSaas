@@ -1,5 +1,5 @@
 import { apiClient } from "./client";
-import type { CourseAccess, CourseInfo, Payment, Plan, Subscription } from "@/types";
+import type { Payment, Plan, Subscription } from "@/types";
 
 export const billingApi = {
   async listPlans(): Promise<Plan[]> {
@@ -30,21 +30,6 @@ export const billingApi = {
 
   async cancel(): Promise<Subscription> {
     const r = await apiClient.post("/api/v1/billing/cancel");
-    return r.data;
-  },
-
-  async getCourseInfo(): Promise<CourseInfo> {
-    const r = await apiClient.get("/api/v1/billing/course/info");
-    return r.data;
-  },
-
-  async getCourse(): Promise<CourseAccess> {
-    const r = await apiClient.get("/api/v1/billing/course");
-    return r.data;
-  },
-
-  async buyCourse(): Promise<{ payment_url: string; payment_id: string }> {
-    const r = await apiClient.post("/api/v1/billing/course/buy");
     return r.data;
   },
 };

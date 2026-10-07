@@ -59,3 +59,12 @@ def verify_result_signature(out_sum: str, inv_id: str, signature: str) -> bool:
     """
     expected = _md5(f"{out_sum}:{inv_id}:{settings.robokassa_password2}")
     return expected.lower() == signature.lower()
+
+
+def verify_success_signature(out_sum: str, inv_id: str, signature: str) -> bool:
+    """Проверка подписи в Success URL (редирект покупателя после оплаты).
+
+    Использует password1: так Робокасса подписывает параметры возврата на сайт.
+    """
+    expected = _md5(f"{out_sum}:{inv_id}:{settings.robokassa_password1}")
+    return expected.lower() == signature.lower()

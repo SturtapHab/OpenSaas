@@ -15,11 +15,10 @@ export const CHANNEL_HANDLE = "@wellcome_ai";
 export const TIMEWEB_URL = "https://timeweb.cloud";
 
 /**
- * Куда ведёт кнопка «Купить курс»: кабинет → оплата через Робокассу.
- * Цена берётся с сервера (ENV COURSE_PRICE), ссылка на уроки — из ENV COURSE_TELEGRAM_URL
- * и видна только оплатившим. В коде её нет специально: репозиторий открытый.
+ * Курс покупается прямо с лендинга, без регистрации: кнопка сразу ведёт в Робокассу.
+ * Цена — ENV COURSE_PRICE, ссылка на уроки — ENV COURSE_TELEGRAM_URL (видна только
+ * после оплаты на /payment/success). В коде её нет специально: репозиторий открытый.
  */
-export const COURSE_URL = "/billing#course";
 
 /** Ссылка на видео. Пока пусто — показываем плашку «Видео скоро». */
 export const VIDEO_URL = "";

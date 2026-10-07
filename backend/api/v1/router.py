@@ -11,7 +11,11 @@ from api.v1.internal import (
     referrals as referrals_router,
     users as users_router,
 )
-from api.v1.public import me as public_me_router, webhooks as webhooks_router
+from api.v1.public import (
+    course as course_router,
+    me as public_me_router,
+    webhooks as webhooks_router,
+)
 
 api_router = APIRouter(prefix="/api/v1")
 
@@ -26,3 +30,4 @@ api_router.include_router(admin_router.router)
 # Public (API key)
 api_router.include_router(public_me_router.router)
 api_router.include_router(webhooks_router.router)
+api_router.include_router(course_router.router)

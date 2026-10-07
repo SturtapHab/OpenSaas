@@ -13,6 +13,7 @@ from modules.billing.models import Payment, PaymentStatus
 from modules.email import service as email_service
 from modules.referrals import service as ref_service
 from modules.billing.robokassa import verify_result_signature
+from modules.course import service as course_service
 
 router = APIRouter(prefix="/webhooks", tags=["webhooks"])
 
@@ -24,6 +25,7 @@ async def robokassa_webhook(
     OutSum: Annotated[str, Form()],
     InvId: Annotated[str, Form()],
     SignatureValue: Annotated[str, Form()],
+    EMail: Annotated[str | None, Form()] = None,
 ):
     """Робокасса Result URL.
 
@@ -37,15 +39,19 @@ async def robokassa_webhook(
         select(Payment).where(Payment.provider_payment_id == InvId)
     )
     if payment is None:
-        raise HTTPException(status_code=404, detail="Payment not found")
+        # Покупка курса без регистрации (см. modules/course).
+        order = await course_service.get_by_inv_id(db, InvId)
+        if order is None:
+            raise HTTPException(status_code=404, detail="Payment not found")
+        course_service.mark_paid(order, email=EMail)
+        await db.commit()
+        return f"OK{InvId}"
 
     if payment.status == PaymentStatus.SUCCESS:
         return f"OK{InvId}"
 
     payment.status = PaymentStatus.SUCCESS
-    # Курс — разовая покупка: подписку не трогаем, доступ даёт сам успешный платёж.
-    if not billing_service.is_course_payment(payment):
-        await billing_service.activate_paid_subscription(db, payment)
+    await billing_service.activate_paid_subscription(db, payment)
 
     payout = await ref_service.process_payment_for_referral(db, payment)
 

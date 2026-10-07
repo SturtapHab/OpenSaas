@@ -1,13 +1,17 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Check } from "lucide-react";
-import { useCourseInfo } from "@/hooks/useBilling";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import { ArrowRight, Check, Loader2 } from "lucide-react";
+import { courseApi, coursePurchase } from "@/api/course";
 import { formatMoney } from "@/lib/utils";
 import { BrandIcon } from "./BrandIcon";
 import { Reveal, Stagger, StaggerItem } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
-import { AUTHOR_HANDLE, AUTHOR_URL, CHANNEL_HANDLE, CHANNEL_URL, COURSE_URL } from "./site";
+import { AUTHOR_HANDLE, AUTHOR_URL, CHANNEL_HANDLE, CHANNEL_URL } from "./site";
 
 const modules = [
   { n: "01", title: "Как устроен ваш сервис", text: "Фронтенд, бэкенд, база, оплата — на примерах из жизни." },
@@ -21,9 +25,27 @@ const modules = [
 const perks = ["Записанные уроки — смотрите в своём темпе", "Готовые промпты к каждому уроку", "Доступ навсегда и все будущие обновления"];
 
 export function CourseSection() {
-  const { data: course } = useCourseInfo();
+  const { data: course } = useQuery({ queryKey: ["course-info"], queryFn: courseApi.info });
   // Продажа выключена (не задан COURSE_TELEGRAM_URL, например на форке) — ведём к автору.
   const canBuy = course?.enabled ?? true;
+
+  // Уже купил в этом браузере — показываем вход в уроки вместо повторной покупки.
+  const [purchasedUrl, setPurchasedUrl] = useState<string | null>(null);
+  useEffect(() => {
+    const saved = coursePurchase.get();
+    if (saved) setPurchasedUrl(coursePurchase.url(saved));
+  }, []);
+
+  const buy = useMutation({
+    mutationFn: courseApi.buy,
+    onSuccess: (r) => {
+      window.location.href = r.payment_url;
+    },
+    onError: (e) => {
+      const err = e as AxiosError<{ detail?: string }>;
+      toast.error(err.response?.data?.detail ?? "Не удалось перейти к оплате. Попробуйте ещё раз.");
+    },
+  });
 
   return (
     <section id="course" className="lx-section lx-band">
@@ -64,12 +86,25 @@ export function CourseSection() {
                   </li>
                 ))}
               </ul>
-              {canBuy ? (
+              {purchasedUrl ? (
                 <>
-                  <Link href={COURSE_URL} className="relative lx-btn w-full bg-white text-[var(--lx-ink)] hover:-translate-y-0.5" style={{ boxShadow: "0 10px 30px -10px rgba(0,0,0,.5)" }}>
-                    Купить курс <ArrowRight size={17} />
+                  <Link href={purchasedUrl} className="relative lx-btn w-full bg-white text-[var(--lx-ink)] hover:-translate-y-0.5" style={{ boxShadow: "0 10px 30px -10px rgba(0,0,0,.5)" }}>
+                    Открыть уроки <ArrowRight size={17} />
                   </Link>
-                  <div className="relative text-center text-[12.5px] text-white/45 mt-4">Оплата картой через Робокассу</div>
+                  <div className="relative text-center text-[12.5px] text-white/45 mt-4">Вы уже купили курс в этом браузере</div>
+                </>
+              ) : canBuy ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => buy.mutate()}
+                    disabled={buy.isPending || buy.isSuccess}
+                    className="relative lx-btn w-full bg-white text-[var(--lx-ink)] hover:-translate-y-0.5 disabled:opacity-80"
+                    style={{ boxShadow: "0 10px 30px -10px rgba(0,0,0,.5)" }}
+                  >
+                    {buy.isPending || buy.isSuccess ? <Loader2 size={17} className="animate-spin" /> : <>Купить курс <ArrowRight size={17} /></>}
+                  </button>
+                  <div className="relative text-center text-[12.5px] text-white/45 mt-4">Без регистрации · оплата картой через Робокассу</div>
                 </>
               ) : (
                 <a href={AUTHOR_URL} target="_blank" rel="noopener noreferrer" className="relative lx-btn w-full bg-white text-[var(--lx-ink)] hover:-translate-y-0.5" style={{ boxShadow: "0 10px 30px -10px rgba(0,0,0,.5)" }}>
