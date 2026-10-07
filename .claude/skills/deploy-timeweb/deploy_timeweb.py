@@ -383,9 +383,20 @@ def check_health(domain: str) -> str:
     return f"не ответил ({last})"
 
 
+HIDDEN_ENV_VALUE = "hidden-by-api-key-policy"
+
+
 def update_envs(api: Api, app_id: int, updates: dict, remove: tuple = ()) -> dict:
     app = api.get(f"/apps/{app_id}")["app"]
     envs = dict(app.get("envs") or {})
+    # PATCH заменяет весь набор ENV. Если ключ API не видит значения (политика ключа
+    # отдаёт заглушку вместо секретов), запись их обратно затрёт настоящие значения.
+    hidden = sorted(k for k, v in envs.items() if v == HIDDEN_ENV_VALUE and k not in updates)
+    if hidden:
+        die("API-ключ не показывает значения переменных (политика ключа скрывает секреты), "
+            "поэтому менять ENV через API нельзя: это затрёт их заглушкой. Скрыты: "
+            + ", ".join(hidden) + ". Создайте ключ без ограничения на чтение секретов "
+            "или добавьте переменные вручную в панели Timeweb.")
     envs.update({k: str(v) for k, v in updates.items()})
     for k in remove:
         envs.pop(k, None)
