@@ -7,12 +7,19 @@ export const GITHUB_URL = "https://github.com/SturtapHab/OpenSaas";
 export const SKILL_URL = `${GITHUB_URL}/tree/main/.claude/skills`;
 export const DEPLOY_SKILL_URL = `${GITHUB_URL}/tree/main/.claude/skills/deploy-timeweb`;
 export const MENTOR_SKILL_URL = `${GITHUB_URL}/tree/main/.claude/skills/opensaas-mentor`;
-export const AUTHOR_URL = "https://t.me/wellcome_ai";
+/** Автор шаблона: личный Telegram для вопросов и канал. */
+export const AUTHOR_URL = "https://t.me/well_sh";
+export const AUTHOR_HANDLE = "@well_sh";
+export const CHANNEL_URL = "https://t.me/wellcome_ai";
+export const CHANNEL_HANDLE = "@wellcome_ai";
 export const TIMEWEB_URL = "https://timeweb.cloud";
 
-/** Куда ведут кнопки «Купить курс»: тарифы → регистрация → оплата через Робокассу. */
-export const COURSE_URL = "/pricing";
-export const COURSE_PRICE = "3000 ₽";
+/**
+ * Куда ведёт кнопка «Купить курс»: кабинет → оплата через Робокассу.
+ * Цена берётся с сервера (ENV COURSE_PRICE), ссылка на уроки — из ENV COURSE_TELEGRAM_URL
+ * и видна только оплатившим. В коде её нет специально: репозиторий открытый.
+ */
+export const COURSE_URL = "/billing#course";
 
 /** Ссылка на видео. Пока пусто — показываем плашку «Видео скоро». */
 export const VIDEO_URL = "";

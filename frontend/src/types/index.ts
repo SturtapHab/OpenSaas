@@ -82,6 +82,17 @@ export interface Payment {
   created_at: string;
 }
 
+export interface CourseInfo {
+  enabled: boolean;
+  price: string;
+  currency: string;
+}
+
+export interface CourseAccess extends CourseInfo {
+  purchased: boolean;
+  telegram_url: string | null;
+}
+
 export interface ReferralStats {
   total_referred: number;
   converted: number;

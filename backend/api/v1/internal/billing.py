@@ -3,13 +3,16 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from config import settings
 from database import get_db
 from dependencies import CurrentUser
 from modules.billing import service as billing_service
 from modules.billing.schemas import (
+    CourseAccess,
+    CourseInfo,
     PaymentPublic,
     PlanPublic,
     SubscribeRequest,
@@ -62,3 +65,31 @@ async def cancel(
 ):
     sub = await billing_service.cancel_subscription(db, user)
     return SubscriptionPublic.model_validate(sub)
+
+
+@router.get("/course/info", response_model=CourseInfo)
+async def course_info():
+    """Цена курса и включена ли продажа. Без авторизации — нужна лендингу."""
+    return CourseInfo(enabled=settings.course_enabled, price=settings.course_price)
+
+
+@router.get("/course", response_model=CourseAccess)
+async def get_course(
+    user: CurrentUser, db: Annotated[AsyncSession, Depends(get_db)]
+):
+    """Ссылку на уроки (ENV COURSE_TELEGRAM_URL) отдаём только оплатившим."""
+    purchased = await billing_service.has_purchased_course(db, user.id)
+    return CourseAccess(
+        enabled=settings.course_enabled,
+        price=settings.course_price,
+        purchased=purchased,
+        telegram_url=(settings.course_telegram_url or None) if purchased else None,
+    )
+
+
+@router.post("/course/buy", response_model=SubscribeResponse)
+async def buy_course(
+    user: CurrentUser, db: Annotated[AsyncSession, Depends(get_db)]
+):
+    url, payment = await billing_service.create_payment_for_course(db, user)
+    return SubscribeResponse(payment_url=url, payment_id=payment.id)

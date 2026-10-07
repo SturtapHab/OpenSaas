@@ -97,6 +97,14 @@ class Settings(BaseSettings):
         default="Безлимит запросов,Приоритетная поддержка,API доступ,Расширенная аналитика"
     )
 
+    # === Курс (разовая покупка) ===
+    # Цена курса в рублях.
+    course_price: Decimal = Field(default=Decimal("3000"))
+    # Ссылка на Telegram-группу с уроками. Показывается только тем, кто оплатил курс.
+    # Хранится только в ENV сервера, не в коде: репозиторий открытый.
+    # Пусто = продажа курса на этом сайте выключена.
+    course_telegram_url: str = Field(default="")
+
     @model_validator(mode="after")
     def validate_production_defaults(self) -> "Settings":
         """В production запрещаем небезопасные дефолты и короткий secret_key."""
@@ -125,6 +133,11 @@ class Settings(BaseSettings):
     def email_enabled(self) -> bool:
         """Почта настроена: включаются подтверждение email и сброс пароля."""
         return bool(self.smtp_user and self.smtp_password)
+
+    @property
+    def course_enabled(self) -> bool:
+        """Курс продаётся, только если задана ссылка на уроки (иначе нечего выдать)."""
+        return bool(self.course_telegram_url)
 
     @property
     def redis_enabled(self) -> bool:

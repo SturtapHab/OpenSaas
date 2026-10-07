@@ -83,6 +83,57 @@ async def create_payment_for_plan(
     return url, payment
 
 
+COURSE_PRODUCT = "course"
+
+
+def is_course_payment(payment: Payment) -> bool:
+    return (payment.payment_metadata or {}).get("product") == COURSE_PRODUCT
+
+
+async def has_purchased_course(db: AsyncSession, user_id: UUID) -> bool:
+    payments = (
+        await db.scalars(
+            select(Payment).where(
+                Payment.user_id == user_id,
+                Payment.status == PaymentStatus.SUCCESS,
+            )
+        )
+    ).all()
+    return any(is_course_payment(p) for p in payments)
+
+
+async def create_payment_for_course(db: AsyncSession, user: User) -> tuple[str, Payment]:
+    """Разовая оплата курса через Робокассу. Цена — из ENV COURSE_PRICE."""
+    if not settings.course_enabled:
+        raise HTTPException(status_code=404, detail="Продажа курса на этом сайте выключена")
+    if await has_purchased_course(db, user.id):
+        raise HTTPException(status_code=400, detail="Курс уже оплачен")
+
+    numeric_inv_id = str(int(time.time() * 1000))
+    payment = Payment(
+        user_id=user.id,
+        amount=settings.course_price,
+        currency="RUB",
+        status=PaymentStatus.PENDING,
+        provider=PaymentProvider.ROBOKASSA,
+        provider_payment_id=numeric_inv_id,
+        payment_metadata={"product": COURSE_PRODUCT},
+    )
+    db.add(payment)
+    await db.flush()
+
+    url = robokassa.build_payment_url(
+        inv_id=numeric_inv_id,
+        amount=settings.course_price,
+        description=f"{settings.app_name} — курс",
+        user_email=user.email,
+    )
+
+    await db.commit()
+    await db.refresh(payment)
+    return url, payment
+
+
 async def cancel_subscription(db: AsyncSession, user: User) -> Subscription:
     sub = await get_user_subscription(db, user.id)
     if sub is None:

@@ -9,6 +9,7 @@ import { AxiosError } from "axios";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { TrialBanner } from "@/components/billing/TrialBanner";
 import { PlanCard } from "@/components/billing/PlanCard";
+import { CourseCard } from "@/components/billing/CourseCard";
 import { PaymentHistory } from "@/components/billing/PaymentHistory";
 import {
   Card,
@@ -33,8 +34,9 @@ function PaymentStatusHandler() {
     if (!status) return;
 
     if (status === "success") {
-      toast.success("Подписка активирована!");
+      toast.success("Оплата прошла!");
       qc.invalidateQueries({ queryKey: ["subscription"] });
+      qc.invalidateQueries({ queryKey: ["course"] });
     } else if (status === "failed") {
       toast.error("Платёж не прошёл. Попробуйте ещё раз.");
     }
@@ -88,6 +90,8 @@ export default function BillingPage() {
       <PageHeader title="Подписка" description="Тариф, срок действия и история платежей." />
 
       <TrialBanner showLink={false} />
+
+      <CourseCard />
 
       {sub && (
         <Card>

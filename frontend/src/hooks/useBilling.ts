@@ -24,3 +24,17 @@ export function usePayments() {
     queryFn: () => billingApi.listPayments(),
   });
 }
+
+export function useCourseInfo() {
+  return useQuery({
+    queryKey: ["course-info"],
+    queryFn: () => billingApi.getCourseInfo(),
+  });
+}
+
+export function useCourse() {
+  return useQuery({
+    queryKey: ["course"],
+    queryFn: () => billingApi.getCourse(),
+  });
+}

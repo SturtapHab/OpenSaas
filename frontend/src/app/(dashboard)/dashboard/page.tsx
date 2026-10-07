@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowUpRight, CreditCard, Gift, Settings, TrendingUp, Users } from "lucide-react";
 
 import { TrialBanner } from "@/components/billing/TrialBanner";
+import { CourseCard } from "@/components/billing/CourseCard";
 import { EmailBanner } from "@/components/EmailBanner";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { referralsApi } from "@/api/referrals";
@@ -52,6 +53,8 @@ export default function DashboardPage() {
         <EmailBanner />
         <TrialBanner />
       </div>
+
+      <CourseCard />
 
       <div className="grid gap-4 md:grid-cols-2">
         {statCards.map((card) => {

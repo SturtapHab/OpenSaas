@@ -43,7 +43,9 @@ async def robokassa_webhook(
         return f"OK{InvId}"
 
     payment.status = PaymentStatus.SUCCESS
-    await billing_service.activate_paid_subscription(db, payment)
+    # Курс — разовая покупка: подписку не трогаем, доступ даёт сам успешный платёж.
+    if not billing_service.is_course_payment(payment):
+        await billing_service.activate_paid_subscription(db, payment)
 
     payout = await ref_service.process_payment_for_referral(db, payment)
 

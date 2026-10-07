@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
+import { useCourseInfo } from "@/hooks/useBilling";
+import { formatMoney } from "@/lib/utils";
+import { BrandIcon } from "./BrandIcon";
 import { Reveal, Stagger, StaggerItem } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
-import { COURSE_PRICE, COURSE_URL } from "./site";
+import { AUTHOR_HANDLE, AUTHOR_URL, CHANNEL_HANDLE, CHANNEL_URL, COURSE_URL } from "./site";
 
 const modules = [
   { n: "01", title: "Как устроен ваш сервис", text: "Фронтенд, бэкенд, база, оплата — на примерах из жизни." },
@@ -16,6 +21,10 @@ const modules = [
 const perks = ["Записанные уроки — смотрите в своём темпе", "Готовые промпты к каждому уроку", "Доступ навсегда и все будущие обновления"];
 
 export function CourseSection() {
+  const { data: course } = useCourseInfo();
+  // Продажа выключена (не задан COURSE_TELEGRAM_URL, например на форке) — ведём к автору.
+  const canBuy = course?.enabled ?? true;
+
   return (
     <section id="course" className="lx-section lx-band">
       <div className="lx-container">
@@ -43,7 +52,9 @@ export function CourseSection() {
             >
               <div aria-hidden className="absolute pointer-events-none" style={{ width: 420, height: 420, top: -180, right: -160, borderRadius: "50%", filter: "blur(60px)", background: "radial-gradient(circle, rgba(224,138,104,0.45) 0%, transparent 65%)" }} />
               <div className="relative text-[12px] font-semibold tracking-[0.16em] uppercase text-white/55 mb-5">Записанный курс</div>
-              <div className="relative lx-display leading-none" style={{ fontSize: 54 }}>{COURSE_PRICE}</div>
+              <div className="relative lx-display leading-none" style={{ fontSize: 54 }}>
+                {course ? formatMoney(course.price, course.currency) : "\u00a0"}
+              </div>
               <div className="relative text-[14px] text-white/55 mt-2 mb-9">разовый платёж</div>
               <ul className="relative space-y-4 mb-10 flex-1">
                 {perks.map((p) => (
@@ -53,10 +64,30 @@ export function CourseSection() {
                   </li>
                 ))}
               </ul>
-              <Link href={COURSE_URL} className="relative lx-btn w-full bg-white text-[var(--lx-ink)] hover:-translate-y-0.5" style={{ boxShadow: "0 10px 30px -10px rgba(0,0,0,.5)" }}>
-                Купить курс <ArrowRight size={17} />
-              </Link>
-              <div className="relative text-center text-[12.5px] text-white/45 mt-4">Оплата картой через Робокассу</div>
+              {canBuy ? (
+                <>
+                  <Link href={COURSE_URL} className="relative lx-btn w-full bg-white text-[var(--lx-ink)] hover:-translate-y-0.5" style={{ boxShadow: "0 10px 30px -10px rgba(0,0,0,.5)" }}>
+                    Купить курс <ArrowRight size={17} />
+                  </Link>
+                  <div className="relative text-center text-[12.5px] text-white/45 mt-4">Оплата картой через Робокассу</div>
+                </>
+              ) : (
+                <a href={AUTHOR_URL} target="_blank" rel="noopener noreferrer" className="relative lx-btn w-full bg-white text-[var(--lx-ink)] hover:-translate-y-0.5" style={{ boxShadow: "0 10px 30px -10px rgba(0,0,0,.5)" }}>
+                  Купить у автора <ArrowRight size={17} />
+                </a>
+              )}
+              <div className="relative mt-6 pt-5 border-t border-white/10 text-[13.5px] text-white/60 space-y-2">
+                <div className="flex items-center gap-2">
+                  <BrandIcon name="telegram" size={15} color="rgba(255,255,255,.7)" />
+                  <span>Вопросы автору:</span>
+                  <a href={AUTHOR_URL} target="_blank" rel="noopener noreferrer" className="text-white hover:underline">{AUTHOR_HANDLE}</a>
+                </div>
+                <div className="flex items-center gap-2">
+                  <BrandIcon name="telegram" size={15} color="rgba(255,255,255,.7)" />
+                  <span>Канал автора:</span>
+                  <a href={CHANNEL_URL} target="_blank" rel="noopener noreferrer" className="text-white hover:underline">{CHANNEL_HANDLE}</a>
+                </div>
+              </div>
             </div>
           </Reveal>
         </div>

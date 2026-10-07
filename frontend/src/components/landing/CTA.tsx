@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { BrandIcon } from "./BrandIcon";
 import { PromptLine } from "./CopyButton";
 import { Reveal } from "./Reveal";
-import { COURSE_URL, DEPLOY_PROMPT, GITHUB_URL } from "./site";
+import { DEPLOY_PROMPT, GITHUB_URL } from "./site";
 
 export function CTA() {
   return (
@@ -28,7 +28,7 @@ export function CTA() {
                   <BrandIcon name="github" size={17} color="#fff" />
                   Забрать бесплатно
                 </a>
-                <Link href={COURSE_URL} className="lx-btn lx-btn-ghost">
+                <Link href="/#course" className="lx-btn lx-btn-ghost">
                   Курс по развитию <ArrowRight size={16} />
                 </Link>
               </div>

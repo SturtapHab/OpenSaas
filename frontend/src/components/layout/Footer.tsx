@@ -23,7 +23,8 @@ const columns = [
     links: [
       { label: "GitHub", href: "https://github.com/SturtapHab/OpenSaas" },
       { label: "Skills для агентов", href: "https://github.com/SturtapHab/OpenSaas/tree/main/.claude/skills" },
-      { label: "Автор шаблона", href: "https://t.me/wellcome_ai" },
+      { label: "Автор шаблона: @well_sh", href: "https://t.me/well_sh" },
+      { label: "Канал автора: @wellcome_ai", href: "https://t.me/wellcome_ai" },
     ],
   },
 ];

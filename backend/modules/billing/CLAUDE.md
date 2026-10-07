@@ -39,6 +39,15 @@
 5. Webhook: проверка подписи → `activate_paid_subscription` → notification + email
 6. `referrals.process_payment_for_referral` создаёт payout если есть реферер
 
+### Курс (разовая покупка)
+
+- Настройки только в ENV: `COURSE_PRICE` (3000), `COURSE_TELEGRAM_URL` (ссылка на уроки).
+  Пустой `COURSE_TELEGRAM_URL` = продажа выключена (`settings.course_enabled`).
+- `create_payment_for_course` создаёт `Payment` с `payment_metadata={"product": "course"}`
+  без `plan_id`. Webhook для таких платежей подписку **не** активирует.
+- Доступ = есть `Payment(status=success, product=course)` (`has_purchased_course`).
+  `telegram_url` отдаётся только оплатившим. Ссылку не хардкодить: репозиторий открытый.
+
 ## Endpoints
 
 ```
@@ -47,6 +56,9 @@ GET  /api/v1/billing/subscription
 POST /api/v1/billing/subscribe
 GET  /api/v1/billing/payments
 POST /api/v1/billing/cancel
+GET  /api/v1/billing/course/info   # без авторизации: цена и enabled
+GET  /api/v1/billing/course        # purchased + telegram_url (только оплатившим)
+POST /api/v1/billing/course/buy    # payment_url Робокассы
 ```
 
 ## Зависимости
