@@ -4,11 +4,11 @@ import { SectionHeading } from "./SectionHeading";
 import { VIDEO_URL } from "./site";
 
 const chapters = [
-  { t: "0:00", title: "Копируем репозиторий на GitHub" },
-  { t: "1:30", title: "Регистрируемся в Timeweb и берём API-ключ" },
-  { t: "3:00", title: "Открываем проект в Claude Code или Codex" },
-  { t: "4:00", title: "Одно сообщение — и агент деплоит" },
-  { t: "8:00", title: "Заходим в админку готового сервиса" },
+  { t: "01", title: "Копируем репозиторий на GitHub" },
+  { t: "02", title: "Регистрируемся в Timeweb и берём API-ключ" },
+  { t: "03", title: "Открываем проект в Claude Code или Codex" },
+  { t: "04", title: "Одно сообщение — и агент деплоит" },
+  { t: "05", title: "Заходим в админку готового сервиса" },
 ];
 
 const isVideoFile = /\.(mp4|webm|mov)(\?|#|$)/i.test(VIDEO_URL);
@@ -18,7 +18,7 @@ export function VideoSection() {
     <section id="video" className="lx-section">
       <div className="lx-container">
         <SectionHeading
-          tag="Видео · 10 минут"
+          tag="Видеоинструкция · 25 минут"
           title={<>Как запустить <em>свой первый</em> онлайн-бизнес</>}
           text="Повторяйте за экраном: от пустого аккаунта до работающего сайта с оплатой и админкой."
         />
@@ -32,7 +32,7 @@ export function VideoSection() {
               {VIDEO_URL && isVideoFile ? (
                 <video
                   src={VIDEO_URL}
-                  title="Как запустить свой первый онлайн-бизнес за 10 минут"
+                  title="Как запустить свой первый онлайн-бизнес: видеоинструкция на 25 минут"
                   className="absolute inset-0 w-full h-full bg-black"
                   controls
                   playsInline
