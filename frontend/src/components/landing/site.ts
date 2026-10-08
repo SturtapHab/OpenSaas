@@ -20,8 +20,13 @@ export const TIMEWEB_URL = "https://timeweb.cloud";
  * после оплаты на /payment/success). В коде её нет специально: репозиторий открытый.
  */
 
-/** Ссылка на видео. Пока пусто — показываем плашку «Видео скоро». */
-export const VIDEO_URL = "";
+/**
+ * Ссылка на видео. Прямой файл (.mp4/.webm) показывается встроенным плеером,
+ * любая другая ссылка (YouTube, VK, Rutube embed) — через iframe.
+ * Пусто — показываем плашку «Видео скоро».
+ */
+export const VIDEO_URL =
+  "https://s3.twcstorage.ru/85b42609-6dce-4d85-a0f3-62f70b497abd/%D0%98%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%86%D0%B8%D1%8F%20OpenSaas.mp4";
 
 export const DEPLOY_PROMPT = "Вот мой ключ от Timeweb — задеплой сервис: <ключ>";
 export const EXPLAIN_PROMPT = "Объясни, как работает этот проект";

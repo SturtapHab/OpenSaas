@@ -11,6 +11,8 @@ const chapters = [
   { t: "8:00", title: "Заходим в админку готового сервиса" },
 ];
 
+const isVideoFile = /\.(mp4|webm|mov)(\?|#|$)/i.test(VIDEO_URL);
+
 export function VideoSection() {
   return (
     <section id="video" className="lx-section">
@@ -27,7 +29,19 @@ export function VideoSection() {
               className="relative rounded-[28px] overflow-hidden w-full"
               style={{ aspectRatio: "16 / 10", background: "linear-gradient(145deg,#efe7db 0%,#e5d8c6 100%)", boxShadow: "var(--lx-shadow-lg)" }}
             >
-              {VIDEO_URL ? (
+              {VIDEO_URL && isVideoFile ? (
+                <video
+                  src={VIDEO_URL}
+                  title="Как запустить свой первый онлайн-бизнес за 10 минут"
+                  className="absolute inset-0 w-full h-full bg-black"
+                  controls
+                  playsInline
+                  preload="metadata"
+                >
+                  Ваш браузер не может воспроизвести видео.{" "}
+                  <a href={VIDEO_URL} target="_blank" rel="noopener noreferrer">Откройте его по ссылке</a>.
+                </video>
+              ) : VIDEO_URL ? (
                 <iframe
                   src={VIDEO_URL}
                   title="Как запустить свой первый онлайн-бизнес за 10 минут"
@@ -50,6 +64,14 @@ export function VideoSection() {
                 </div>
               )}
             </div>
+            {VIDEO_URL && isVideoFile && (
+              <p className="mt-3 text-[13.5px] text-[var(--lx-ink-3)]">
+                Не запускается?{" "}
+                <a href={VIDEO_URL} target="_blank" rel="noopener noreferrer" className="underline hover:text-[var(--lx-clay)]">
+                  Откройте видео в новой вкладке
+                </a>
+              </p>
+            )}
           </Reveal>
 
           <Reveal delay={0.1} className="min-w-0">
