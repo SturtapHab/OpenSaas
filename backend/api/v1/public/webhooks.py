@@ -7,6 +7,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, Re
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from config import settings
 from database import get_db
 from modules.billing import service as billing_service
 from modules.billing.models import Payment, PaymentStatus
@@ -43,7 +44,15 @@ async def robokassa_webhook(
         order = await course_service.get_by_inv_id(db, InvId)
         if order is None:
             raise HTTPException(status_code=404, detail="Payment not found")
-        course_service.mark_paid(order, email=EMail)
+        if course_service.mark_paid(order, email=EMail) and order.email:
+            user, created = await course_service.grant_access(db, order.email, order)
+            token = await course_service.access_email_token(db, user, created)
+            bg.add_task(
+                email_service.send_course_access_email,
+                user.email,
+                token,
+                settings.course_access_link_days,
+            )
         await db.commit()
         return f"OK{InvId}"
 

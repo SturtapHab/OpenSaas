@@ -1,17 +1,19 @@
 """Admin endpoints (internal, role=admin required)."""
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config import settings
 from database import get_db
 from dependencies import AdminUser, require_admin
 from modules.admin import service as admin_service
+from modules.course import service as course_service
 from modules.auth.models import UserRole
 from modules.auth.schemas import UserPublic
 from modules.email import service as email_service
@@ -152,3 +154,123 @@ async def reject_payout(
         db, payout_id, ReferralPayoutStatus.REJECTED
     )
     return AdminReferralPayoutPublic.model_validate(p)
+
+
+# --- Курс -----------------------------------------------------------------
+
+
+class LessonAdmin(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    position: int
+    title: str
+    description: str
+    video_url: str
+
+
+class LessonCreate(BaseModel):
+    title: str = Field(min_length=1, max_length=255)
+    description: str = ""
+    video_url: str = Field(default="", max_length=1000)
+    position: int | None = None
+
+
+class LessonUpdate(BaseModel):
+    title: str | None = Field(default=None, min_length=1, max_length=255)
+    description: str | None = None
+    video_url: str | None = Field(default=None, max_length=1000)
+    position: int | None = None
+
+
+class CourseAccessUpdate(BaseModel):
+    has_course: bool
+
+
+class CourseGrantRequest(BaseModel):
+    email: EmailStr
+
+
+class CourseGrantResponse(BaseModel):
+    user: UserPublic
+    created: bool
+
+
+class CourseOrderAdmin(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    inv_id: str
+    amount: str
+    email: str | None
+    user_id: UUID | None
+    paid_at: datetime | None
+
+
+@router.get("/course/lessons", response_model=list[LessonAdmin])
+async def list_lessons(db: Annotated[AsyncSession, Depends(get_db)]):
+    return [LessonAdmin.model_validate(x) for x in await course_service.list_lessons(db)]
+
+
+@router.post("/course/lessons", response_model=LessonAdmin, status_code=201)
+async def create_lesson(payload: LessonCreate, db: Annotated[AsyncSession, Depends(get_db)]):
+    lesson = await course_service.create_lesson(db, **payload.model_dump())
+    return LessonAdmin.model_validate(lesson)
+
+
+@router.patch("/course/lessons/{lesson_id}", response_model=LessonAdmin)
+async def update_lesson(
+    lesson_id: UUID, payload: LessonUpdate, db: Annotated[AsyncSession, Depends(get_db)]
+):
+    lesson = await course_service.update_lesson(db, lesson_id, **payload.model_dump())
+    return LessonAdmin.model_validate(lesson)
+
+
+@router.delete("/course/lessons/{lesson_id}", status_code=204)
+async def delete_lesson(lesson_id: UUID, db: Annotated[AsyncSession, Depends(get_db)]):
+    await course_service.delete_lesson(db, lesson_id)
+
+
+@router.get("/course/orders", response_model=list[CourseOrderAdmin])
+async def list_course_orders(
+    db: Annotated[AsyncSession, Depends(get_db)],
+    limit: int = Query(100, ge=1, le=500),
+):
+    return [
+        CourseOrderAdmin(
+            inv_id=o.inv_id,
+            amount=str(o.amount),
+            email=o.email,
+            user_id=o.user_id,
+            paid_at=o.paid_at,
+        )
+        for o in await course_service.list_orders(db, limit=limit)
+    ]
+
+
+@router.post("/course/grant", response_model=CourseGrantResponse)
+async def grant_course(
+    payload: CourseGrantRequest,
+    bg: BackgroundTasks,
+    db: Annotated[AsyncSession, Depends(get_db)],
+):
+    """Выдать курс по email: нет аккаунта — создаём, письмо с доступом — как после оплаты."""
+    user, created = await course_service.grant_access(db, payload.email)
+    token = await course_service.access_email_token(db, user, created)
+    await db.commit()
+    await db.refresh(user)
+    bg.add_task(
+        email_service.send_course_access_email,
+        user.email,
+        token,
+        settings.course_access_link_days,
+    )
+    return CourseGrantResponse(user=UserPublic.model_validate(user), created=created)
+
+
+@router.patch("/users/{user_id}/course", response_model=UserPublic)
+async def set_user_course(
+    user_id: UUID, payload: CourseAccessUpdate, db: Annotated[AsyncSession, Depends(get_db)]
+):
+    """Открыть или забрать курс у пользователя (без письма)."""
+    user = await course_service.set_user_access(db, user_id, payload.has_course)
+    return UserPublic.model_validate(user)

@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authApi } from "@/api/auth";
+import { useAuth } from "@/hooks/useAuth";
 
 const schema = z
   .object({
@@ -30,6 +31,9 @@ function ResetPasswordInner() {
   const router = useRouter();
   const params = useSearchParams();
   const token = params.get("token") ?? "";
+  // Ссылка из письма о покупке курса: после пароля сразу входим и открываем уроки.
+  const forCourse = params.get("course") === "1";
+  const { login } = useAuth();
 
   const {
     register,
@@ -43,7 +47,11 @@ function ResetPasswordInner() {
       return;
     }
     try {
-      await authApi.resetPassword(token, values.password);
+      const user = await authApi.resetPassword(token, values.password);
+      if (forCourse) {
+        await login(user.email, values.password, "/course");
+        return;
+      }
       toast.success("Пароль обновлён. Войдите с новым паролем.");
       router.push("/login");
     } catch (e) {
@@ -53,7 +61,10 @@ function ResetPasswordInner() {
   }
 
   return (
-    <AuthCard title="Новый пароль" description="Придумайте новый пароль для входа.">
+    <AuthCard
+      title={forCourse ? "Добро пожаловать!" : "Новый пароль"}
+      description={forCourse ? "Придумайте пароль — и сразу откроем курс." : "Придумайте новый пароль для входа."}
+    >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
           <Label htmlFor="password">Новый пароль</Label>
@@ -66,7 +77,7 @@ function ResetPasswordInner() {
           {errors.confirm && <p className="text-xs text-destructive">{errors.confirm.message}</p>}
         </div>
         <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? "Сохраняем…" : "Сохранить пароль"}
+          {isSubmitting ? "Сохраняем…" : forCourse ? "Сохранить и открыть курс" : "Сохранить пароль"}
         </Button>
       </form>
     </AuthCard>

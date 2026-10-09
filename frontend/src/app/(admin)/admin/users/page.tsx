@@ -65,6 +65,14 @@ export default function AdminUsersPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-users"] }),
   });
 
+  const courseAccess = useMutation({
+    mutationFn: ({ id, has }: { id: string; has: boolean }) => adminApi.setCourseAccess(id, has),
+    onSuccess: (u) => {
+      toast.success(u.has_course ? "Курс открыт" : "Доступ к курсу закрыт");
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
+    },
+  });
+
   return (
     <>
       <div>
@@ -124,6 +132,7 @@ export default function AdminUsersPage() {
                     <th className="px-6 py-3">Роль</th>
                     <th className="px-6 py-3">Email подтв.</th>
                     <th className="px-6 py-3">Активен</th>
+                    <th className="px-6 py-3">Курс</th>
                     <th className="px-6 py-3">Зарегистрирован</th>
                     <th className="px-6 py-3 text-right">Действия</th>
                   </tr>
@@ -147,11 +156,28 @@ export default function AdminUsersPage() {
                           {u.is_active ? "active" : "blocked"}
                         </Badge>
                       </td>
+                      <td className="px-6 py-3">
+                        <Badge variant={u.has_course ? "success" : "secondary"}>
+                          {u.has_course ? "есть" : "нет"}
+                        </Badge>
+                      </td>
                       <td className="px-6 py-3 text-muted-foreground">
                         {formatDateTime(u.created_at)}
                       </td>
                       <td className="px-6 py-3 text-right">
-                        <div className="flex justify-end gap-2">
+                        <div className="flex flex-wrap justify-end gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              const has = !u.has_course;
+                              if (has || window.confirm(`Забрать курс у ${u.email}?`)) {
+                                courseAccess.mutate({ id: u.id, has });
+                              }
+                            }}
+                          >
+                            {u.has_course ? "Забрать курс" : "Выдать курс"}
+                          </Button>
                           <Button
                             size="sm"
                             variant="outline"

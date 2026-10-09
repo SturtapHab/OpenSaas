@@ -3,10 +3,12 @@
 import { Suspense, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { ArrowUpRight, CheckCircle2, Loader2 } from "lucide-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import { CheckCircle2, Loader2, Mail } from "lucide-react";
 
-import { courseApi, coursePurchase, type RobokassaReturn } from "@/api/course";
+import { courseApi, type RobokassaReturn } from "@/api/course";
 import { PaymentPage } from "@/components/course/PaymentPage";
 
 const POLL_MS = 3000;
@@ -18,7 +20,7 @@ function readParams(params: URLSearchParams): RobokassaReturn | null {
   const InvId = params.get("InvId");
   const SignatureValue = params.get("SignatureValue");
   if (OutSum && InvId && SignatureValue) return { OutSum, InvId, SignatureValue };
-  return coursePurchase.get();
+  return null;
 }
 
 function SuccessContent() {
@@ -45,8 +47,16 @@ function SuccessContent() {
     if (!data || !ret) return;
     // Не курс — это оплата подписки из кабинета: возвращаем туда, как раньше.
     if (!data.is_course) router.replace("/billing?status=success");
-    else if (data.paid) coursePurchase.set(ret);
   }, [data, ret, router]);
+
+  const resend = useMutation({
+    mutationFn: () => courseApi.resend(ret!),
+    onSuccess: (r) => toast.success(`Письмо отправлено ещё раз на ${r.email ?? "вашу почту"}`),
+    onError: (e) => {
+      const err = e as AxiosError<{ detail?: string }>;
+      toast.error(err.response?.data?.detail ?? "Не удалось отправить письмо");
+    },
+  });
 
   if (!ret || isError) {
     return (
@@ -67,18 +77,25 @@ function SuccessContent() {
         <CheckCircle2 className="mx-auto h-12 w-12 text-[var(--lx-clay)]" strokeWidth={1.5} />
         <h1 className="lx-display mt-5 text-[30px] leading-tight">Спасибо за покупку!</h1>
         <p className="mt-4 text-[var(--lx-ink-2)]">
-          Уроки курса лежат в закрытой Telegram-группе. Доступ навсегда.
+          Доступ к курсу отправили на{" "}
+          <span className="font-semibold text-[var(--lx-ink)]">{data.email ?? "вашу почту"}</span>.
+          Откройте письмо и нажмите кнопку в нём — уроки ждут вас на платформе. Доступ навсегда.
         </p>
-        {data.telegram_url ? (
-          <a href={data.telegram_url} target="_blank" rel="noopener noreferrer" className="lx-btn lx-btn-ink mt-8">
-            Перейти к урокам в Telegram <ArrowUpRight size={17} />
-          </a>
-        ) : (
-          <p className="mt-6 font-medium">Ссылка на уроки скоро появится — напишите автору.</p>
-        )}
+        <div className="mt-8 flex flex-col gap-3">
+          <Link href="/login?next=/course" className="lx-btn lx-btn-ink">
+            У меня уже есть пароль — войти
+          </Link>
+          <button
+            type="button"
+            onClick={() => resend.mutate()}
+            disabled={resend.isPending}
+            className="lx-btn lx-btn-ghost"
+          >
+            {resend.isPending ? <Loader2 size={17} className="animate-spin" /> : <><Mail size={16} /> Отправить письмо ещё раз</>}
+          </button>
+        </div>
         <p className="mt-6 text-[13.5px] text-[var(--lx-ink-3)]">
-          Заказ № {data.inv_id}. Сохраните эту страницу в закладки — по ней можно вернуться
-          к ссылке. В этом браузере кнопка «Открыть уроки» появится и на главной.
+          Письма нет? Проверьте «Спам». Ошиблись в адресе — напишите автору, номер заказа: {data.inv_id}.
         </p>
       </>
     );

@@ -98,12 +98,23 @@ class Settings(BaseSettings):
     )
 
     # === Курс (разовая покупка) ===
+    # Продавать курс на этом сайте. На форках по умолчанию выключено:
+    # кнопка «Купить курс» ведёт к автору в Telegram.
+    course_enabled: bool = Field(default=False)
     # Цена курса в рублях.
     course_price: Decimal = Field(default=Decimal("3000"))
-    # Ссылка на Telegram-группу с уроками. Показывается только тем, кто оплатил курс.
-    # Хранится только в ENV сервера, не в коде: репозиторий открытый.
-    # Пусто = продажа курса на этом сайте выключена.
-    course_telegram_url: str = Field(default="")
+    # Сколько живёт ссылка «Задать пароль и войти» из письма покупателю.
+    course_access_link_days: int = Field(default=7)
+
+    # === S3-хранилище с видео уроков (Timeweb S3) ===
+    # Если ключи заданы, видео из этого хранилища отдаются по временной
+    # подписанной ссылке (S3_VIDEO_LINK_MINUTES), а сам бакет можно сделать
+    # приватным. Без ключей ссылка на видео отдаётся как есть.
+    s3_endpoint: str = Field(default="https://s3.twcstorage.ru")
+    s3_region: str = Field(default="ru-1")
+    s3_access_key: str = Field(default="")
+    s3_secret_key: str = Field(default="")
+    s3_video_link_minutes: int = Field(default=180)
 
     @model_validator(mode="after")
     def validate_production_defaults(self) -> "Settings":
@@ -135,9 +146,8 @@ class Settings(BaseSettings):
         return bool(self.smtp_user and self.smtp_password)
 
     @property
-    def course_enabled(self) -> bool:
-        """Курс продаётся, только если задана ссылка на уроки (иначе нечего выдать)."""
-        return bool(self.course_telegram_url)
+    def s3_signing_enabled(self) -> bool:
+        return bool(self.s3_access_key and self.s3_secret_key)
 
     @property
     def redis_enabled(self) -> bool:

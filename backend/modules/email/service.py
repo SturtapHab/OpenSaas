@@ -100,3 +100,13 @@ async def send_reset_password_email(to: str, token: str) -> None:
 async def send_referral_payout_email(to: str, amount: str) -> None:
     html = render("referral_payout.html", amount=amount)
     await send_email(to, f"Вы получили выплату — {settings.app_name}", html)
+
+
+async def send_course_access_email(to: str, token: str | None, link_days: int) -> None:
+    """Доступ к курсу. С token — ссылка «Задать пароль и войти», без — ссылка на вход."""
+    if token:
+        url = f"{app_url()}/reset-password?token={token}&course=1"
+    else:
+        url = f"{app_url()}/login?next=/course"
+    html = render("course_access.html", url=url, new_account=bool(token), link_days=link_days)
+    await send_email(to, f"Доступ к курсу — {settings.app_name}", html)

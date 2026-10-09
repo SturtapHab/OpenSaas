@@ -68,6 +68,7 @@ class UserPublic(BaseModel):
     is_active: bool
     is_email_verified: bool
     trial_ends_at: datetime | None = None
+    has_course: bool = False
     created_at: datetime
 
 

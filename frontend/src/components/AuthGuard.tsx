@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Loader2, WifiOff } from "lucide-react";
 
@@ -16,17 +16,19 @@ export function AuthGuard({
 }) {
   const { user, isLoading, connectionError, retry } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (isLoading || connectionError) return;
     if (!user) {
-      router.replace("/login");
+      // После входа вернём туда, куда человек шёл (например, по ссылке из письма на /course).
+      router.replace(pathname && pathname !== "/dashboard" ? `/login?next=${encodeURIComponent(pathname)}` : "/login");
       return;
     }
     if (requireAdmin && user.role !== "admin") {
       router.replace("/dashboard");
     }
-  }, [isLoading, connectionError, user, requireAdmin, router]);
+  }, [isLoading, connectionError, user, requireAdmin, router, pathname]);
 
   if (connectionError) {
     return (

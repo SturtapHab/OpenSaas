@@ -15,6 +15,8 @@ export interface User {
   is_active: boolean;
   is_email_verified: boolean;
   trial_ends_at: string | null;
+  /** Куплен курс: в кабинете показывается раздел «Мой курс». */
+  has_course: boolean;
   created_at: string;
   profile?: UserProfile | null;
 }

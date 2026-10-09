@@ -55,6 +55,11 @@ function restoreSession(): Promise<void> {
   return restoring;
 }
 
+/** Куда вернуть после входа: только пути этого сайта (/course), не чужие адреса. */
+export function safeNext(next?: string | null): string | null {
+  return next && next.startsWith("/") && !next.startsWith("//") ? next : null;
+}
+
 export function useAuth() {
   const { user, isLoading, initialized, connectionError, setSession, logout } = useAuthStore();
   const router = useRouter();
@@ -72,10 +77,10 @@ export function useAuth() {
       useAuthStore.setState({ connectionError: false, isLoading: true, initialized: false });
     },
 
-    async login(email: string, password: string) {
+    async login(email: string, password: string, next?: string | null) {
       const res = await authApi.login(email, password);
       setSession(res.user, res.access_token, res.refresh_token);
-      router.push("/dashboard");
+      router.push(safeNext(next) ?? "/dashboard");
       return res;
     },
 

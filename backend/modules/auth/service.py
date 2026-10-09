@@ -186,11 +186,13 @@ async def create_email_token(db: AsyncSession, user: User) -> str:
     return rec.token
 
 
-async def create_reset_token(db: AsyncSession, user: User) -> str:
+async def create_reset_token(
+    db: AsyncSession, user: User, ttl: timedelta = timedelta(hours=1)
+) -> str:
     rec = PasswordResetToken(
         user_id=user.id,
         token=uuid.uuid4().hex,
-        expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
+        expires_at=datetime.now(timezone.utc) + ttl,
     )
     db.add(rec)
     await db.commit()
@@ -208,5 +210,7 @@ async def reset_password(db: AsyncSession, token: str, new_password: str) -> Use
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     user.hashed_password = hash_password(new_password)
+    # Ссылка пришла на эту почту — значит, она принадлежит человеку.
+    user.is_email_verified = True
     await db.commit()
     return user

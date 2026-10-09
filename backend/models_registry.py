@@ -17,4 +17,4 @@ from modules.referrals.models import (  # noqa: F401
     ReferralPayout,
 )
 from modules.api_keys.models import ApiKey, RateLimitEntry  # noqa: F401
-from modules.course.models import CourseOrder  # noqa: F401
+from modules.course.models import CourseLesson, CourseOrder  # noqa: F401

@@ -33,7 +33,7 @@ export default function LoginPage() {
 
   async function onSubmit(values: FormValues) {
     try {
-      await login(values.email, values.password);
+      await login(values.email, values.password, new URLSearchParams(window.location.search).get("next"));
     } catch (e) {
       const err = e as AxiosError<{ detail?: string }>;
       const detail = err.response?.data?.detail;

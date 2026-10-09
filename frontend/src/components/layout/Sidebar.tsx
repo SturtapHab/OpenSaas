@@ -11,6 +11,8 @@ import {
   ShieldCheck,
   Users,
   DollarSign,
+  GraduationCap,
+  BookOpen,
 } from "lucide-react";
 
 import { useAuthStore } from "@/store/authStore";
@@ -19,6 +21,8 @@ import { cn } from "@/lib/utils";
 
 const userNav = [
   { href: "/dashboard", label: "Главная", icon: LayoutDashboard },
+  // Виден только тем, кто купил курс (и админам — посмотреть, как выглядит).
+  { href: "/course", label: "Мой курс", icon: GraduationCap, courseOnly: true },
   { href: "/billing", label: "Подписка", icon: CreditCard },
   { href: "/referrals", label: "Рефералы", icon: Gift },
   { href: "/settings", label: "Настройки", icon: Settings },
@@ -28,6 +32,7 @@ const adminNav = [
   { href: "/admin", label: "Админ", icon: ShieldCheck },
   { href: "/admin/users", label: "Пользователи", icon: Users },
   { href: "/admin/billing", label: "Платежи", icon: DollarSign },
+  { href: "/admin/course", label: "Курс", icon: BookOpen },
   { href: "/admin/referrals", label: "Выплаты", icon: Gift },
 ];
 
@@ -37,7 +42,9 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <nav className="flex flex-col gap-0.5 p-3">
-      {userNav.map((item) => {
+      {userNav
+        .filter((item) => !item.courseOnly || user?.has_course || user?.role === "admin")
+        .map((item) => {
         const Icon = item.icon;
         const active =
           pathname === item.href ||

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+  <h3 style="color:#111;">Курс оплачен — доступ открыт</h3>
+  {% if new_account %}
+  <p>Спасибо за покупку! Мы создали для вас аккаунт на платформе с этой почтой.
+     Придумайте пароль — и сразу попадёте к урокам:</p>
+  {% else %}
+  <p>Спасибо за покупку! Курс добавлен в ваш аккаунт на платформе.
+     Войдите со своим паролем — уроки в разделе «Мой курс»:</p>
+  {% endif %}
+  <p style="margin:24px 0;">
+    <a href="{{ url }}"
+       style="display:inline-block; background:#111; color:#fff; padding:12px 24px; border-radius:6px; text-decoration:none;">
+      {% if new_account %}Задать пароль и открыть курс{% else %}Открыть курс{% endif %}
+    </a>
+  </p>
+  {% if new_account %}
+  <p style="font-size:13px; color:#888;">Ссылка действительна {{ link_days }} дн. Если она истечёт,
+     нажмите «Забыли пароль» на странице входа и укажите эту почту.</p>
+  {% else %}
+  <p style="font-size:13px; color:#888;">Забыли пароль? Нажмите «Забыли пароль» на странице входа.</p>
+  {% endif %}
+  <p style="font-size:13px; color:#888;">Доступ к курсу навсегда.</p>
+{% endblock %}
