@@ -1,11 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { CheckCircle2, GraduationCap, Lock, PlayCircle } from "lucide-react";
+import { ArrowRight, Check, CheckCircle2, GraduationCap, Loader2, PlayCircle } from "lucide-react";
+import { toast } from "sonner";
 
 import { courseApi, type CourseLesson } from "@/api/course";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { formatMoney } from "@/lib/utils";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -55,18 +59,7 @@ export default function CoursePage() {
     }
   }
 
-  if (forbidden) {
-    return (
-      <Card>
-        <EmptyState
-          icon={Lock}
-          title="Курс ещё не куплен"
-          description="После оплаты уроки появятся здесь, а доступ придёт на почту."
-          action={{ label: "Перейти к курсу", href: "/#course" }}
-        />
-      </Card>
-    );
-  }
+  if (forbidden) return <BuyCourse />;
 
   return (
     <>
@@ -180,5 +173,67 @@ function LessonPlayer({
       onError={onError}
       className="aspect-video w-full rounded-2xl bg-black"
     />
+  );
+}
+
+const PERKS = [
+  "Записанные уроки прямо здесь — смотрите в своём темпе",
+  "Готовые промпты к каждому уроку",
+  "Доступ навсегда и все будущие обновления",
+];
+
+/** Курс ещё не куплен: оплата из кабинета, доступ откроется в этом же аккаунте. */
+function BuyCourse() {
+  const { user } = useAuth();
+  const { data: course } = useQuery({ queryKey: ["course-info"], queryFn: courseApi.info });
+
+  const buy = useMutation({
+    mutationFn: () => courseApi.buy(user!.email),
+    onSuccess: (r) => {
+      window.location.href = r.payment_url;
+    },
+    onError: (e) => {
+      const err = e as AxiosError<{ detail?: string }>;
+      toast.error(err.response?.data?.detail ?? "Не удалось перейти к оплате. Попробуйте ещё раз.");
+    },
+  });
+
+  return (
+    <>
+      <PageHeader title="Мой курс" description="Как превратить шаблон в свой бизнес и дорабатывать его через Claude Code." />
+      <Card>
+        <CardContent className="grid gap-8 p-6 sm:p-8 md:grid-cols-[1fr_auto] md:items-end">
+          <div>
+            <div className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">Записанный курс</div>
+            <div className="mt-3 font-display text-[40px] leading-none">
+              {course ? formatMoney(course.price, course.currency) : "\u00a0"}
+            </div>
+            <div className="mt-1 text-sm text-muted-foreground">разовый платёж</div>
+            <ul className="mt-6 space-y-3">
+              {PERKS.map((p) => (
+                <li key={p} className="flex gap-3 text-[15px]">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-clay" strokeWidth={2.5} />
+                  {p}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="md:w-72">
+            {course && !course.enabled ? (
+              <p className="text-sm text-muted-foreground">Продажа курса на этом сайте сейчас выключена.</p>
+            ) : (
+              <>
+                <Button size="lg" className="w-full" onClick={() => buy.mutate()} disabled={!user || buy.isPending || buy.isSuccess}>
+                  {buy.isPending || buy.isSuccess ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Купить курс <ArrowRight className="h-4 w-4" /></>}
+                </Button>
+                <p className="mt-3 text-center text-xs text-muted-foreground">
+                  Оплата картой через Робокассу. Курс откроется в этом аккаунте ({user?.email}).
+                </p>
+              </>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </>
   );
 }

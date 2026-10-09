@@ -15,13 +15,16 @@ import {
   BookOpen,
 } from "lucide-react";
 
+import { useQuery } from "@tanstack/react-query";
+
+import { courseApi } from "@/api/course";
 import { useAuthStore } from "@/store/authStore";
 import { useUiStore } from "@/store/uiStore";
 import { cn } from "@/lib/utils";
 
 const userNav = [
   { href: "/dashboard", label: "Главная", icon: LayoutDashboard },
-  // Виден только тем, кто купил курс (и админам — посмотреть, как выглядит).
+  // Купил — уроки, не купил — там же покупка. Скрыт, если курс на сайте не продаётся.
   { href: "/course", label: "Мой курс", icon: GraduationCap, courseOnly: true },
   { href: "/billing", label: "Подписка", icon: CreditCard },
   { href: "/referrals", label: "Рефералы", icon: Gift },
@@ -39,11 +42,13 @@ const adminNav = [
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   const user = useAuthStore((s) => s.user);
+  const { data: course } = useQuery({ queryKey: ["course-info"], queryFn: courseApi.info });
+  const showCourse = Boolean(user?.has_course || user?.role === "admin" || course?.enabled);
 
   return (
     <nav className="flex flex-col gap-0.5 p-3">
       {userNav
-        .filter((item) => !item.courseOnly || user?.has_course || user?.role === "admin")
+        .filter((item) => !item.courseOnly || showCourse)
         .map((item) => {
         const Icon = item.icon;
         const active =

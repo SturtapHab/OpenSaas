@@ -9,6 +9,7 @@ import { AxiosError } from "axios";
 import { CheckCircle2, Loader2, Mail } from "lucide-react";
 
 import { courseApi, type RobokassaReturn } from "@/api/course";
+import { useAuth } from "@/hooks/useAuth";
 import { PaymentPage } from "@/components/course/PaymentPage";
 
 const POLL_MS = 3000;
@@ -28,6 +29,7 @@ function SuccessContent() {
   const search = useSearchParams();
   const ret = useMemo(() => readParams(new URLSearchParams(search.toString())), [search]);
   const polls = useRef(0);
+  const { user } = useAuth();
 
   const { data, isError } = useQuery({
     queryKey: ["course-order", ret?.InvId],
@@ -82,9 +84,15 @@ function SuccessContent() {
           Откройте письмо и нажмите кнопку в нём — уроки ждут вас на платформе. Доступ навсегда.
         </p>
         <div className="mt-8 flex flex-col gap-3">
-          <Link href="/login?next=/course" className="lx-btn lx-btn-ink">
-            У меня уже есть пароль — войти
-          </Link>
+          {user ? (
+            <Link href="/course" className="lx-btn lx-btn-ink">
+              Открыть курс
+            </Link>
+          ) : (
+            <Link href="/login?next=/course" className="lx-btn lx-btn-ink">
+              У меня уже есть пароль — войти
+            </Link>
+          )}
           <button
             type="button"
             onClick={() => resend.mutate()}

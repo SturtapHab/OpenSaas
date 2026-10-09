@@ -35,7 +35,7 @@ src/app/
 ├── (dashboard)/            # защищённые страницы (AuthGuard + Sidebar)
 │   ├── layout.tsx
 │   ├── dashboard/page.tsx
-│   ├── course/page.tsx     # «Мой курс»: уроки (только с user.has_course)
+│   ├── course/page.tsx     # «Мой курс»: уроки; без курса — покупка из кабинета
 │   ├── billing/page.tsx
 │   ├── referrals/page.tsx
 │   ├── api-keys/page.tsx
