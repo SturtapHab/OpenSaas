@@ -1,6 +1,7 @@
-"""Создаёт админа из ADMIN_EMAIL/ADMIN_PASSWORD при первом запуске.
+"""Создаёт админа из ADMIN_EMAIL/ADMIN_PASSWORD (запускается при каждом старте).
 
-Идемпотентен — если админ уже существует, не делает ничего.
+Идемпотентен. Если админ уже существует — выставляет ему пароль из ADMIN_PASSWORD,
+роль admin и снимает блокировку: доступ админа всегда задаётся переменными.
 Также создаёт дефолтные планы и UserProfile для админа.
 """
 from __future__ import annotations
@@ -18,7 +19,7 @@ from config import settings  # noqa: E402
 from database import AsyncSessionLocal  # noqa: E402
 from modules.auth.models import User, UserProfile, UserRole  # noqa: E402
 from modules.auth.service import email_is  # noqa: E402
-from modules.auth.utils import hash_password  # noqa: E402
+from modules.auth.utils import hash_password, verify_password  # noqa: E402
 from modules.billing.models import (  # noqa: E402
     Plan,
     PlanInterval,
@@ -71,7 +72,15 @@ async def main() -> None:
             select(User).where(email_is(settings.admin_email))
         )
         if admin:
-            print(f"[create_admin] Admin {settings.admin_email} already exists")
+            # Пароль админа всегда берётся из ADMIN_PASSWORD: поменяли переменную —
+            # после перезапуска действует новый пароль. Смена пароля в «Настройках»
+            # для админа держится только до следующего перезапуска.
+            if not verify_password(settings.admin_password, admin.hashed_password):
+                admin.hashed_password = hash_password(settings.admin_password)
+            admin.role = UserRole.ADMIN
+            admin.is_active = True
+            await db.commit()
+            print(f"[create_admin] Admin {settings.admin_email} exists, password synced from ADMIN_PASSWORD")
             return
 
         admin = User(

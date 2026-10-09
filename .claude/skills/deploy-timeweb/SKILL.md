@@ -23,7 +23,8 @@ description: Деплой OpenSaaS в Timeweb Cloud (App Platform + управл
 - Корневой `Dockerfile` собирает **всё в один контейнер**: Next.js (фронт) + FastAPI/gunicorn
   (бэк) + nginx на порту `10000`, всем управляет supervisord.
 - При старте `start.sh` сам делает `alembic upgrade head` и `scripts/create_admin.py`
-  (создаёт админа из `ADMIN_EMAIL`/`ADMIN_PASSWORD` и тарифы).
+  (создаёт админа из `ADMIN_EMAIL`/`ADMIN_PASSWORD` и тарифы). Пароль админа **всегда** берётся
+  из `ADMIN_PASSWORD`: чтобы сменить его, `set-env ADMIN_PASSWORD=...` (приложение перезапустится).
 - Регистрация работает сразу после деплоя: без SMTP подтверждение email выключено, от ботов
   защищает встроенная ALTCHA (без ключей). Почта включается позже, см. шаг 5.1.
 - Нужна внешняя PostgreSQL → создаём управляемую БД Timeweb.
