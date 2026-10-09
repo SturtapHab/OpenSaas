@@ -130,7 +130,7 @@ async def grant_access(
     Возвращает (user, created). Коммит — на вызывающем.
     """
     email = normalize_email(email)
-    user = await db.scalar(select(User).where(func.lower(User.email) == email))
+    user = await db.scalar(select(User).where(auth_service.email_is(email)))
     created = user is None
     if user is None:
         user = await _create_user(db, email)

@@ -166,7 +166,7 @@ async def resend_confirmation(
     db: Annotated[AsyncSession, Depends(get_db)],
 ):
     _require_email()
-    user = await db.scalar(select(User).where(User.email == payload.email))
+    user = await db.scalar(select(User).where(auth_service.email_is(payload.email)))
     if user and not user.is_email_verified:
         token = await auth_service.create_email_token(db, user)
         bg.add_task(email_service.send_confirmation_email, user.email, token)
@@ -181,7 +181,7 @@ async def forgot_password(
 ):
     _require_email()
     await altcha.verify(db, payload.altcha)
-    user = await db.scalar(select(User).where(User.email == payload.email))
+    user = await db.scalar(select(User).where(auth_service.email_is(payload.email)))
     if user:
         token = await auth_service.create_reset_token(db, user)
         bg.add_task(email_service.send_reset_password_email, user.email, token)

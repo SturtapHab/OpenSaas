@@ -6,7 +6,7 @@ import uuid
 from datetime import datetime, timedelta, timezone
 
 from fastapi import HTTPException, status
-from sqlalchemy import select, update
+from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config import settings
@@ -27,6 +27,11 @@ from modules.auth.utils import (
 from modules.billing.models import Subscription, SubscriptionStatus
 
 
+def email_is(email: str):
+    """Условие «почта совпадает» без учёта регистра: Ivan@Mail.ru == ivan@mail.ru."""
+    return func.lower(User.email) == email.strip().lower()
+
+
 async def register_user(
     db: AsyncSession, payload: RegisterRequest, *, with_code: bool = True
 ) -> tuple[User, str, str, str | None]:
@@ -35,7 +40,7 @@ async def register_user(
     with_code=False (почта не настроена): код не создаётся, регистрация
     завершается сразу.
     """
-    existing = await db.scalar(select(User).where(User.email == payload.email))
+    existing = await db.scalar(select(User).where(email_is(payload.email)))
     if existing:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="Email already registered"
@@ -147,7 +152,7 @@ async def verify_email_code(db: AsyncSession, user_id: uuid.UUID, code: str) -> 
 
 
 async def authenticate(db: AsyncSession, email: str, password: str) -> User:
-    user = await db.scalar(select(User).where(User.email == email))
+    user = await db.scalar(select(User).where(email_is(email)))
     if not user or not verify_password(password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

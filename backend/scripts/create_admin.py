@@ -17,6 +17,7 @@ from sqlalchemy import select  # noqa: E402
 from config import settings  # noqa: E402
 from database import AsyncSessionLocal  # noqa: E402
 from modules.auth.models import User, UserProfile, UserRole  # noqa: E402
+from modules.auth.service import email_is  # noqa: E402
 from modules.auth.utils import hash_password  # noqa: E402
 from modules.billing.models import (  # noqa: E402
     Plan,
@@ -67,7 +68,7 @@ async def main() -> None:
 
         # Админ
         admin = await db.scalar(
-            select(User).where(User.email == settings.admin_email)
+            select(User).where(email_is(settings.admin_email))
         )
         if admin:
             print(f"[create_admin] Admin {settings.admin_email} already exists")
